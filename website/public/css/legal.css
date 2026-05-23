@@ -177,3 +177,45 @@
         --glow-height: 200px;
     }
 }
+
+/* 404 page */
+.not-found-page {
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.not-found-inner {
+    max-width: 480px;
+}
+
+.not-found-code {
+    font-size: clamp(4rem, 15vw, 6rem);
+    font-weight: 700;
+    color: var(--accent-purple, #8B7EC8);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.not-found-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.not-found-text {
+    color: var(--text-muted, rgba(255, 255, 255, 0.7));
+    margin-bottom: 2rem;
+}
+
+.not-found-meta {
+    margin-top: 2rem;
+    font-size: 0.875rem;
+    color: var(--text-muted, rgba(255, 255, 255, 0.5));
+}
+
+.not-found-meta a {
+    color: var(--accent-purple, #8B7EC8);
+}

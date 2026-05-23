@@ -14,30 +14,26 @@ Solo project by Tyr. This is the **marketing website** repo (`boojy`).
 
 ```
 website/
-├── index.html          # Vite entry — React app (hub, audio, notes)
+├── index.html          # Vite entry — React SPA
 ├── src/                # React routes + shared layout components
-│   ├── pages/          # HubPage, AudioPage, NotesPage
-│   └── components/     # Nav, Footer, Starfield, etc.
-├── public/             # Static assets + legacy HTML pages
-│   ├── privacy.html, terms.html, subscribed.html, 404.html
-│   ├── css/            # shared.css + page styles
-│   ├── js/             # shared.js (legal pages), dev-tools.js
+│   ├── pages/          # Hub, Audio, Notes, Cloud, Account, legal, 404
+│   ├── components/     # Nav, Footer, Starfield, LegalLayout, etc.
+│   └── content/        # site copy, cloud FAQ, legal HTML bodies
+├── public/             # Static assets only (CSS, images, redirects)
+│   ├── css/
+│   ├── js/             # dev-tools.js (logo-test)
 │   ├── images/
 │   ├── _redirects
 │   ├── _headers
 │   ├── robots.txt
 │   └── sitemap.xml
-├── partials/           # Nav/footer source for static pages
-├── sync-partials.py
-├── bump-cache.py
 ├── vite.config.ts
 └── package.json
 ```
 
 ## Tech Stack
 
-- **React routes:** `/`, `/audio/`, `/notes/`, `/cloud/`, `/account/` (React Router + shared layout)
-- **Static pages:** legal pages only (`privacy.html`, `terms.html`, etc.)
+- **Framework:** React 19 + TypeScript + Vite + React Router (all routes)
 - **Hosting:** Cloudflare Pages (auto-deploys from GitHub `master`)
 - **Build:** `npm run build` → output in `website/dist/`
 - **Auth:** Supabase JS `@2.43.4` via npm on `/account/` route
@@ -48,18 +44,12 @@ website/
 
 ## Migration status (website)
 
-| Route | Stack |
-|-------|-------|
-| `/`, `/audio/`, `/notes/`, `/cloud/`, `/account/` | React 19 + TS + Vite + React Router |
-| Legal pages | Static HTML in `website/public/` |
-
-Set `CLOUD_LAUNCHED = true` in `src/lib/supabase.ts` when Cloud storage goes live to show billing UI on account.
+All marketing routes are React. Set `CLOUD_LAUNCHED = true` in `src/lib/supabase.ts` when Cloud storage goes live to show billing UI on account.
 
 ## Key Conventions
 
-- React routes: shared CSS from `public/css/`; page CSS per route in `src/pages/`
+- Shared CSS from `public/css/`; page CSS imported per route in `src/pages/` or components
 - Account auth: `@supabase/supabase-js@2.43.4` as npm import (not CDN)
-- Legal pages: nav/footer via `sync-partials.py`; `shared.css` + `shared.js`
 - Edge Function calls need both `apikey` and `Authorization` headers
 - All Edge Functions are deployed with `--no-verify-jwt`
 - Use `.maybeSingle()` not `.single()` for Supabase queries that may return no rows
@@ -82,8 +72,7 @@ Set `CLOUD_LAUNCHED = true` in `src/lib/supabase.ts` when Cloud storage goes liv
 
 ```bash
 cd website && npm install && npm run dev
-# React: http://localhost:5173/ , /audio/ , /notes/ , /cloud/ , /account/
-# Static: http://localhost:5173/privacy.html , etc.
+# http://localhost:5173/
 ```
 
 Production build: `npm run build` (output in `dist/`).

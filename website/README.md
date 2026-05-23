@@ -4,18 +4,18 @@ Source code for [boojy.org](https://boojy.org).
 
 ## Migration status
 
-The site uses a **hybrid deploy**: React routes are built by Vite; remaining pages are static HTML copied from `public/` into `dist/` on build.
+The site is a **full React SPA** built with Vite. Static assets (CSS, images, `_headers`, `_redirects`, etc.) live in `public/` and are copied into `dist/` on build.
 
-| Route | Status | Notes |
-|-------|--------|-------|
-| `/` | React | Hub — product cards, Cloud teaser |
-| `/audio/` | React | Download detection, platforms panel |
-| `/notes/` | React | Web CTA, downloads, live version from GitHub |
-| `/cloud/` | React | Preview pricing; checkout disabled until launch |
-| `/account/` | React | Supabase auth; billing UI gated by `CLOUD_LAUNCHED` |
-| `/privacy.html`, `/terms.html`, etc. | Static | Legal + misc pages |
-
-**Still to migrate:** legal pages (`privacy`, `terms`, `404`, `subscribed`). **Deferred:** removing `sync-partials.py` / `bump-cache.py` (still used for legal pages).
+| Route | Notes |
+|-------|-------|
+| `/` | Hub — product cards, Cloud teaser |
+| `/audio/` | Download detection, platforms panel |
+| `/notes/` | Web CTA, downloads, live version from GitHub |
+| `/cloud/` | Preview pricing; checkout disabled until launch |
+| `/account/` | Supabase auth; billing UI gated by `CLOUD_LAUNCHED` |
+| `/privacy.html`, `/terms.html` | Legal content via `LegalLayout` |
+| `/subscribed.html` | Post-newsletter signup confirmation |
+| `*` (404) | React `NotFoundPage` |
 
 Cloud messaging was updated site-wide: storage is **rolling out soon** (preview pricing on `/cloud/`, no live checkout).
 
@@ -29,10 +29,7 @@ npm run dev
 
 Then visit `http://localhost:5173/`
 
-- React routes: `/`, `/audio/`, `/notes/`, `/cloud/`, `/account/`
-- Static pages: `/privacy.html`, `/terms.html`, etc.
-
-Do **not** use `python3 -m http.server` for React work — use `npm run dev` or `npm run preview`.
+All routes are React — use `npm run dev` or `npm run preview`, not `python3 -m http.server`.
 
 ## Build
 
@@ -50,22 +47,20 @@ Output goes to `website/dist/` — this is what Cloudflare Pages deploys.
 website/
 ├── index.html          # Vite entry
 ├── src/
-│   ├── App.tsx         # React Router (hub, audio, notes, cloud, account)
+│   ├── App.tsx         # React Router (all routes)
 │   ├── pages/
 │   ├── components/
+│   ├── content/        # site copy, cloud FAQ, legal HTML bodies
 │   ├── hooks/
 │   └── lib/            # platform detection, supabase client
 ├── public/
 │   ├── css/
-│   ├── js/             # dev-tools.js; shared.js for static legal pages
+│   ├── js/             # dev-tools.js (logo-test)
 │   ├── images/
 │   ├── _headers
-│   ├── _redirects      # SPA fallbacks for /audio/*, /notes/*, /cloud/*, /account/*
+│   ├── _redirects      # SPA fallback /* → index.html
 │   ├── robots.txt
 │   └── sitemap.xml
-├── partials/           # Nav/footer source for static pages only
-├── sync-partials.py    # Sync partials into public/ HTML (not React routes)
-├── bump-cache.py       # Cache-bust ?v= on static pages
 ├── vite.config.ts
 └── package.json
 ```
@@ -86,8 +81,7 @@ Pushes to `master` auto-deploy.
 
 ## Tech Stack
 
-- React 19 + TypeScript + Vite + React Router (product + cloud + account routes)
-- Static HTML for legal pages only
+- React 19 + TypeScript + Vite + React Router (all routes)
 - Supabase JS `@2.43.4` via npm on `/account/` (no CDN script tag)
 
 ## Links

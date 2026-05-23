@@ -1,5 +1,20 @@
 # Changelog
 
+## 2026-05-23 (legal + misc)
+
+### Added
+- **React routes** — `/privacy.html`, `/terms.html`, `/subscribed.html`, catch-all 404
+- **`LegalLayout`**, **`usePageTitle`**, legal body content in `src/content/legal/`
+
+### Changed
+- **SPA fallback** — `_redirects` catch-all `/* → index.html`
+- **Footer** — `Link` for privacy/terms
+- **Docs** — migration complete; removed `sync-partials.py` / `bump-cache.py` references
+
+### Removed
+- Static `public/privacy.html`, `terms.html`, `404.html`, `subscribed.html`
+- `partials/`, `sync-partials.py`, `bump-cache.py`
+
 ## 2026-05-23 (continued)
 
 ### Added

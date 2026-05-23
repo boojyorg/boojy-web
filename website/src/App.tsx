@@ -5,6 +5,10 @@ import { NotesPage } from './pages/NotesPage';
 import { AudioPage } from './pages/AudioPage';
 import { CloudPage } from './pages/CloudPage';
 import { AccountPage } from './pages/AccountPage';
+import { PrivacyPage } from './pages/PrivacyPage';
+import { TermsPage } from './pages/TermsPage';
+import { SubscribedPage } from './pages/SubscribedPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 export default function App() {
   return (
@@ -20,6 +24,11 @@ export default function App() {
           <Route path="/cloud/" element={<CloudPage />} />
           <Route path="/account" element={<Navigate to="/account/" replace />} />
           <Route path="/account/" element={<AccountPage />} />
+          <Route path="/privacy.html" element={<PrivacyPage />} />
+          <Route path="/terms.html" element={<TermsPage />} />
+          <Route path="/subscribed.html" element={<SubscribedPage />} />
+          <Route path="/404.html" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -9,8 +9,8 @@ export function Footer() {
           <Link to="/audio/">Audio</Link>
           <Link to="/notes/">Notes</Link>
           <Link to="/cloud/">Cloud</Link>
-          <a href="/privacy.html">Privacy</a>
-          <a href="/terms.html">Terms</a>
+          <Link to="/privacy.html">Privacy</Link>
+          <Link to="/terms.html">Terms</Link>
         </nav>
         <div className="footer-row-2">
           <a href="https://github.com/boojyorg" target="_blank" aria-label="GitHub" className="footer-icon" rel="noreferrer">
