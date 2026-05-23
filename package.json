@@ -1,0 +1,7 @@
+{
+  "name": "boojy",
+  "private": true,
+  "scripts": {
+    "build": "npm ci --prefix website && npm run build --prefix website"
+  }
+}

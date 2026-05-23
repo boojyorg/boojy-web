@@ -71,13 +71,19 @@ Hosted on Cloudflare Pages:
 
 | Setting | Value |
 |---------|-------|
-| Root directory | `website` |
+| Root directory | *(leave empty — repo root)* |
 | Build command | `npm run build` |
-| Output directory | `dist` |
+| Output directory | `website/dist` |
+
+The repo root `package.json` runs the Vite build inside `website/`.
+
+**Alternative:** Root directory `website`, build `npm run build`, output `dist`.
 
 Pushes to `master` auto-deploy.
 
-**Important:** Cloudflare project must use the Vite build settings above. A plain static deploy (no build step) will not serve the React app correctly.
+**Build failed with `ENOENT ... repo/package.json`?** Cloudflare ran the build at repo root without finding `package.json` — use the settings above (empty root directory + `website/dist` output).
+
+**Live site shows `/src/main.tsx`?** The Vite build did not run — check the deploy log for `vite build`.
 
 ## Tech Stack
 

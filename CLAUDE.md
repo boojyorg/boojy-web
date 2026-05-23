@@ -81,9 +81,11 @@ Production build: `npm run build` (output in `dist/`).
 
 Cloudflare Pages settings:
 
-- **Root directory:** `website`
+- **Root directory:** *(empty — repo root)*
 - **Build command:** `npm run build`
-- **Output directory:** `dist`
+- **Output directory:** `website/dist`
+
+(Alternative: root directory `website`, output `dist`. Repo root `package.json` delegates the build into `website/`.)
 
 Push to `master` branch → Cloudflare Pages auto-deploys.
 
