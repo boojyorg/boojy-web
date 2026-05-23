@@ -22,6 +22,8 @@
   const PRESETS = {
     gold: "#F5A623",
     purple: "#8B5CF6",
+    sun: "#FBBF24",
+    nebula: "#A78BFA",
   };
 
   // --- Helpers ---
@@ -251,14 +253,23 @@
   // Presets
   const presets = document.createElement("div");
   presets.className = "dt-presets";
+  presets.style.flexWrap = "wrap";
   const btnGold = document.createElement("button");
   btnGold.className = "dt-btn";
   btnGold.textContent = "Gold";
   const btnPurple = document.createElement("button");
   btnPurple.className = "dt-btn";
   btnPurple.textContent = "Purple";
+  const btnSun = document.createElement("button");
+  btnSun.className = "dt-btn";
+  btnSun.textContent = "Sun";
+  const btnNebula = document.createElement("button");
+  btnNebula.className = "dt-btn";
+  btnNebula.textContent = "Nebula";
   presets.appendChild(btnGold);
   presets.appendChild(btnPurple);
+  presets.appendChild(btnSun);
+  presets.appendChild(btnNebula);
   panel.appendChild(presets);
 
   // Color groups
@@ -730,6 +741,143 @@
     };
   }
 
+  // --- Legal Hero Glow section ---
+  const legalGlowEl = document.querySelector(".legal-hero-glow");
+
+  if (legalGlowEl) {
+    function setLegalGlowVar(name, value) {
+      legalGlowEl.style.setProperty(name, value);
+    }
+
+    const LEGAL_GLOW_DEFAULTS = {
+      glowOpacity: 55,
+      glowSize: 1000,
+      glowColor: [196, 197, 255],
+    };
+
+    const legalGlowSection = document.createElement("div");
+    legalGlowSection.className = "dt-section";
+    legalGlowSection.textContent = "Hero Glow";
+    panel.appendChild(legalGlowSection);
+
+    // Opacity slider
+    const lgOpacityGroup = document.createElement("div");
+    lgOpacityGroup.className = "dt-group";
+    const lgOpacityVal = document.createElement("span");
+    lgOpacityVal.className = "dt-val";
+    lgOpacityVal.textContent = LEGAL_GLOW_DEFAULTS.glowOpacity + "%";
+    const lgOpacityLbl = document.createElement("div");
+    lgOpacityLbl.className = "dt-label";
+    lgOpacityLbl.innerHTML = "<span>Opacity</span>";
+    lgOpacityLbl.appendChild(lgOpacityVal);
+    lgOpacityGroup.appendChild(lgOpacityLbl);
+    const lgOpacitySlider = document.createElement("input");
+    lgOpacitySlider.type = "range"; lgOpacitySlider.min = 0; lgOpacitySlider.max = 100; lgOpacitySlider.value = LEGAL_GLOW_DEFAULTS.glowOpacity;
+    lgOpacitySlider.className = "dt-slider dt-generic";
+    lgOpacitySlider.addEventListener("input", () => {
+      const v = +lgOpacitySlider.value;
+      lgOpacityVal.textContent = v + "%";
+      setLegalGlowVar("--glow-opacity", v / 100);
+    });
+    lgOpacityGroup.appendChild(lgOpacitySlider);
+    panel.appendChild(lgOpacityGroup);
+
+    // Size slider
+    const lgSizeGroup = document.createElement("div");
+    lgSizeGroup.className = "dt-group";
+    const lgSizeVal = document.createElement("span");
+    lgSizeVal.className = "dt-val";
+    lgSizeVal.textContent = LEGAL_GLOW_DEFAULTS.glowSize + "px";
+    const lgSizeLbl = document.createElement("div");
+    lgSizeLbl.className = "dt-label";
+    lgSizeLbl.innerHTML = "<span>Size</span>";
+    lgSizeLbl.appendChild(lgSizeVal);
+    lgSizeGroup.appendChild(lgSizeLbl);
+    const lgSizeSlider = document.createElement("input");
+    lgSizeSlider.type = "range"; lgSizeSlider.min = 200; lgSizeSlider.max = 1800; lgSizeSlider.value = LEGAL_GLOW_DEFAULTS.glowSize;
+    lgSizeSlider.className = "dt-slider dt-generic";
+    lgSizeSlider.addEventListener("input", () => {
+      const w = +lgSizeSlider.value;
+      const h = Math.round(w * 0.71);
+      lgSizeVal.textContent = w + "px";
+      setLegalGlowVar("--glow-width", w + "px");
+      setLegalGlowVar("--glow-height", h + "px");
+    });
+    lgSizeGroup.appendChild(lgSizeSlider);
+    panel.appendChild(lgSizeGroup);
+
+    // Glow color RGB
+    function buildLegalGlowRgbGroup(label, cssVar, defaultRgb) {
+      const group = document.createElement("div");
+      group.className = "dt-group";
+
+      let [r, g, b] = defaultRgb;
+      const swatch = document.createElement("span");
+      swatch.className = "dt-swatch";
+      swatch.style.background = rgbToHex(r, g, b);
+      const hexLabel = document.createElement("span");
+      hexLabel.className = "dt-hex";
+      hexLabel.textContent = rgbToHex(r, g, b);
+
+      const lbl = document.createElement("div");
+      lbl.className = "dt-label";
+      lbl.innerHTML = `<span>${label}</span>`;
+      lbl.appendChild(hexLabel);
+      lbl.insertBefore(swatch, hexLabel);
+      group.appendChild(lbl);
+
+      function update() {
+        const hex = rgbToHex(r, g, b);
+        swatch.style.background = hex;
+        hexLabel.textContent = hex;
+        setLegalGlowVar(cssVar, `${r}, ${g}, ${b}`);
+      }
+
+      function makeSlider(channel, value, cls) {
+        const s = document.createElement("input");
+        s.type = "range"; s.min = 0; s.max = 255; s.value = value;
+        s.className = `dt-slider ${cls}`;
+        s.addEventListener("input", () => {
+          if (channel === "r") r = +s.value;
+          if (channel === "g") g = +s.value;
+          if (channel === "b") b = +s.value;
+          update();
+        });
+        group.appendChild(s);
+        return s;
+      }
+
+      const sr = makeSlider("r", r, "dt-r");
+      const sg = makeSlider("g", g, "dt-g");
+      const sb = makeSlider("b", b, "dt-b");
+
+      group._reset = (rgb) => {
+        [r, g, b] = rgb;
+        sr.value = r; sg.value = g; sb.value = b;
+        update();
+      };
+
+      return group;
+    }
+
+    const legalGlowColorGroup = buildLegalGlowRgbGroup("Color", "--glow-color", LEGAL_GLOW_DEFAULTS.glowColor);
+    panel.appendChild(legalGlowColorGroup);
+
+    // Expose reset for legal glow controls
+    var resetLegalGlow = function () {
+      lgOpacitySlider.value = LEGAL_GLOW_DEFAULTS.glowOpacity;
+      lgOpacityVal.textContent = LEGAL_GLOW_DEFAULTS.glowOpacity + "%";
+      setLegalGlowVar("--glow-opacity", LEGAL_GLOW_DEFAULTS.glowOpacity / 100);
+
+      lgSizeSlider.value = LEGAL_GLOW_DEFAULTS.glowSize;
+      lgSizeVal.textContent = LEGAL_GLOW_DEFAULTS.glowSize + "px";
+      setLegalGlowVar("--glow-width", LEGAL_GLOW_DEFAULTS.glowSize + "px");
+      setLegalGlowVar("--glow-height", Math.round(LEGAL_GLOW_DEFAULTS.glowSize * 0.71) + "px");
+
+      legalGlowColorGroup._reset(LEGAL_GLOW_DEFAULTS.glowColor);
+    };
+  }
+
   // --- Logo Test Glow section ---
   const logoGlowEl = document.querySelector(".logo-page-glow");
 
@@ -1024,6 +1172,16 @@
     showToast("Accent → Purple");
   });
 
+  btnSun.addEventListener("click", () => {
+    accentGroup._setHex(PRESETS.sun);
+    showToast("Accent → Sun");
+  });
+
+  btnNebula.addEventListener("click", () => {
+    accentGroup._setHex(PRESETS.nebula);
+    showToast("Accent → Nebula");
+  });
+
   btnReset.addEventListener("click", () => {
     accentGroup._setHex(DEFAULTS.accent);
     bgGroup._setHex(DEFAULTS.bg);
@@ -1034,6 +1192,7 @@
     if (typeof resetNotesCards === "function") resetNotesCards();
     if (typeof resetNotesGlow === "function") resetNotesGlow();
     if (typeof resetAudioGlow === "function") resetAudioGlow();
+    if (typeof resetLegalGlow === "function") resetLegalGlow();
     if (typeof resetLogoGlow === "function") resetLogoGlow();
     showToast("Reset to defaults");
   });

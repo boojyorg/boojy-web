@@ -228,6 +228,10 @@
     color: #ef4444;
 }
 
+.cloud-prelaunch-hidden {
+    display: none !important;
+}
+
 /* === Responsive === */
 @media (max-width: 480px) {
     .account-container {

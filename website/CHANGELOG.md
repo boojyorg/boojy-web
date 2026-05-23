@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-05-23
+
+### Added
+- **React + Vite scaffold** — `package.json`, `vite.config.ts`, TypeScript config, `src/` app
+- **React routes** — `/` (hub), `/audio/`, `/notes/` via React Router + shared `SiteLayout`
+- **Shared React components** — `Nav`, `Footer`, `Starfield`, `ProductCloudCard`, hero/pages for each route
+- **SPA fallbacks** — `_redirects` rules for `/audio/*` and `/notes/*` → `index.html`
+
+### Changed
+- **Project layout** — static assets and unmigrated pages moved under `website/public/`; Vite builds to `website/dist/`
+- **Cloud rollout messaging** — hub, notes, cloud preview, and account copy updated; checkout/billing UI disabled until Cloud launches
+- **`sync-partials.py` / `bump-cache.py`** — paths updated for `public/`; audio/notes/hub removed (now React)
+- **Docs** — `website/README.md`, root `README.md`, `CLAUDE.md` updated with migration status
+
+### Removed
+- Static `website/audio/index.html` and `website/notes/index.html` (replaced by React pages)
+
 ## 2026-03-13
 
 ### Added
@@ -17,3 +34,8 @@
 - **Supabase anon key** — added comments in `cloud/index.html` and `js/account.js` documenting the key is intentionally public (RLS-protected)
 - **Cache busting** — created `bump-cache.py` to auto-replace `?v=` strings with git commit hash; all pages now use `?v=89a0dc2`
 - **Linux detection** — `detectPlatform()` now recognises Linux and shows Tux icon + "Linux coming soon" with a disabled download button
+
+### Known Issues
+- **Boojy Notes download 404** — clicking the macOS download button links to a GitHub release asset that returns a 404 (`boojyorg/boojy-notes/releases/download/v0.1.3/Boojy-Notes-0.1.3-arm64.dmg`)
+- **"Boojy" text rendering** — the word "Boojy" in "Boojy Audio" / "Boojy Notes" headings occasionally renders in the wrong font
+- **Nav logo hover** — the Boojy icon in the top-left should scale up ~10% on hover (enhancement)

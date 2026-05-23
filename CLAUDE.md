@@ -14,47 +14,53 @@ Solo project by Tyr. This is the **marketing website** repo (`boojy`).
 
 ```
 website/
-├── index.html          # Hub page (product cards)
-├── audio/index.html    # Audio product page
-├── notes/index.html    # Notes product page
-├── cloud/index.html    # Cloud pricing/info page
-├── account/index.html  # Auth + account dashboard
-├── privacy.html
-├── terms.html
-├── subscribed.html     # Post-checkout success page
-├── 404.html
-├── css/
-│   ├── shared.css      # Global styles (nav, footer, layout)
-│   ├── hub.css         # Hub page styles
-│   ├── audio.css
-│   ├── notes.css
-│   ├── cloud.css
-│   └── account.css
-├── js/
-│   ├── shared.js       # Nav hamburger, common UI
-│   ├── account.js      # Supabase auth + dashboard (type="module")
-│   └── audio.js        # Audio page interactions
-├── images/
-├── _redirects          # Cloudflare Pages redirects
-├── _headers            # Cloudflare Pages headers
-├── robots.txt
-└── sitemap.xml
+├── index.html          # Vite entry — React app (hub, audio, notes)
+├── src/                # React routes + shared layout components
+│   ├── pages/          # HubPage, AudioPage, NotesPage
+│   └── components/     # Nav, Footer, Starfield, etc.
+├── public/             # Static assets + legacy HTML pages
+│   ├── cloud/index.html
+│   ├── account/index.html
+│   ├── privacy.html, terms.html, subscribed.html, 404.html
+│   ├── css/            # shared.css + page styles
+│   ├── js/             # shared.js, account.js, audio.js, etc.
+│   ├── images/
+│   ├── _redirects
+│   ├── _headers
+│   ├── robots.txt
+│   └── sitemap.xml
+├── partials/           # Nav/footer source for static pages
+├── sync-partials.py
+├── bump-cache.py
+├── vite.config.ts
+└── package.json
 ```
 
 ## Tech Stack
 
-- **Framework:** Plain HTML/CSS/JS (no build step)
+- **React routes:** `/`, `/audio/`, `/notes/` (React Router + shared layout)
+- **Static pages:** `/cloud/`, `/account/`, legal pages (migrating incrementally)
 - **Hosting:** Cloudflare Pages (auto-deploys from GitHub `master`)
+- **Build:** `npm run build` → output in `website/dist/`
 - **Auth:** Supabase JS via CDN (pinned to v2.43.4)
-- **Payments:** Stripe Checkout + Customer Portal
+- **Payments:** Stripe Checkout + Customer Portal (disabled on site until Cloud launches)
 - **Backend:** Supabase Edge Functions (in boojy-cloud repo)
 - **Storage:** Cloudflare R2 (S3-compatible, for note content)
 - **Analytics:** Umami (self-hosted on Railway)
 
+## Migration status (website)
+
+| Route | Stack |
+|-------|-------|
+| `/`, `/audio/`, `/notes/` | React 19 + TS + Vite + React Router |
+| `/cloud/`, `/account/`, legal | Static HTML in `website/public/` |
+
+Shared layout (`Nav`, `Footer`, `Starfield`) lives in `website/src/components/`. Static pages still use `partials/` + `sync-partials.py`. Cloud checkout is disabled; account hides billing/storage until Cloud launches.
+
 ## Key Conventions
 
-- All HTML pages share the same nav and footer structure
-- `shared.css` and `shared.js` are loaded on every page
+- React routes: shared CSS imported from `public/css/`; page CSS imported per route in `src/pages/`
+- Static pages: nav/footer synced via `sync-partials.py`; `shared.css` + `shared.js` on each page
 - Supabase CDN is pinned to `@2.43.4` (newer versions break global scope)
 - Scripts using Supabase must use `type="module"` to avoid global property conflicts
 - Edge Function calls need both `apikey` and `Authorization` headers
@@ -78,13 +84,20 @@ website/
 ## Local Dev
 
 ```bash
-cd website && python3 -m http.server
-# Opens at http://localhost:8000
+cd website && npm install && npm run dev
+# React: http://localhost:5173/ , /audio/ , /notes/
+# Static: http://localhost:5173/cloud/ , /account/ , etc.
 ```
 
-No build step needed. Edit HTML/CSS/JS directly.
+Production build: `npm run build` (output in `dist/`).
 
 ## Deployment
+
+Cloudflare Pages settings:
+
+- **Root directory:** `website`
+- **Build command:** `npm run build`
+- **Output directory:** `dist`
 
 Push to `master` branch → Cloudflare Pages auto-deploys.
 

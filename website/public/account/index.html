@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#13151C">
     <meta name="view-transition" content="same-origin">
-    <meta name="description" content="Boojy Account - Sign in to sync your notes and manage your Boojy Cloud subscription.">
+    <meta name="description" content="Boojy Account - Create your Boojy account. Cloud storage is rolling out soon.">
     <meta property="og:title" content="Boojy Account">
-    <meta property="og:description" content="Sign in to sync your notes and manage your Boojy Cloud subscription.">
+    <meta property="og:description" content="Create your Boojy account. Cloud storage is rolling out soon.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://boojy.org/account/">
     <meta property="og:image" content="https://boojy.org/images/Boojy_Image_Logo.png">
@@ -68,7 +68,7 @@
 
                 <div class="account-signin-prompt">
                     <div class="account-cloud-icon">☁</div>
-                    <p>Sign in to sync your notes across your devices. Free with 500 MB of cloud storage.</p>
+                    <p>Create your Boojy account. Cloud storage is rolling out soon — we&rsquo;ll let you know when sync is ready.</p>
 
                     <div class="auth-buttons">
                         <button class="auth-btn auth-btn-email" id="btn-email">
@@ -119,12 +119,12 @@
                     </div>
                 </div>
 
-                <div class="account-section-header" style="margin-top: var(--spacing-2xl);">
+                <div class="account-section-header cloud-prelaunch-hidden" id="dash-storage-header" style="margin-top: var(--spacing-2xl);">
                     <span>STORAGE</span>
                     <hr>
                 </div>
 
-                <div class="dash-storage">
+                <div class="dash-storage cloud-prelaunch-hidden">
                     <div class="dash-storage-track">
                         <div id="dash-storage-bar" class="dash-storage-fill" style="width: 0%;"></div>
                     </div>
@@ -132,8 +132,8 @@
                 </div>
 
                 <div class="dash-actions">
-                    <a href="/cloud/" id="dash-upgrade" class="btn btn-primary" style="display: inline-block;">Upgrade to Orbit</a>
-                    <button id="dash-manage" class="btn btn-secondary" style="display: none;">Manage Subscription</button>
+                    <a href="/cloud/" id="dash-upgrade" class="btn btn-primary cloud-prelaunch-hidden" style="display: inline-block;">Upgrade to Orbit</a>
+                    <button id="dash-manage" class="btn btn-secondary cloud-prelaunch-hidden" style="display: none;">Manage Subscription</button>
                     <button id="btn-signout" class="btn-signout">Sign out</button>
                 </div>
             </div>

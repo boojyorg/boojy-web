@@ -46,3 +46,7 @@ yarn-error.log*
 # Backup files
 *.bak
 *.backup
+
+# Vite
+node_modules/
+dist/

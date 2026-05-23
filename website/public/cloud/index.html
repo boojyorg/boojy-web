@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#13151C">
     <meta name="view-transition" content="same-origin">
-    <meta name="description" content="Boojy Cloud - Sync your creative work across all your devices. Free up to 500 MB. Your data stays yours.">
+    <meta name="description" content="Boojy Cloud - Cloud storage is rolling out soon. Planned pricing and sync across your devices.">
     <meta property="og:title" content="Boojy Cloud - Sync Your Creative Work">
-    <meta property="og:description" content="Sync your creative work across all your devices. Free up to 500 MB. Your data stays yours.">
+    <meta property="og:description" content="Cloud storage is rolling out soon. Planned pricing for sync across your devices.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://boojy.org/cloud/">
     <meta property="og:image" content="https://boojy.org/images/cloud-preview.jpg">
@@ -16,8 +16,6 @@
     <link rel="apple-touch-icon" href="/images/favicon.png">
     <link rel="stylesheet" href="/css/shared.css?v=89a0dc2">
     <link rel="stylesheet" href="/css/cloud.css?v=89a0dc2">
-    <!-- Supabase Auth -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.43.4/dist/umd/supabase.min.js"></script>
     <!-- Umami Analytics -->
     <script defer src="https://umami-production-fc39.up.railway.app/script.js" data-website-id="863178bf-14fc-4b35-b45a-5e4ff4240862"></script>
 </head>
@@ -58,8 +56,9 @@
     <!-- Hero Section -->
     <section class="cloud-hero">
         <div class="container">
+            <p class="cloud-rollout-banner">Cloud storage is rolling out soon. Pricing below is planned — create an account to be ready when sync goes live.</p>
             <h1 class="cloud-title">Boojy Cloud</h1>
-            <p class="cloud-subtitle">Your creative work, synced and safe.</p>
+            <p class="cloud-subtitle">Your creative work, synced and safe — coming soon.</p>
         </div>
     </section>
 
@@ -78,7 +77,7 @@
                         <li><span class="check">✓</span> Sync across devices</li>
                         <li><span class="check">✓</span> All app features</li>
                     </ul>
-                    <a href="/account/" id="btn-free" class="btn btn-secondary pricing-btn">Get Started</a>
+                    <button id="btn-free" class="btn btn-secondary pricing-btn" disabled>Coming soon</button>
                 </div>
 
                 <div class="pricing-card pricing-card-highlight">
@@ -92,7 +91,7 @@
                         <li><span class="check">✓</span> Everything in Free</li>
                         <li><span class="check">✓</span> Priority support</li>
                     </ul>
-                    <button id="btn-upgrade" class="btn btn-primary pricing-btn">Upgrade</button>
+                    <button id="btn-upgrade" class="btn btn-primary pricing-btn" disabled>Coming soon</button>
                 </div>
             </div>
         </div>
@@ -153,7 +152,7 @@
                         <span class="faq-arrow">▸</span>
                     </button>
                     <div class="faq-answer">
-                        <p>Your notes stay on your device — nothing gets deleted. You'll keep the Free plan with 500 MB of cloud storage. If you're over the Free limit, syncing pauses until you're under 500 MB, but your local notes are always accessible.</p>
+                        <p>When Cloud launches, your notes stay on your device — nothing gets deleted. You'll keep the Free plan with 500 MB of cloud storage. If you're over the Free limit, syncing pauses until you're under 500 MB, but your local notes are always accessible.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -162,7 +161,7 @@
                         <span class="faq-arrow">▸</span>
                     </button>
                     <div class="faq-answer">
-                        <p>You'll get a heads-up when you're close. Once you hit the limit, syncing pauses for new notes — but everything already synced stays available. You can free up space or upgrade to continue syncing.</p>
+                        <p>When Cloud launches, you'll get a heads-up when you're close to your limit. Once you hit the limit, syncing pauses for new notes — but everything already synced stays available. You can free up space or upgrade to continue syncing.</p>
                     </div>
                 </div>
                 <div class="faq-item">
@@ -213,106 +212,5 @@
     </footer>
 
     <script src="/js/shared.js?v=89a0dc2"></script>
-    <script type="module">
-        const SUPABASE_URL = 'https://wupmcvhzstgsdrvcigtm.supabase.co';
-        // This is the Supabase anon (public) key — safe to expose in client-side code.
-        // Access is restricted by Row Level Security (RLS) policies.
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1cG1jdmh6c3Rnc2RydmNpZ3RtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3ODkzNDMsImV4cCI6MjA4NzM2NTM0M30.D8Zbzblj0oyP28ACJystGWSmqmwdBIyp7mMQmwqtPjM';
-
-        let sb = null;
-        try {
-            const createClient = window.supabase && window.supabase.createClient;
-            if (createClient) {
-                sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            } else {
-                console.error('Supabase client not loaded');
-            }
-        } catch (err) {
-            console.error('Failed to init Supabase:', err);
-        }
-
-        const btnFree = document.getElementById('btn-free');
-        const btnUpgrade = document.getElementById('btn-upgrade');
-
-        // Check auth state and update buttons
-        if (sb) {
-            try {
-                const { data: { session } } = await sb.auth.getSession();
-                if (session) {
-                    const { data: profile } = await sb
-                        .from('profiles')
-                        .select('tier')
-                        .eq('id', session.user.id)
-                        .maybeSingle();
-
-                    if (profile?.tier === 'orbit') {
-                        if (btnUpgrade) {
-                            btnUpgrade.textContent = 'Current Plan';
-                            btnUpgrade.classList.add('pricing-btn-current');
-                            btnUpgrade.disabled = true;
-                        }
-                    } else {
-                        if (btnFree) {
-                            btnFree.textContent = 'Current Plan';
-                            btnFree.classList.add('pricing-btn-current');
-                            btnFree.removeAttribute('href');
-                        }
-                    }
-                }
-            } catch (err) {
-                console.error('Failed to check plan:', err);
-            }
-        }
-
-        // Upgrade button click handler
-        if (btnUpgrade) {
-            btnUpgrade.addEventListener('click', async () => {
-                if (btnUpgrade.classList.contains('pricing-btn-current')) return;
-
-                if (!sb) {
-                    window.location.href = '/account/';
-                    return;
-                }
-
-                try {
-                    const { data: { session } } = await sb.auth.getSession();
-
-                    if (!session) {
-                        window.location.href = '/account/';
-                        return;
-                    }
-
-                    btnUpgrade.textContent = 'Loading...';
-                    btnUpgrade.disabled = true;
-
-                    const res = await fetch(SUPABASE_URL + '/functions/v1/create-checkout', {
-                        method: 'POST',
-                        headers: {
-                            'apikey': SUPABASE_ANON_KEY,
-                            'Authorization': 'Bearer ' + session.access_token,
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ country: 'US' }),
-                    });
-
-                    const data = await res.json();
-
-                    if (data.url) {
-                        window.location.href = data.url;
-                    } else {
-                        console.error('Checkout response:', data);
-                        btnUpgrade.textContent = 'Upgrade';
-                        btnUpgrade.disabled = false;
-                        alert('Something went wrong. Please try again.');
-                    }
-                } catch (err) {
-                    console.error('Upgrade error:', err);
-                    btnUpgrade.textContent = 'Upgrade';
-                    btnUpgrade.disabled = false;
-                    alert('Something went wrong. Please try again.');
-                }
-            });
-        }
-    </script>
 </body>
 </html>

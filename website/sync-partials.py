@@ -22,15 +22,12 @@ ROOT = Path(__file__).parent
 #   "product"  — data-product value to mark active (Audio/Notes nav links)
 #   "account"  — True to mark the Account link active
 PAGES = {
-    "index.html":          {},
-    "audio/index.html":    {"product": "audio"},
-    "notes/index.html":    {"product": "notes"},
-    "cloud/index.html":    {},
-    "account/index.html":  {"account": True},
-    "privacy.html":        {},
-    "terms.html":          {},
-    "subscribed.html":     {},
-    "404.html":            {},
+    "public/cloud/index.html":    {},
+    "public/account/index.html":  {"account": True},
+    "public/privacy.html":        {},
+    "public/terms.html":          {},
+    "public/subscribed.html":     {},
+    "public/404.html":            {},
 }
 
 # Regex patterns for nav and footer blocks

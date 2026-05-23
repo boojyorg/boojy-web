@@ -16,15 +16,12 @@ ROOT = Path(__file__).parent
 
 # Same page list as sync-partials.py
 PAGES = [
-    "index.html",
-    "audio/index.html",
-    "notes/index.html",
-    "cloud/index.html",
-    "account/index.html",
-    "privacy.html",
-    "terms.html",
-    "subscribed.html",
-    "404.html",
+    "public/cloud/index.html",
+    "public/account/index.html",
+    "public/privacy.html",
+    "public/terms.html",
+    "public/subscribed.html",
+    "public/404.html",
 ]
 
 VERSION_RE = re.compile(r"\?v=[a-zA-Z0-9_.-]+")

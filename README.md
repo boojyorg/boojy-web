@@ -51,7 +51,9 @@ Currently in beta (v0.1.0).
 
 ## About This Repo
 
-This repository contains the source code for [boojy.org](https://boojy.org) - the website.
+This repository contains the source code for [boojy.org](https://boojy.org) — the marketing website.
+
+The site is being migrated from plain HTML to **React 19 + TypeScript + Vite**. See [website/README.md](website/README.md) for local dev and migration status.
 
 For the Boojy Audio app source code, see [tyrbujac/boojy-audio](https://github.com/tyrbujac/boojy-audio).
 
