@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import '../../public/css/legal.css';
-import { usePageTitle } from '../hooks/usePageTitle';
 
 export function NotFoundPage() {
-  usePageTitle('404 - Page Not Found | Boojy');
-
   return (
     <section className="not-found-page">
       <div className="container not-found-inner">

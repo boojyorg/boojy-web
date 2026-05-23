@@ -1,10 +1,7 @@
 import privacyBody from '../content/legal/privacy-body.html?raw';
 import { LegalLayout } from '../components/LegalLayout';
-import { usePageTitle } from '../hooks/usePageTitle';
 
 export function PrivacyPage() {
-  usePageTitle('Privacy Policy – Boojy');
-
   return (
     <LegalLayout
       title="Privacy Policy"

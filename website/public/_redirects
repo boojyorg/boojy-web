@@ -1,8 +1,4 @@
 /github      https://github.com/boojyorg    301
 /notes/app   https://notes.boojy.org               301
 /pricing     /cloud                                 301
-/audio/*     /index.html                            200
-/notes/*     /index.html                            200
-/cloud/*     /index.html                            200
-/account/*   /index.html                            200
 /*           /index.html                            200

@@ -1,10 +1,7 @@
 import { Link } from 'react-router-dom';
 import '../../public/css/audio.css';
-import { usePageTitle } from '../hooks/usePageTitle';
 
 export function SubscribedPage() {
-  usePageTitle('Subscribed – Boojy');
-
   return (
     <section className="subscribed-hero">
       <div className="container">

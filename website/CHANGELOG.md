@@ -1,5 +1,13 @@
 # Changelog
 
+### Changed
+- **`usePageMeta`** — per-route title, description, and Open Graph tags (ported from static HTML)
+- **`_redirects`** — simplified to external redirects + SPA catch-all
+- **Sitemap** — `lastmod` updated to 2026-05-23
+
+### Removed
+- Orphaned static JS (`account.js`, `hub.js`, `audio.js`, `notes.js`) superseded by React
+
 ## 2026-05-23 (legal + misc)
 
 ### Added
