@@ -22,8 +22,6 @@ ROOT = Path(__file__).parent
 #   "product"  — data-product value to mark active (Audio/Notes nav links)
 #   "account"  — True to mark the Account link active
 PAGES = {
-    "public/cloud/index.html":    {},
-    "public/account/index.html":  {"account": True},
     "public/privacy.html":        {},
     "public/terms.html":          {},
     "public/subscribed.html":     {},

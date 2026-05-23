@@ -11,11 +11,11 @@ The site uses a **hybrid deploy**: React routes are built by Vite; remaining pag
 | `/` | React | Hub — product cards, Cloud teaser |
 | `/audio/` | React | Download detection, platforms panel |
 | `/notes/` | React | Web CTA, downloads, live version from GitHub |
-| `/cloud/` | Static | Preview pricing; checkout disabled until Cloud launches |
-| `/account/` | Static | Auth works; billing/storage UI hidden until launch |
+| `/cloud/` | React | Preview pricing; checkout disabled until launch |
+| `/account/` | React | Supabase auth; billing UI gated by `CLOUD_LAUNCHED` |
 | `/privacy.html`, `/terms.html`, etc. | Static | Legal + misc pages |
 
-**Still to migrate:** Cloud, Account, legal pages. **Deferred:** full SPA for static routes, removing `sync-partials.py` / `bump-cache.py`.
+**Still to migrate:** legal pages (`privacy`, `terms`, `404`, `subscribed`). **Deferred:** removing `sync-partials.py` / `bump-cache.py` (still used for legal pages).
 
 Cloud messaging was updated site-wide: storage is **rolling out soon** (preview pricing on `/cloud/`, no live checkout).
 
@@ -29,8 +29,8 @@ npm run dev
 
 Then visit `http://localhost:5173/`
 
-- React routes: `/`, `/audio/`, `/notes/`
-- Static pages: `/cloud/`, `/account/`, `/privacy.html`, etc.
+- React routes: `/`, `/audio/`, `/notes/`, `/cloud/`, `/account/`
+- Static pages: `/privacy.html`, `/terms.html`, etc.
 
 Do **not** use `python3 -m http.server` for React work — use `npm run dev` or `npm run preview`.
 
@@ -50,19 +50,17 @@ Output goes to `website/dist/` — this is what Cloudflare Pages deploys.
 website/
 ├── index.html          # Vite entry
 ├── src/
-│   ├── App.tsx         # React Router (/ , /audio/ , /notes/)
-│   ├── pages/          # HubPage, AudioPage, NotesPage
-│   ├── components/     # Nav, Footer, Starfield, ProductCloudCard, …
-│   ├── hooks/          # glow transition, platforms panel, notes version
-│   └── lib/            # platform detection
-├── public/             # Static assets + unmigrated HTML pages
-│   ├── cloud/
-│   ├── account/
-│   ├── css/            # shared.css + page styles (imported by React + static pages)
-│   ├── js/             # account.js, shared.js, dev-tools.js (static pages only)
+│   ├── App.tsx         # React Router (hub, audio, notes, cloud, account)
+│   ├── pages/
+│   ├── components/
+│   ├── hooks/
+│   └── lib/            # platform detection, supabase client
+├── public/
+│   ├── css/
+│   ├── js/             # dev-tools.js; shared.js for static legal pages
 │   ├── images/
 │   ├── _headers
-│   ├── _redirects      # includes SPA fallbacks for /audio/* and /notes/*
+│   ├── _redirects      # SPA fallbacks for /audio/*, /notes/*, /cloud/*, /account/*
 │   ├── robots.txt
 │   └── sitemap.xml
 ├── partials/           # Nav/footer source for static pages only
@@ -88,12 +86,9 @@ Pushes to `master` auto-deploy.
 
 ## Tech Stack
 
-- React 19 + TypeScript + Vite + React Router (`/`, `/audio/`, `/notes/`)
-- Static HTML/CSS/JS for unmigrated routes
-- Cloudflare Pages hosting
-- Umami analytics
-- Supabase auth on `/account/` (static, CDN `@2.43.4`)
-- Stripe checkout removed from `/cloud/` until Cloud launches
+- React 19 + TypeScript + Vite + React Router (product + cloud + account routes)
+- Static HTML for legal pages only
+- Supabase JS `@2.43.4` via npm on `/account/` (no CDN script tag)
 
 ## Links
 

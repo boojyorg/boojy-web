@@ -12,6 +12,7 @@ export function Nav() {
     : location.pathname.startsWith('/notes/')
       ? 'notes'
       : undefined;
+  const accountActive = location.pathname.startsWith('/account/');
 
   useEffect(() => {
     const navbar = navbarRef.current;
@@ -76,9 +77,9 @@ export function Nav() {
               <path d={GITHUB_ICON_PATH} />
             </svg>
           </a>
-          <a href="/account/" className="nav-signin">
+          <Link to="/account/" className={`nav-signin${accountActive ? ' active' : ''}`}>
             Account
-          </a>
+          </Link>
           <button
             className="nav-toggle"
             aria-label="Toggle menu"
@@ -109,9 +110,13 @@ export function Nav() {
           >
             Notes
           </Link>
-          <a href="/account/" className="nav-mobile-link" onClick={closeMenu}>
+          <Link
+            to="/account/"
+            className={`nav-mobile-link${accountActive ? ' active' : ''}`}
+            onClick={closeMenu}
+          >
             Account
-          </a>
+          </Link>
           <a
             href="https://github.com/boojyorg"
             target="_blank"

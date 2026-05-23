@@ -1,5 +1,19 @@
 # Changelog
 
+## 2026-05-23 (continued)
+
+### Added
+- **React routes** — `/cloud/` (preview pricing + FAQ) and `/account/` (Supabase auth via npm `@2.43.4`)
+- **`FaqAccordion`**, **`useAccount`**, **`src/lib/supabase.ts`** with `CLOUD_LAUNCHED` flag for billing UI
+
+### Changed
+- **SPA fallbacks** — `_redirects` rules for `/cloud/*` and `/account/*`
+- **`sync-partials.py` / `bump-cache.py`** — cloud/account removed (now React)
+- **Nav/Footer** — `Link` for `/cloud/` and `/account/`; account active state on `/account/`
+
+### Removed
+- Static `public/cloud/index.html` and `public/account/index.html`
+
 ## 2026-05-23
 
 ### Added

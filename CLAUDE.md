@@ -19,11 +19,9 @@ website/
 │   ├── pages/          # HubPage, AudioPage, NotesPage
 │   └── components/     # Nav, Footer, Starfield, etc.
 ├── public/             # Static assets + legacy HTML pages
-│   ├── cloud/index.html
-│   ├── account/index.html
 │   ├── privacy.html, terms.html, subscribed.html, 404.html
 │   ├── css/            # shared.css + page styles
-│   ├── js/             # shared.js, account.js, audio.js, etc.
+│   ├── js/             # shared.js (legal pages), dev-tools.js
 │   ├── images/
 │   ├── _redirects
 │   ├── _headers
@@ -38,11 +36,11 @@ website/
 
 ## Tech Stack
 
-- **React routes:** `/`, `/audio/`, `/notes/` (React Router + shared layout)
-- **Static pages:** `/cloud/`, `/account/`, legal pages (migrating incrementally)
+- **React routes:** `/`, `/audio/`, `/notes/`, `/cloud/`, `/account/` (React Router + shared layout)
+- **Static pages:** legal pages only (`privacy.html`, `terms.html`, etc.)
 - **Hosting:** Cloudflare Pages (auto-deploys from GitHub `master`)
 - **Build:** `npm run build` → output in `website/dist/`
-- **Auth:** Supabase JS via CDN (pinned to v2.43.4)
+- **Auth:** Supabase JS `@2.43.4` via npm on `/account/` route
 - **Payments:** Stripe Checkout + Customer Portal (disabled on site until Cloud launches)
 - **Backend:** Supabase Edge Functions (in boojy-cloud repo)
 - **Storage:** Cloudflare R2 (S3-compatible, for note content)
@@ -52,17 +50,16 @@ website/
 
 | Route | Stack |
 |-------|-------|
-| `/`, `/audio/`, `/notes/` | React 19 + TS + Vite + React Router |
-| `/cloud/`, `/account/`, legal | Static HTML in `website/public/` |
+| `/`, `/audio/`, `/notes/`, `/cloud/`, `/account/` | React 19 + TS + Vite + React Router |
+| Legal pages | Static HTML in `website/public/` |
 
-Shared layout (`Nav`, `Footer`, `Starfield`) lives in `website/src/components/`. Static pages still use `partials/` + `sync-partials.py`. Cloud checkout is disabled; account hides billing/storage until Cloud launches.
+Set `CLOUD_LAUNCHED = true` in `src/lib/supabase.ts` when Cloud storage goes live to show billing UI on account.
 
 ## Key Conventions
 
-- React routes: shared CSS imported from `public/css/`; page CSS imported per route in `src/pages/`
-- Static pages: nav/footer synced via `sync-partials.py`; `shared.css` + `shared.js` on each page
-- Supabase CDN is pinned to `@2.43.4` (newer versions break global scope)
-- Scripts using Supabase must use `type="module"` to avoid global property conflicts
+- React routes: shared CSS from `public/css/`; page CSS per route in `src/pages/`
+- Account auth: `@supabase/supabase-js@2.43.4` as npm import (not CDN)
+- Legal pages: nav/footer via `sync-partials.py`; `shared.css` + `shared.js`
 - Edge Function calls need both `apikey` and `Authorization` headers
 - All Edge Functions are deployed with `--no-verify-jwt`
 - Use `.maybeSingle()` not `.single()` for Supabase queries that may return no rows
@@ -85,8 +82,8 @@ Shared layout (`Nav`, `Footer`, `Starfield`) lives in `website/src/components/`.
 
 ```bash
 cd website && npm install && npm run dev
-# React: http://localhost:5173/ , /audio/ , /notes/
-# Static: http://localhost:5173/cloud/ , /account/ , etc.
+# React: http://localhost:5173/ , /audio/ , /notes/ , /cloud/ , /account/
+# Static: http://localhost:5173/privacy.html , etc.
 ```
 
 Production build: `npm run build` (output in `dist/`).

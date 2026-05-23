@@ -8,7 +8,7 @@ export function Footer() {
         <nav className="footer-row-1">
           <Link to="/audio/">Audio</Link>
           <Link to="/notes/">Notes</Link>
-          <a href="/cloud/">Cloud</a>
+          <Link to="/cloud/">Cloud</Link>
           <a href="/privacy.html">Privacy</a>
           <a href="/terms.html">Terms</a>
         </nav>

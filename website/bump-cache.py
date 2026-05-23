@@ -16,8 +16,6 @@ ROOT = Path(__file__).parent
 
 # Same page list as sync-partials.py
 PAGES = [
-    "public/cloud/index.html",
-    "public/account/index.html",
     "public/privacy.html",
     "public/terms.html",
     "public/subscribed.html",

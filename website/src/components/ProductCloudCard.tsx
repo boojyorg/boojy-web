@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { GLOBE_ICON_PATHS, LAPTOP_ICON_PATH } from '../content/site';
 
 interface ProductCloudCardProps {
@@ -60,9 +61,9 @@ export function ProductCloudCard({
           </div>
           <p className="product-cloud-description">{description}</p>
           {cta.kind === 'link' ? (
-            <a href={cta.href} className={`product-cloud-cta ${ctaClassName}`.trim()}>
+            <Link to={cta.href} className={`product-cloud-cta ${ctaClassName}`.trim()}>
               {cta.label}
-            </a>
+            </Link>
           ) : (
             <span className={`product-cloud-cta ${ctaClassName}`.trim()}>{cta.label}</span>
           )}
