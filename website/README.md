@@ -1,10 +1,8 @@
 # Boojy Website
 
-Source code for [boojy.org](https://boojy.org).
+Source code for [boojy.org](https://boojy.org) — live as a React SPA on Cloudflare Pages.
 
-## Migration status
-
-The site is a **full React SPA** built with Vite. Static assets (CSS, images, `_headers`, `_redirects`, etc.) live in `public/` and are copied into `dist/` on build.
+## Routes
 
 | Route | Notes |
 |-------|-------|
@@ -17,7 +15,14 @@ The site is a **full React SPA** built with Vite. Static assets (CSS, images, `_
 | `/subscribed.html` | Post-newsletter signup confirmation |
 | `*` (404) | React `NotFoundPage` |
 
-Cloud messaging was updated site-wide: storage is **rolling out soon** (preview pricing on `/cloud/`, no live checkout).
+Cloud storage is **rolling out soon** — preview pricing on `/cloud/`, no live checkout.
+
+## What's next
+
+1. **Cloud launch** — set `CLOUD_LAUNCHED = true` in `src/lib/supabase.ts`, re-enable checkout on `/cloud/`, verify Stripe + billing UI on `/account/`
+2. **Optional cleanup** — remove empty `public/audio/`, `notes/`, `cloud/`, `account/` dirs; drop `logo-test/` or legacy `shared.js` / `starfield.js`
+3. **Share cards** — if link previews matter, SPA client-side OG tags won't help crawlers; consider prerender or edge HTML later
+4. **Legal edits** — move privacy/terms from raw HTML blobs in `src/content/legal/` to Markdown/TSX when you next update copy
 
 ## Local Development
 
@@ -29,14 +34,22 @@ npm run dev
 
 Then visit `http://localhost:5173/`
 
-All routes are React — use `npm run dev` or `npm run preview`, not `python3 -m http.server`.
+Use `npm run dev` or `npm run preview` — not a plain static file server.
 
 ## Build
+
+From `website/` (day-to-day):
 
 ```bash
 cd website
 npm run build
 npm run preview   # optional — preview production build locally
+```
+
+From repo root (matches Cloudflare):
+
+```bash
+npm run build
 ```
 
 Output goes to `website/dist/` — this is what Cloudflare Pages deploys.
@@ -50,8 +63,8 @@ website/
 │   ├── App.tsx         # React Router (all routes)
 │   ├── pages/
 │   ├── components/
-│   ├── content/        # site copy, cloud FAQ, legal HTML bodies
-│   ├── hooks/
+│   ├── content/        # site copy, cloud FAQ, page-meta.ts, legal HTML bodies
+│   ├── hooks/          # usePageMeta, useAccount, …
 │   └── lib/            # platform detection, supabase client
 ├── public/
 │   ├── css/
@@ -75,11 +88,19 @@ Hosted on Cloudflare Pages:
 | Build command | `npm run build` |
 | Output directory | `website/dist` |
 
-The repo root `package.json` runs the Vite build inside `website/`.
+The repo root [`package.json`](../package.json) runs the Vite build inside `website/`.
 
 **Alternative:** Root directory `website`, build `npm run build`, output `dist`.
 
 Pushes to `master` auto-deploy.
+
+### Deploy verification
+
+- Build log shows `vite build` completing
+- `curl -s https://boojy.org/ | grep assets/index` → `/assets/index-*.js`, not `main.tsx`
+- Browser smoke: hub starfield, `/audio/` downloads, `/account/` sign-in, fake URL → 404
+
+### Troubleshooting
 
 **Build failed with `ENOENT ... repo/package.json`?** Cloudflare ran the build at repo root without finding `package.json` — use the settings above (empty root directory + `website/dist` output).
 
@@ -94,3 +115,4 @@ Pushes to `master` auto-deploy.
 
 - **Live site:** [boojy.org](https://boojy.org)
 - **App repo:** [tyrbujac/boojy-audio](https://github.com/tyrbujac/boojy-audio)
+- **Project context:** [CLAUDE.md](../CLAUDE.md)

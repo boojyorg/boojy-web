@@ -53,7 +53,10 @@ Currently in beta (v0.1.0).
 
 This repository contains the source code for [boojy.org](https://boojy.org) — the marketing website.
 
-The site is a **React 19 + TypeScript + Vite** SPA. See [website/README.md](website/README.md) for local dev and route overview.
+The site is live as a **React 19 + TypeScript + Vite** SPA on Cloudflare Pages.
+
+- **[website/README.md](website/README.md)** — local dev, routes, deploy settings, verification
+- **[CLAUDE.md](CLAUDE.md)** — project context for AI assistants and next steps
 
 For the Boojy Audio app source code, see [tyrbujac/boojy-audio](https://github.com/tyrbujac/boojy-audio).
 

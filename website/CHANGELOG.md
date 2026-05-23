@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-05-23 (deploy)
+
+### Added
+- **Repo-root `package.json`** — Cloudflare Pages build delegates `npm ci` + Vite build into `website/`
+
+### Changed
+- **Deploy docs** — Cloudflare settings (empty root directory, output `website/dist`) and troubleshooting notes
+
+## 2026-05-23 (SEO + cleanup)
+
 ### Changed
 - **`usePageMeta`** — per-route title, description, and Open Graph tags (ported from static HTML)
 - **`_redirects`** — simplified to external redirects + SPA catch-all
@@ -12,7 +22,7 @@
 
 ### Added
 - **React routes** — `/privacy.html`, `/terms.html`, `/subscribed.html`, catch-all 404
-- **`LegalLayout`**, **`usePageTitle`**, legal body content in `src/content/legal/`
+- **`LegalLayout`**, **`usePageMeta`**, legal body content in `src/content/legal/`
 
 ### Changed
 - **SPA fallback** — `_redirects` catch-all `/* → index.html`
