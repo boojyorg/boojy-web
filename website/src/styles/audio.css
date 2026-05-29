@@ -5,268 +5,270 @@
 
 /* === Hero === */
 .audio-hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding-top: 120px;
-    padding-bottom: calc(var(--spacing-sm) + 20px);
-    position: relative;
-    z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 120px;
+  padding-bottom: calc(var(--spacing-sm) + 20px);
+  position: relative;
+  z-index: 5;
 }
 
 .audio-hero .container {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
 .audio-hero-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .audio-hero-logo {
-    height: 4.55rem;
-    width: auto;
-    position: relative;
-    left: -2px;
+  height: 4.55rem;
+  width: auto;
+  position: relative;
+  left: -2px;
 }
 
 .audio-hero-product {
-    height: 3.549rem;
-    width: auto;
-    position: relative;
-    top: -8px;
-    left: 9.5px;
+  height: 3.549rem;
+  width: auto;
+  position: relative;
+  top: -8px;
+  left: 9.5px;
 }
 
 .audio-hero-glow {
-    --glow-opacity: 0.9;
-    --glow-width: 1400px;
-    --glow-height: 994px;
-    --glow-color: 86, 177, 255;
+  --glow-opacity: 0.9;
+  --glow-width: 1400px;
+  --glow-height: 994px;
+  --glow-color: 86, 177, 255;
 
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, calc(-50% + 18px));
-    width: var(--glow-width);
-    height: var(--glow-height);
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 1;
-    opacity: var(--glow-origin-opacity, var(--glow-opacity));
-    background: radial-gradient(ellipse,
-        rgba(var(--glow-origin, var(--glow-color)), 0.25) 0%,
-        rgba(var(--glow-origin, var(--glow-color)), 0.12) 40%,
-        transparent 70%);
-    view-transition-name: hero-glow;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 18px));
+  width: var(--glow-width);
+  height: var(--glow-height);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--glow-origin-opacity, var(--glow-opacity));
+  background: radial-gradient(
+    ellipse,
+    rgba(var(--glow-origin, var(--glow-color)), 0.25) 0%,
+    rgba(var(--glow-origin, var(--glow-color)), 0.12) 40%,
+    transparent 70%
+  );
+  view-transition-name: hero-glow;
 }
 
 .audio-tagline {
-    font-size: 1.35rem;
-    font-weight: 400;
-    color: var(--color-text);
-    max-width: 600px;
-    margin: 0 auto var(--spacing-md);
-    line-height: 1.5;
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--color-text);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-md);
+  line-height: 1.5;
 }
 
 .audio-cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 3px;
-    position: relative;
-    z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3px;
+  position: relative;
+  z-index: 2;
 }
 
 /* Audio web CTA — blue fill */
 .btn-web-audio {
-    background: var(--color-audio);
-    color: #0F1119;
+  background: var(--color-audio);
+  color: #0f1119;
 }
 .btn-web-audio:hover {
-    filter: brightness(1.15);
-    transform: translateY(-1px);
+  filter: brightness(1.15);
+  transform: translateY(-1px);
 }
 
 /* === Screenshot === */
 .audio-screenshot-section {
-    padding: 10px 0 var(--spacing-lg);
-    position: relative;
-    z-index: 4;
+  padding: 10px 0 var(--spacing-lg);
+  position: relative;
+  z-index: 4;
 }
 
 .audio-screenshot-wrapper {
-    max-width: 900px;
-    margin: 0 auto;
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
 .audio-screenshot {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* === Features Grid === */
 .audio-features-section {
-    padding: var(--spacing-lg) 0 var(--spacing-xl);
-    position: relative;
-    z-index: 1;
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
+  position: relative;
+  z-index: 1;
 }
 
 .audio-features-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-xl);
-    max-width: 900px;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .audio-feature-card {
-    background: #040412;
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-xl);
-    border: 1px solid var(--color-border);
-    transition: all 0.3s ease;
-    text-align: center;
+  background: #040412;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+  text-align: center;
 }
 
 .audio-feature-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(74, 158, 245, 0.3);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px);
+  border-color: rgba(74, 158, 245, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
 .audio-feature-icon {
-    display: block;
-    margin: 0 auto var(--spacing-sm);
-    width: 28px;
-    height: 28px;
-    color: var(--color-audio);
+  display: block;
+  margin: 0 auto var(--spacing-sm);
+  width: 28px;
+  height: 28px;
+  color: var(--color-audio);
 }
 
 .audio-feature-card h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--color-text);
-    margin-bottom: var(--spacing-xs);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
 }
 
 .audio-feature-card p {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    position: relative;
-    z-index: 1;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
 }
 
 /* === Cloud Card Overrides === */
 .audio-cloud-card:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .audio-cloud-cta {
-    background: rgba(255, 255, 255, 0.15);
-    color: var(--color-text-light);
-    cursor: default;
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--color-text-light);
+  cursor: default;
 }
 
 /* === Subscribed Page === */
 .subscribed-hero {
-    min-height: calc(100vh - 200px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-dark);
-    padding: var(--spacing-3xl) 0;
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-dark);
+  padding: var(--spacing-3xl) 0;
 }
 
 .subscribed-box {
-    text-align: center;
-    max-width: 500px;
-    margin: 0 auto;
-    animation: fadeIn 0.5s ease;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+  animation: fadeIn 0.5s ease;
 }
 
 .subscribed-logo {
-    width: 100px;
-    height: auto;
-    margin: 0 auto var(--spacing-lg);
-    display: block;
+  width: 100px;
+  height: auto;
+  margin: 0 auto var(--spacing-lg);
+  display: block;
 }
 
 .subscribed-box h1 {
-    color: var(--color-primary);
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-md);
+  color: var(--color-primary);
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .subscribed-box p {
-    color: var(--color-text-light);
-    font-size: 1.1rem;
-    margin-bottom: var(--spacing-xl);
-    line-height: 1.6;
+  color: var(--color-text-light);
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
 }
 
 /* === Responsive === */
 @media (max-width: 768px) {
-    .audio-hero {
-        padding-top: 90px;
-    }
+  .audio-hero {
+    padding-top: 90px;
+  }
 
-    .audio-hero-logo {
-        height: 3.575rem;
-    }
+  .audio-hero-logo {
+    height: 3.575rem;
+  }
 
-    .audio-hero-product {
-        height: 2.15rem;
-    }
+  .audio-hero-product {
+    height: 2.15rem;
+  }
 
-    .audio-tagline {
-        font-size: 1.15rem;
-    }
+  .audio-tagline {
+    font-size: 1.15rem;
+  }
 
-    .audio-features-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--spacing-lg);
-    }
+  .audio-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
 }
 
 @media (max-width: 480px) {
-    .audio-hero-title {
-        flex-direction: column;
-    }
+  .audio-hero-title {
+    flex-direction: column;
+  }
 
-    .audio-hero-logo {
-        height: 2.925rem;
-    }
+  .audio-hero-logo {
+    height: 2.925rem;
+  }
 
-    .audio-hero-product {
-        height: 1.8rem;
-    }
+  .audio-hero-product {
+    height: 1.8rem;
+  }
 
-    .audio-hero-glow {
-        --glow-width: 300px;
-        --glow-height: 200px;
-    }
+  .audio-hero-glow {
+    --glow-width: 300px;
+    --glow-height: 200px;
+  }
 
-    .audio-tagline {
-        font-size: 1rem;
-    }
+  .audio-tagline {
+    font-size: 1rem;
+  }
 
-    .audio-features-grid {
-        grid-template-columns: 1fr;
-        max-width: 400px;
-        margin: 0 auto;
-    }
+  .audio-features-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
 }

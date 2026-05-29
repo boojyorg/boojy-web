@@ -16,7 +16,10 @@ export function detectPlatform(): PlatformId {
   if (typeof navigator === 'undefined' || typeof document === 'undefined') return null;
 
   const userAgent = navigator.userAgent;
-  const platform = navigator.platform || (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform || '';
+  const platform =
+    navigator.platform ||
+    (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform ||
+    '';
 
   if (platform.includes('Mac') || userAgent.includes('Mac')) {
     try {
@@ -36,7 +39,8 @@ export function detectPlatform(): PlatformId {
       // fall through
     }
 
-    const uaData = (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData;
+    const uaData = (navigator as Navigator & { userAgentData?: { platform?: string } })
+      .userAgentData;
     if (uaData?.platform === 'macOS') {
       return 'mac-arm64';
     }

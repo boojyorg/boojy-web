@@ -5,236 +5,237 @@
 
 /* === Page Layout === */
 .account-page {
-    min-height: calc(100vh - 200px);
-    padding-top: 80px;
-    background: var(--color-bg-dark);
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
+  min-height: calc(100vh - 200px);
+  padding-top: 80px;
+  background: var(--color-bg-dark);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 .account-container {
-    width: 100%;
-    max-width: 480px;
-    padding: var(--spacing-2xl) var(--spacing-lg);
+  width: 100%;
+  max-width: 480px;
+  padding: var(--spacing-2xl) var(--spacing-lg);
 }
 
 /* === Section === */
 .account-section {
-    margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .account-section-header {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    margin-bottom: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
 }
 
 .account-section-header span {
-    font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    color: var(--color-accent);
-    white-space: nowrap;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-accent);
+  white-space: nowrap;
 }
 
 .account-section-header hr {
-    flex-grow: 1;
-    border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-grow: 1;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* === Sign-in Prompt === */
 .account-signin-prompt {
-    text-align: center;
+  text-align: center;
 }
 
 .account-cloud-icon {
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-md);
-    opacity: 0.7;
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+  opacity: 0.7;
 }
 
 .account-signin-prompt > p:first-of-type {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: var(--spacing-xl);
-    max-width: 320px;
-    margin-left: auto;
-    margin-right: auto;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-xl);
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* === Auth Buttons === */
 .auth-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .auth-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-sm);
-    width: 100%;
-    padding: 0.85rem var(--spacing-md);
-    border-radius: var(--border-radius);
-    font-size: 1rem;
-    font-weight: 600;
-    font-family: var(--font-sans);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 1px solid var(--color-border);
-    background: rgba(51, 51, 51, 0.6);
-    color: var(--color-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: 0.85rem var(--spacing-md);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid var(--color-border);
+  background: rgba(51, 51, 51, 0.6);
+  color: var(--color-text);
 }
 
 .auth-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .auth-btn:not(:disabled):hover {
-    border-color: var(--color-accent);
-    transform: translateY(-1px);
+  border-color: var(--color-accent);
+  transform: translateY(-1px);
 }
 
 .auth-btn svg {
-    flex-shrink: 0;
+  flex-shrink: 0;
 }
 
 /* === Email Form === */
 .email-form {
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-sm);
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
 }
 
 .email-toggle {
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-    margin-top: var(--spacing-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-top: var(--spacing-xs);
 }
 
 .email-toggle a {
-    color: var(--color-accent);
-    text-decoration: none;
-    font-weight: 600;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .email-toggle a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .auth-error {
-    color: #ef4444;
-    font-size: 0.85rem;
-    min-height: 1.2em;
+  color: #ef4444;
+  font-size: 0.85rem;
+  min-height: 1.2em;
 }
 
 /* === Dashboard === */
 .dash-profile {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
 }
 
 .dash-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dash-label {
-    font-size: 0.9rem;
-    color: var(--color-text-light);
+  font-size: 0.9rem;
+  color: var(--color-text-light);
 }
 
 .dash-value {
-    font-size: 0.9rem;
-    color: var(--color-text);
-    font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-text);
+  font-weight: 500;
 }
 
 .dash-tier-badge {
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 0.2rem 0.75rem;
-    border-radius: 20px;
-    letter-spacing: 0.03em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.2rem 0.75rem;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
 }
 
 .dash-tier-free {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-text-light);
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-light);
 }
 
 .dash-tier-orbit {
-    background: rgba(56, 189, 248, 0.15);
-    color: var(--color-accent);
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--color-accent);
 }
 
 /* === Storage Bar === */
 .dash-storage {
-    margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .dash-storage-track {
-    width: 100%;
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: var(--spacing-xs);
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: var(--spacing-xs);
 }
 
 .dash-storage-fill {
-    height: 100%;
-    background: var(--color-accent);
-    border-radius: 4px;
-    transition: width 0.5s ease;
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 4px;
+  transition: width 0.5s ease;
 }
 
 .dash-storage-text {
-    font-size: 0.85rem;
-    color: var(--color-text-light);
-    text-align: right;
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  text-align: right;
 }
 
 /* === Dashboard Actions === */
 .dash-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-xl);
 }
 
 .btn-signout {
-    background: none;
-    border: none;
-    color: var(--color-text-light);
-    font-size: 0.9rem;
-    font-family: var(--font-sans);
-    cursor: pointer;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    transition: color 0.3s ease;
+  background: none;
+  border: none;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  transition: color 0.3s ease;
 }
 
 .btn-signout:hover {
-    color: #ef4444;
+  color: #ef4444;
 }
 
 .cloud-prelaunch-hidden {
-    display: none !important;
+  /* biome-ignore lint/complexity/noImportantStyles: utility class must win over inline/display rules */
+  display: none !important;
 }
 
 /* === Responsive === */
 @media (max-width: 480px) {
-    .account-container {
-        padding: var(--spacing-xl) var(--spacing-md);
-    }
+  .account-container {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
 }

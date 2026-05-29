@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 function mulberry32(seed: number) {
-  return function () {
+  return () => {
     seed |= 0;
     seed = (seed + 0x6d2b79f5) | 0;
     let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
@@ -204,11 +204,14 @@ export function Starfield() {
       window.removeEventListener('resize', onResize);
       resizeObserver.disconnect();
       styleEl.remove();
-      document.querySelectorAll('.shooting-star').forEach((el) => el.remove());
+      document.querySelectorAll('.shooting-star').forEach((el) => {
+        el.remove();
+      });
     };
   }, []);
 
   return (
+    // biome-ignore lint/a11y/noAriaHiddenOnFocusable: decorative, non-interactive background canvas (no tabindex)
     <canvas
       ref={canvasRef}
       aria-hidden="true"

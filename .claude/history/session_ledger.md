@@ -5,6 +5,37 @@ the next session. Newest entry on top.
 
 ---
 
+## 2026-05-29 · Verify prod deploy + adopt Biome (Phase 8) · chore/biome
+
+### Session Work
+
+| Task | Outcome |
+|---|---|
+| Confirm migration shipped | PR #1 already merged to `master` (`b471f22`); CF settings flipped in lockstep. Verified **live**: `boojy.org` serves static HTML with real per-route `<title>`/description/OG, `/audio/` distinct meta, `/privacy.html`→`/privacy/` 301. Phase 7b ✅ |
+| Phase 8 — adopt Biome | `@biomejs/biome` 2.4.16 + `biome.json`; `pnpm lint` / `lint:fix` scripts. Scoped to `.ts/.tsx/.js/.mjs/.json/.css` |
+| Critical scoping catch | Biome parses `.astro` frontmatter as standalone JS → false-flagged **31 imports + 13 vars** used only in templates as unused. Auto-fix would have **stripped them and broken the build**. Excluded `.astro` (+ legal `.html` content) — `astro check` remains the `.astro` gate |
+| Lint dispositions | Fixed in code: 8 decorative SVGs → `aria-hidden`, `forEach` block body, dead empty CSS rule, `useArrowFunction` autofix, 2 `dangerouslySetInnerHtml` suppressions (fixed comment placement). Disabled (documented, recurring patterns): `noNonNullAssertion`, `noUnknownTypeSelector`, `useValidAnchor`. Per-line ignore: `noImportantStyles`, `noAriaHiddenOnFocusable` |
+| Reformat | Whole tree → 2-space (CSS was 4-space). Big but isolated diff — exactly why Biome was deferred to its own commit |
+| Doc sync | CLAUDE.md (migration live + Biome adopted + scope/disabled-rules note + deploy trap → past tense), dreams.md (Phases 7b/8 ✅, new deferred a→button item) |
+
+### Gates
+
+| Gate | Result |
+|---|---|
+| `pnpm lint` (biome check) | ✅ 26 files, 0 diagnostics |
+| `pnpm exec astro check` | ✅ 0 errors, 0 warnings (2 pre-existing hints) |
+| `pnpm build` | ✅ 9 pages clean |
+
+### Notes (handoff)
+
+Migration fully done + live; Biome adopted. **Open:** commit `chore/biome` (branch off merged
+`master`) → PR. The root `README.md` is still the **Boojy Audio** product readme, not the website —
+pre-existing mismatch, worth fixing in a separate doc pass. Deferred backlog (dreams §3): a→button
+semantic fix, glow-gradient duplication, 404 self-canonical, single download island, Tailwind.
+The local post-edit hook gates `astro check` only — consider adding `biome check` now that it's green.
+
+---
+
 ## 2026-05-29 · Code review (high) + fixes; doc sync · astro-migration
 
 ### Session Work
