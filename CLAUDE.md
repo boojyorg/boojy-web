@@ -63,11 +63,14 @@ anchors — semantic a→button conversion is deferred styling work).
 ## Shipping workflow
 
 1. **Branch** (never commit straight to `master`).
-2. **Green the gates:** `pnpm exec astro check` + `pnpm build` + `pnpm lint`.
+2. **Green the gates:** `pnpm exec astro check` + `pnpm build` + `pnpm lint`. These same three run
+   in CI (`.github/workflows/ci.yml`) on every PR and on `master` — so a red PR check = a gate you
+   skipped locally.
 3. **Commit, push.**
 4. **Deploy is Cloudflare Pages Git integration** — a preview deploy per branch, production on
-   `master`. No wrangler, no GitHub Actions. CF build settings are now: root `website`, build
-   command `pnpm build`, output `dist`.
+   `master`. CF build settings: root `website`, build command `pnpm build`, output `dist`.
+   **GitHub Actions runs CI gates only, never the deploy** (no wrangler, no Actions-driven deploy);
+   Cloudflare builds and ships the site itself. Keep that split — it's why CI needs no CF secrets.
 
 > ⚠️ **Deploy trap (resolved — kept as a reference).** CF Pages build settings are shared between
 > production and preview: one build command / output dir for both. During the migration this was

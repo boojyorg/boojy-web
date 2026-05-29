@@ -1,0 +1,43 @@
+name: CI
+
+# Runs the gates (Biome lint + astro check + build) on PRs and on master.
+# Deploys are NOT handled here — boojy.org ships via the Cloudflare Pages Git
+# integration (CF watches the repo and builds it itself). This workflow only
+# gates code; see CLAUDE.md for the deploy model.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+# Cancel superseded runs on the same ref.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# The app lives in website/; run every step there.
+defaults:
+  run:
+    working-directory: website
+
+jobs:
+  verify:
+    name: Lint · Check · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      # pnpm version comes from the root package.json "packageManager" field.
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: website/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm run check
+      - run: pnpm build
