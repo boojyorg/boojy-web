@@ -47,6 +47,9 @@ yarn-error.log*
 *.bak
 *.backup
 
-# Vite
+# Build output & deps
 node_modules/
 dist/
+
+# Astro
+.astro/
