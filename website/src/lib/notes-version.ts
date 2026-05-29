@@ -28,16 +28,23 @@ export async function getNotesVersion(): Promise<string> {
     const tag = tags[0];
     if (!tag) return FALLBACK;
 
-    const commitRes = await fetch(tag.commit.url, { headers, signal: controller.signal });
-    if (!commitRes.ok) return `${tag.name} Beta`;
+    // We have a real tag now — never drop below `${tag.name} Beta`. A separate try keeps a
+    // slow/aborted commit fetch (the shared 5s timeout can fire mid-second-request) from
+    // throwing to the outer catch and discarding the tag name we already fetched.
+    try {
+      const commitRes = await fetch(tag.commit.url, { headers, signal: controller.signal });
+      if (!commitRes.ok) return `${tag.name} Beta`;
 
-    const commit = (await commitRes.json()) as GitHubCommit;
-    const formatted = new Date(commit.commit.committer.date).toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    });
-    return `${tag.name} Beta · ${formatted}`;
+      const commit = (await commitRes.json()) as GitHubCommit;
+      const formatted = new Date(commit.commit.committer.date).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+      return `${tag.name} Beta · ${formatted}`;
+    } catch {
+      return `${tag.name} Beta`;
+    }
   } catch {
     return FALLBACK;
   } finally {

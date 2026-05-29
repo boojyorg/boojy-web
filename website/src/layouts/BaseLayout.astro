@@ -2,7 +2,7 @@
 import { Starfield } from '../components/Starfield';
 import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
-import { getPageMeta, pageMetaUrl } from '../content/page-meta';
+import { DEFAULT_OG_IMAGE, getPageMeta, pageMetaUrl } from '../content/page-meta';
 import '../styles/shared.css';
 
 interface Props {
@@ -13,7 +13,7 @@ interface Props {
 const { path } = Astro.props;
 const meta = getPageMeta(path);
 const url = pageMetaUrl(meta);
-const ogImage = meta.ogImage ?? 'https://boojy.org/images/Boojy_Image_Logo.png';
+const ogImage = meta.ogImage ?? DEFAULT_OG_IMAGE;
 ---
 
 <!doctype html>

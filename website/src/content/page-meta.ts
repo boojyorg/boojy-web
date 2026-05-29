@@ -1,5 +1,5 @@
 const SITE = 'https://boojy.org';
-const DEFAULT_OG_IMAGE = `${SITE}/images/Boojy_Image_Logo.png`;
+export const DEFAULT_OG_IMAGE = `${SITE}/images/Boojy_Image_Logo.png`;
 
 export interface PageMeta {
   title: string;
