@@ -97,6 +97,18 @@ JSON-LD, Brotli on, sitemap/robots good. Findings:
 - ⏭️ **Core Web Vitals not measured** — Chrome DevTools MCP not configured this session. Run a
   Lighthouse pass or add `chrome-devtools-mcp` for real LCP/CLS/INP.
 
+#### User action items — status
+
+- [ ] **Cloudflare Browser Cache TTL → "Respect Existing Headers"** (boojy.org → Caching →
+  Configuration). Makes `/_astro/*` cache 1yr instead of the current 4h. _Not done yet._
+- [ ] **Google Search Console — UNFINISHED (resume later).** Property added as a **Domain** property;
+  verification in progress. **Still TODO:** (1) Sitemaps → submit the **full URL**
+  `https://boojy.org/sitemap-index.xml` (a Domain property needs the full URL, not the relative
+  path — the relative path returns "invalid sitemap address"); (2) URL-inspection → **Request
+  Indexing** for `/`, `/audio/`, `/notes/`, `/cloud/`, `/privacy/`, `/terms/`.
+- [x] **GitHub branch protection** — "Lint · Check · Build" set as a required status check on
+  `master` (via API; no required approvals so solo merges still work).
+
 ### Post-review cleanup (deferred, low severity)
 
 From `/code-review high` on the branch — correctness (#1 download fallbacks, #2 notes-version
