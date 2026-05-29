@@ -153,3 +153,10 @@ validation failures into §2 — clear stale/transient ones once gates are green
 
 Monitor session context. When utilization crosses ~50%, pause active loops, summarize the current
 migration phase + files touched, update `dreams.md`, and run `/compact`.
+
+**Cost discipline (from the 2026-05-29 session — $55 in one sitting; see `dreams.md` §3).** Two
+things drove almost all of it: **subagent-heavy work** (each subagent is its own request stream) and
+**long context** (>150k tokens). Spend was overwhelmingly large-context *cache reads*, not new
+generation. So: be deliberate about spawning subagents (and consider a cheaper model for simple
+ones), `/compact` mid-task, and `/clear` when switching tasks. A long single session is expensive
+even when cached.

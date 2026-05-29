@@ -84,11 +84,13 @@ JSON-LD, Brotli on, sitemap/robots good. Findings:
 
 - ✅ **Fixed:** `/account/` was in the sitemap despite being a login-gated `client:only` page (no
   server-rendered content). Added to the sitemap filter alongside `/subscribed/`.
-- ⚠️ **USER ACTION — `/_astro/*` cached 4h, not 1yr.** `_headers` correctly says
-  `max-age=31536000, immutable`, but live response is `max-age=14400` — **Cloudflare's Browser Cache
-  TTL is overriding the header.** Fix in CF dashboard: boojy.org → Caching → Configuration → Browser
-  Cache TTL → **"Respect Existing Headers."** Hashed assets are safe to cache forever; this only
-  hurts repeat-visit perf.
+- ✅ **Fixed (was: `/_astro/*` cached 4h, not 1yr).** Two-part: (1) **user** flipped CF Browser
+  Cache TTL → "Respect Existing Headers" (it had been overriding the header to `max-age=14400`);
+  (2) that exposed a `_headers` conflict — hashed assets matched both `/_astro/*` AND generic
+  `/*.css`//*.js` rules, and CF *combines* matching rules, yielding a doubled Cache-Control
+  (`…immutable, …max-age=3600, must-revalidate`). Removed the generic rules (all CSS/JS is hashed
+  under `/_astro/`). **Verified live** via cache-buster: fresh fetch returns a clean single
+  `public, max-age=31536000, immutable`.
 - 💡 **Optimization (deferred):** the homepage ships ~57KB (brotli) of React runtime (`client.js`)
   solely to hydrate the decorative **Starfield** — the only island on `/`, and vanilla JS pre-
   migration. It's `client:idle` (doesn't block paint), but re-implementing Starfield as a plain
@@ -99,8 +101,9 @@ JSON-LD, Brotli on, sitemap/robots good. Findings:
 
 #### User action items — status
 
-- [ ] **Cloudflare Browser Cache TTL → "Respect Existing Headers"** (boojy.org → Caching →
-  Configuration). Makes `/_astro/*` cache 1yr instead of the current 4h. _Not done yet._
+- [x] **Cloudflare Browser Cache TTL → "Respect Existing Headers"** — done by user; `/_astro/*` now
+  caches 1yr (verified live). Follow-on `_headers` conflict fixed in PR #6. _(Stale edge copies of
+  the old doubled header will age out, or "Purge Everything" to clear immediately — optional.)_
 - [ ] **Google Search Console — UNFINISHED (resume later).** Property added as a **Domain** property;
   verification in progress. **Still TODO:** (1) Sitemaps → submit the **full URL**
   `https://boojy.org/sitemap-index.xml` (a Domain property needs the full URL, not the relative
@@ -142,3 +145,14 @@ a rough activity signal — a formatter sweep inflates it without adding behavio
 - **2026-05-29 · Biome (Phase 8) + CI** (`b471f22..2c89519`, 4 commits): 22 files, **+1985 / −1565**.
   ~90% is the one-time Biome 2-space CSS reformat (semantic-identical); real code change is just
   +54/−18 TS/TSX. Config +190/−2 (biome.json, scripts, lockfile, ci.yml); docs +79/−27.
+
+- **2026-05-29 · Full post-migration session (cost)** — Biome + CI + SEO/perf audit + README rewrites
+  + sitemap fix + branch-protection + cache-header fix. **6 PRs (#2–#6 + docs).**
+  - **Cost: $55.08** (Opus 4.8 $54.87; Haiku $0.21). API 1h39m / wall 3h30m. ~2432 lines added /
+    403 removed (CSS reformat dominates the adds).
+  - Opus token mix: 103.5k input · 400k output · **66.6m cache read** · 1.8m cache write — i.e. cost
+    was overwhelmingly large-context cache reads, not new generation.
+  - **Cost drivers (Anthropic usage view):** 83% from subagent-heavy sessions, 73% at >150k context.
+    **Lesson:** be deliberate spawning subagents (each is its own request stream); `/compact`
+    mid-task and `/clear` between tasks to keep context — and cost — down. See "Context Hygiene
+    Gate" in CLAUDE.md.

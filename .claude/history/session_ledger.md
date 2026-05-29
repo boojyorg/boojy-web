@@ -29,24 +29,36 @@ the next session. Newest entry on top.
 | `pnpm build` | ✅ 9 pages clean |
 | GitHub Actions CI (PR #3) | ✅ Lint·Check·Build pass (27s) + CF Pages preview pass |
 
-### Metrics (session footprint · `b471f22..2c89519`)
+### Metrics
 
-4 commits (PR #2 Biome, PR #3 CI). **22 files, +1985 / −1565** (≈3550 churn). Breakdown:
+Biome+CI footprint (`b471f22..2c89519`, 4 commits): **22 files, +1985 / −1565** (≈3550 churn).
 CSS reformat **+1662/−1518** (90% — mechanical 2-space, semantic-identical); TS/TSX **+54/−18**
-(the real code edits); config (biome.json/scripts/lock/ci.yml) **+190/−2**; docs **+79/−27**.
-Maps to **Phase 8 (Biome)** + post-migration CI tooling. Take the line count with salt — it's
-dominated by the one-time formatter sweep, not new behavior.
+(real edits); config **+190/−2**; docs **+79/−27**. Line count is dominated by the one-time sweep.
+
+**Cost (whole session, 6 PRs #2–#6 + docs):** **$55.08** (Opus 4.8 $54.87, Haiku $0.21). API 1h39m /
+wall 3h30m. Opus tokens: 103.5k in · 400k out · **66.6m cache read** · 1.8m cache write — cost was
+mostly large-context cache reads, not generation. Anthropic usage view: **83% subagent-heavy, 73%
+>150k context.** Lesson logged in CLAUDE.md (Context Hygiene Gate) + dreams §3: deliberate subagent
+use, `/compact` mid-task.
 
 ### Notes (handoff)
 
-**Migration + Biome + CI all merged to `master` and live.** No open migration work. Next session
-(planned with user): SEO/perf audit of live `boojy.org` (web-perf skill), fix root `README.md`
-(still the **Boojy Audio** readme, not the website), and commit the untracked `.claude/` tooling
-(incl. the post-edit hook's nvm-PATH fix — currently local-only). User-side: resubmit
-`sitemap-index.xml` in Search Console; make "Lint · Check · Build" a required status check.
-Deferred backlog (dreams §3): a→button a11y, glow-gradient duplication, 404 self-canonical, single
-download island, Tailwind. The local post-edit hook still gates `astro check` only — could add
-`pnpm lint` now that Biome is green.
+**All of the below shipped THIS session (the "next session" plan got done now):** Biome (PR #2), CI
+(PR #3), SEO/perf audit + README rewrites for Astro + `/account/` sitemap fix + `.claude`/scripts
+tracked (PR #4), open-items doc (PR #5), `_headers` cache-conflict fix (PR #6). Branch protection:
+"Lint · Check · Build" required on `master`. CF Browser Cache TTL fixed by user + `/_astro/*` 1yr
+immutable verified live.
+
+**Open (user-side):** Google Search Console — Domain property added, **sitemap submit + Request
+Indexing still TODO** (submit the *full* URL); optional Cloudflare "Purge Everything" to clear stale
+edge copies of the old doubled cache header (harmless, ages out).
+
+**Open (engineering, optional):** Core Web Vitals not measured — add `chrome-devtools-mcp` for real
+LCP/CLS/INP. Deferred backlog (dreams §3): starfield→vanilla-JS (drop ~57KB React from homepage),
+a→button a11y, glow-gradient duplication, 404 self-canonical, single download island, Tailwind.
+`.DS_Store` is tracked (minor hygiene — gitignore + untrack). Post-edit hook gates `astro check`
+only — could add `pnpm lint`. **Note:** `master` now requires the CI check, so all changes need a
+branch + PR (no direct commits).
 
 ---
 
