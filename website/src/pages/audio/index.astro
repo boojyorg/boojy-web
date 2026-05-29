@@ -6,6 +6,21 @@ import '../../styles/audio.css';
 ---
 
 <BaseLayout path="/audio/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Boojy Audio',
+      applicationCategory: 'MultimediaApplication',
+      operatingSystem: 'macOS, Windows',
+      url: 'https://boojy.org/audio/',
+      description: 'A free, simple music studio for macOS and Windows. Perfect for making your first beat.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    })}
+  />
   <section class="audio-hero">
     <div class="audio-hero-glow" aria-hidden="true" data-glow></div>
     <div class="container">

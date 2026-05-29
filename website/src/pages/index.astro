@@ -7,6 +7,20 @@ import '../styles/hub.css';
 ---
 
 <BaseLayout path="/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Boojy',
+      url: 'https://boojy.org',
+      logo: 'https://boojy.org/images/Boojy_Image_Logo.png',
+      description: 'Free, open-source creative software. Music production, note-taking, and cloud storage.',
+      sameAs: ['https://github.com/boojyorg', 'https://youtube.com/@boojy'],
+    })}
+  />
   <section class="hub-hero">
     <div class="hub-hero-glow" aria-hidden="true" data-glow></div>
     <div class="container">

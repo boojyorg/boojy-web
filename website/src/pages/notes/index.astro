@@ -12,6 +12,21 @@ const versionText = await getNotesVersion();
 ---
 
 <BaseLayout path="/notes/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Boojy Notes',
+      applicationCategory: 'ProductivityApplication',
+      operatingSystem: 'macOS, Windows, Web',
+      url: 'https://boojy.org/notes/',
+      description: 'A calm space for your thoughts. Write in markdown, organize with folders. Free and runs in your browser.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    })}
+  />
   <section class="notes-hero">
     <div class="notes-hero-glow" aria-hidden="true" data-glow></div>
     <div class="container">
