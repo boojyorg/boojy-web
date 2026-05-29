@@ -98,7 +98,8 @@ export function Starfield() {
           x: rand() * w,
           y: FIELD_HEIGHT * TOP_EXCLUDE + rand() * FIELD_HEIGHT * (1 - TOP_EXCLUDE),
           radius,
-          color: COLOURS[Math.floor(rand() * COLOURS.length)],
+          // index is always in-bounds (rand() is [0,1)); assert for noUncheckedIndexedAccess
+          color: COLOURS[Math.floor(rand() * COLOURS.length)]!,
           maxBrightness: 0.3 + rand() * 0.7,
           cycleDuration: 7500 + rand() * 30000,
           phaseOffset: rand() * Math.PI * 2,
