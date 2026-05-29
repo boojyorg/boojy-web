@@ -4,3 +4,9 @@ docs/BUSINESS_PLAN.md
 
 # Local Netlify folder
 .netlify
+
+# Claude Code personal (local) settings — not shared
+.claude/settings.local.json
+
+# Transient hook artifact (astro check log)
+.astro_errors.log

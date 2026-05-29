@@ -1,0 +1,103 @@
+---
+import { GITHUB_ICON_PATH } from '../content/site';
+
+// Active-route highlighting is computed at build time from the page's own URL,
+// so the `active` class is baked into the static HTML (no runtime router needed).
+const path = Astro.url.pathname;
+const activeProduct = path.startsWith('/audio/')
+  ? 'audio'
+  : path.startsWith('/notes/')
+    ? 'notes'
+    : undefined;
+const accountActive = path.startsWith('/account/');
+---
+
+<nav class="navbar" id="navbar">
+  <div class="nav-container">
+    <a href="/" class="nav-brand">
+      <img src="/images/Boojy_Image_Logo.png" alt="Boojy" class="logo-icon" />
+    </a>
+
+    <div class="nav-products">
+      <a
+        href="/audio/"
+        class:list={['nav-product', { active: activeProduct === 'audio' }]}
+        data-product="audio">Audio</a
+      >
+      <a
+        href="/notes/"
+        class:list={['nav-product', { active: activeProduct === 'notes' }]}
+        data-product="notes">Notes</a
+      >
+    </div>
+
+    <div class="nav-right">
+      <a
+        href="https://github.com/boojyorg"
+        target="_blank"
+        class="nav-github"
+        aria-label="GitHub"
+        rel="noreferrer"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d={GITHUB_ICON_PATH} />
+        </svg>
+      </a>
+      <a href="/account/" class:list={['nav-signin', { active: accountActive }]}>Account</a>
+      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" type="button" id="nav-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+
+    <div class="nav-mobile-menu" id="nav-mobile-menu">
+      <a
+        href="/audio/"
+        class:list={['nav-mobile-link', { active: activeProduct === 'audio' }]}
+        data-product="audio">Audio</a
+      >
+      <a
+        href="/notes/"
+        class:list={['nav-mobile-link', { active: activeProduct === 'notes' }]}
+        data-product="notes">Notes</a
+      >
+      <a href="/account/" class:list={['nav-mobile-link', { active: accountActive }]}>Account</a>
+      <a href="https://github.com/boojyorg" target="_blank" class="nav-mobile-link" rel="noreferrer">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<script is:inline>
+  (function () {
+    var navbar = document.getElementById('navbar');
+    var toggle = document.getElementById('nav-toggle');
+    var menu = document.getElementById('nav-mobile-menu');
+
+    if (toggle && menu) {
+      var close = function () {
+        menu.classList.remove('active');
+        toggle.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+      };
+      toggle.addEventListener('click', function () {
+        var open = menu.classList.toggle('active');
+        toggle.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+      });
+      var links = menu.querySelectorAll('a');
+      for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', close);
+      }
+    }
+
+    if (navbar) {
+      var onScroll = function () {
+        navbar.style.boxShadow =
+          window.pageYOffset > 50 ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none';
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+  })();
+</script>

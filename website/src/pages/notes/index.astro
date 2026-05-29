@@ -1,0 +1,119 @@
+---
+import { NotesDownload } from '../../components/NotesDownload';
+import ProductCloudCard from '../../components/ProductCloudCard.astro';
+import { CLOUD_DESCRIPTION } from '../../content/site';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getNotesVersion } from '../../lib/notes-version';
+import '../../styles/notes.css';
+
+// Build-time fetch — the version is baked into the static HTML and re-fetched on each
+// deploy. getNotesVersion never throws (falls back on any error/timeout).
+const versionText = await getNotesVersion();
+---
+
+<BaseLayout path="/notes/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Boojy Notes',
+      applicationCategory: 'ProductivityApplication',
+      operatingSystem: 'macOS, Windows, Web',
+      url: 'https://boojy.org/notes/',
+      description: 'A calm space for your thoughts. Write in markdown, organize with folders. Free and runs in your browser.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    })}
+  />
+  <section class="notes-hero">
+    <div class="notes-hero-glow" aria-hidden="true" data-glow></div>
+    <div class="container">
+      <div class="notes-hero-title reveal">
+        <img src="/images/boojy-logo.svg" alt="Boojy" class="notes-hero-logo" />
+        <img src="/images/Notes-text-logo.png" alt="Notes" class="notes-hero-product" />
+      </div>
+      <p class="notes-tagline reveal reveal-d1">Your notes. Your files. Your devices.</p>
+      <NotesDownload client:load versionText={versionText} />
+    </div>
+  </section>
+
+  <section class="notes-screenshot-section">
+    <div class="container">
+      <div class="notes-screenshot-wrapper reveal reveal-d3">
+        <img
+          src="/images/notes-screenshot-v0.1.png"
+          alt="Boojy Notes"
+          class="notes-screenshot"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="notes-features-section">
+    <div class="container">
+      <div class="notes-features-grid">
+        <div class="notes-feature-card">
+          <svg
+            class="notes-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path
+              d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
+            ></path>
+            <path d="m15 5 4 4"></path>
+          </svg>
+          <h3>Markdown files</h3>
+          <p>Write in markdown, rendered live. Your notes are plain files — always yours.</p>
+        </div>
+        <div class="notes-feature-card">
+          <svg
+            class="notes-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+            <path d="M2 12h20"></path>
+          </svg>
+          <h3>Cross-platform</h3>
+          <p>Web and desktop. Pick up where you left off.</p>
+        </div>
+        <div class="notes-feature-card">
+          <svg
+            class="notes-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 20h.01"></path>
+            <path d="M8.5 16.429a5 5 0 0 1 7 0"></path>
+            <path d="M5 12.859a10 10 0 0 1 5.17-2.69"></path>
+            <path d="M13.83 10.17A10 10 0 0 1 19 12.859"></path>
+            <path d="M1.42 9a16 16 0 0 1 6.81-4.15"></path>
+            <path d="M15.77 4.85A16 16 0 0 1 22.58 9"></path>
+            <line x1="2" x2="22" y1="2" y2="22"></line>
+          </svg>
+          <h3>Offline first</h3>
+          <p>Works without internet. Cloud sync coming soon.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ProductCloudCard ctaClassName="notes-cloud-cta" description={CLOUD_DESCRIPTION} />
+</BaseLayout>

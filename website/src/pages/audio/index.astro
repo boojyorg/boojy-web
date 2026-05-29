@@ -1,0 +1,110 @@
+---
+import { AudioDownload } from '../../components/AudioDownload';
+import ProductCloudCard from '../../components/ProductCloudCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/audio.css';
+---
+
+<BaseLayout path="/audio/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Boojy Audio',
+      applicationCategory: 'MultimediaApplication',
+      operatingSystem: 'macOS, Windows',
+      url: 'https://boojy.org/audio/',
+      description: 'A free, simple music studio for macOS and Windows. Perfect for making your first beat.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    })}
+  />
+  <section class="audio-hero">
+    <div class="audio-hero-glow" aria-hidden="true" data-glow></div>
+    <div class="container">
+      <div class="audio-hero-title reveal">
+        <img src="/images/boojy-logo.svg" alt="Boojy" class="audio-hero-logo" />
+        <img src="/images/audio-text-logo.png" alt="Audio" class="audio-hero-product" />
+      </div>
+      <p class="audio-tagline reveal reveal-d1">Music production without the barriers.</p>
+      <AudioDownload client:load />
+    </div>
+  </section>
+
+  <section class="audio-screenshot-section">
+    <div class="container">
+      <div class="audio-screenshot-wrapper reveal reveal-d3">
+        <img
+          src="/images/screenshot-main-interface.png"
+          alt="Boojy Audio"
+          class="audio-screenshot"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="audio-features-section">
+    <div class="container">
+      <div class="audio-features-grid">
+        <div class="audio-feature-card">
+          <svg
+            class="audio-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+          <h3>Completely Free</h3>
+          <p>No subscriptions, no paywalls. Free forever.</p>
+        </div>
+        <div class="audio-feature-card">
+          <svg
+            class="audio-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18V5l12-2v13"></path>
+            <circle cx="6" cy="18" r="3"></circle>
+            <circle cx="18" cy="16" r="3"></circle>
+          </svg>
+          <h3>Plugin Support</h3>
+          <p>Use VST3 and AU instruments and effects.</p>
+        </div>
+        <div class="audio-feature-card">
+          <svg
+            class="audio-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+          </svg>
+          <h3>Beginner Friendly</h3>
+          <p>Clean interface. No overwhelming menus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ProductCloudCard
+    cardClassName="audio-cloud-card"
+    ctaClassName="audio-cloud-cta"
+    description="Sync your projects across devices. Coming soon to Boojy Audio."
+    cta={{ kind: 'text', label: 'Coming soon' }}
+  />
+</BaseLayout>

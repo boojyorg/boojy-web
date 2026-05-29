@@ -1,5 +1,5 @@
 const SITE = 'https://boojy.org';
-const DEFAULT_OG_IMAGE = `${SITE}/images/Boojy_Image_Logo.png`;
+export const DEFAULT_OG_IMAGE = `${SITE}/images/Boojy_Image_Logo.png`;
 
 export interface PageMeta {
   title: string;
@@ -68,26 +68,26 @@ export const PAGE_META: Record<string, PageMeta> = {
     'Boojy Account',
     'Sign in to sync your notes and manage your Boojy Cloud subscription.',
   ),
-  '/privacy.html': meta(
+  '/privacy/': meta(
     'Privacy Policy – Boojy',
     'Boojy Privacy Policy - How we handle your data',
-    '/privacy.html',
+    '/privacy/',
     DEFAULT_OG_IMAGE,
     'Privacy Policy – Boojy',
     'How we handle your data. No tracking, no selling, no surprises.',
   ),
-  '/terms.html': meta(
+  '/terms/': meta(
     'Terms of Service – Boojy',
     'Boojy Terms of Service - Simple terms in plain English',
-    '/terms.html',
+    '/terms/',
     DEFAULT_OG_IMAGE,
     'Terms of Service – Boojy',
     'Simple terms in plain English. Your content is yours. 100%.',
   ),
-  '/subscribed.html': meta(
+  '/subscribed/': meta(
     'Subscribed – Boojy',
     "You're subscribed to Boojy updates",
-    '/subscribed.html',
+    '/subscribed/',
     DEFAULT_OG_IMAGE,
     'Subscribed – Boojy',
     "You're subscribed to Boojy updates.",
@@ -102,7 +102,8 @@ export const PAGE_META: Record<string, PageMeta> = {
   ),
 };
 
-const NOT_FOUND_META = PAGE_META['/404.html'];
+const NOT_FOUND_META: PageMeta =
+  PAGE_META['/404.html'] ?? meta('Page Not Found | Boojy', 'Page not found - Boojy', '/404.html');
 
 export function getPageMeta(pathname: string): PageMeta {
   return PAGE_META[pathname] ?? NOT_FOUND_META;

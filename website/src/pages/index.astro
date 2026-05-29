@@ -1,0 +1,41 @@
+---
+import ProductCards from '../components/ProductCards.astro';
+import ProductCloudCard from '../components/ProductCloudCard.astro';
+import { CLOUD_DESCRIPTION } from '../content/site';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import '../styles/hub.css';
+---
+
+<BaseLayout path="/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'Boojy',
+      url: 'https://boojy.org',
+      logo: 'https://boojy.org/images/Boojy_Image_Logo.png',
+      description: 'Free, open-source creative software. Music production, note-taking, and cloud storage.',
+      sameAs: ['https://github.com/boojyorg', 'https://youtube.com/@boojy'],
+    })}
+  />
+  <section class="hub-hero">
+    <div class="hub-hero-glow" aria-hidden="true" data-glow></div>
+    <div class="container">
+      <div class="hub-hero-title reveal">
+        <img src="/images/boojy-logo.svg" alt="Boojy" class="hub-hero-logo" />
+        <img src="/images/Boojy_Image_Logo.png" alt="" class="hub-hero-icon" />
+      </div>
+      <p class="hub-tagline reveal reveal-d1">Free, open-source creative software.</p>
+      <p class="hub-tagline-sub reveal reveal-d2">Made by Tyr.</p>
+    </div>
+  </section>
+  <ProductCards />
+  <ProductCloudCard
+    cardClassName="cloud-card"
+    ctaClassName="cloud-cta"
+    description={CLOUD_DESCRIPTION}
+  />
+</BaseLayout>
