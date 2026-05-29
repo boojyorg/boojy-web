@@ -77,6 +77,26 @@ _None open._
 - **GitHub API is 60 req/hr/IP unauthenticated** on shared CF build IPs — the notes-version fallback
   string covers the occasional rate-limit; no token needed.
 
+### SEO / perf audit (2026-05-29, live prod)
+
+SEO is healthy: all routes ship static HTML with correct per-route title/description/canonical/OG +
+JSON-LD, Brotli on, sitemap/robots good. Findings:
+
+- ✅ **Fixed:** `/account/` was in the sitemap despite being a login-gated `client:only` page (no
+  server-rendered content). Added to the sitemap filter alongside `/subscribed/`.
+- ⚠️ **USER ACTION — `/_astro/*` cached 4h, not 1yr.** `_headers` correctly says
+  `max-age=31536000, immutable`, but live response is `max-age=14400` — **Cloudflare's Browser Cache
+  TTL is overriding the header.** Fix in CF dashboard: boojy.org → Caching → Configuration → Browser
+  Cache TTL → **"Respect Existing Headers."** Hashed assets are safe to cache forever; this only
+  hurts repeat-visit perf.
+- 💡 **Optimization (deferred):** the homepage ships ~57KB (brotli) of React runtime (`client.js`)
+  solely to hydrate the decorative **Starfield** — the only island on `/`, and vanilla JS pre-
+  migration. It's `client:idle` (doesn't block paint), but re-implementing Starfield as a plain
+  `is:inline` script would drop React from the homepage entirely (still loads on /audio, /notes,
+  /account). Worth a pass if homepage weight matters.
+- ⏭️ **Core Web Vitals not measured** — Chrome DevTools MCP not configured this session. Run a
+  Lighthouse pass or add `chrome-devtools-mcp` for real LCP/CLS/INP.
+
 ### Post-review cleanup (deferred, low severity)
 
 From `/code-review high` on the branch — correctness (#1 download fallbacks, #2 notes-version
@@ -104,5 +124,9 @@ abort) and the icon/OG dedup (#3, #4, #7) are **fixed**. Remaining, optional:
 
 ### 💸 Cost / session telemetry
 
-_Add per-session cost + token notes here (mirrors boojy-design's practice). First entry to be added
-after the first migration work session._
+Line-velocity footprint per session (`git diff --stat` vs the session's starting `master`). Treat as
+a rough activity signal — a formatter sweep inflates it without adding behaviour.
+
+- **2026-05-29 · Biome (Phase 8) + CI** (`b471f22..2c89519`, 4 commits): 22 files, **+1985 / −1565**.
+  ~90% is the one-time Biome 2-space CSS reformat (semantic-identical); real code change is just
+  +54/−18 TS/TSX. Config +190/−2 (biome.json, scripts, lockfile, ci.yml); docs +79/−27.

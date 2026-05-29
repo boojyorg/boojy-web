@@ -1,118 +1,95 @@
 # Boojy Website
 
-Source code for [boojy.org](https://boojy.org) — live as a React SPA on Cloudflare Pages.
+Source for [boojy.org](https://boojy.org) — a **static [Astro](https://astro.build) site** (SSG +
+React islands) on Cloudflare Pages. Every page ships fully-formed HTML; the interactive bits hydrate
+as islands.
 
 ## Routes
+
+File-based, under `src/pages/`. All routes are directory routes (`trailingSlash: 'always'`).
 
 | Route | Notes |
 |-------|-------|
 | `/` | Hub — product cards, Cloud teaser |
-| `/audio/` | Download detection, platforms panel |
-| `/notes/` | Web CTA, downloads, live version from GitHub |
-| `/cloud/` | Preview pricing; checkout disabled until launch |
-| `/account/` | Supabase auth; billing UI gated by `CLOUD_LAUNCHED` |
-| `/privacy.html`, `/terms.html` | Legal content via `LegalLayout` |
-| `/subscribed.html` | Post-newsletter signup confirmation |
-| `*` (404) | React `NotFoundPage` |
+| `/audio/` | OS-aware download CTA + platforms panel (island) |
+| `/notes/` | Web CTA + downloads; version baked at build time from the GitHub API |
+| `/cloud/` | Preview pricing; checkout disabled until launch (`CLOUD_LAUNCHED`) |
+| `/account/` | Supabase auth; billing UI gated by `CLOUD_LAUNCHED` (`client:only` island) |
+| `/privacy/`, `/terms/` | Legal content via `LegalLayout` (clean URLs; old `.html` 301 → here) |
+| `/subscribed/` | Post-signup confirmation |
+| `*` (404) | `404.astro` → `dist/404.html`, served by Cloudflare for unmatched paths |
 
 Cloud storage is **rolling out soon** — preview pricing on `/cloud/`, no live checkout.
 
-## What's next
-
-1. **Cloud launch** — set `CLOUD_LAUNCHED = true` in `src/lib/supabase.ts`, re-enable checkout on `/cloud/`, verify Stripe + billing UI on `/account/`
-2. **Optional cleanup** — remove empty `public/audio/`, `notes/`, `cloud/`, `account/` dirs; drop `logo-test/` or legacy `shared.js` / `starfield.js`
-3. **Share cards** — if link previews matter, SPA client-side OG tags won't help crawlers; consider prerender or edge HTML later
-4. **Legal edits** — move privacy/terms from raw HTML blobs in `src/content/legal/` to Markdown/TSX when you next update copy
-
-## Local Development
+## Local development
 
 ```bash
 cd website
-npm install
-npm run dev
+pnpm install
+pnpm dev          # http://localhost:4321
 ```
 
-Then visit `http://localhost:5173/`
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Astro dev server |
+| `pnpm build` | Static build → `dist/` |
+| `pnpm preview` | Serve the production build locally |
+| `pnpm run check` | `astro check` — type/diagnostic gate |
+| `pnpm lint` / `pnpm lint:fix` | Biome lint + format (check / apply) |
 
-Use `npm run dev` or `npm run preview` — not a plain static file server.
+**Gates before pushing:** `pnpm run check` + `pnpm build` + `pnpm lint`. The same three run in CI on
+every PR.
 
-## Build
-
-From `website/` (day-to-day):
-
-```bash
-cd website
-npm run build
-npm run preview   # optional — preview production build locally
-```
-
-From repo root (matches Cloudflare):
-
-```bash
-npm run build
-```
-
-Output goes to `website/dist/` — this is what Cloudflare Pages deploys.
-
-## Project Structure
+## Project structure
 
 ```
 website/
-├── index.html          # Vite entry
+├── astro.config.mjs    # static output, trailingSlash, sitemap (filters /account/ + /subscribed/)
+├── biome.json          # lint/format (.ts/.tsx/.js/.json/.css — .astro excluded; see CLAUDE.md)
 ├── src/
-│   ├── App.tsx         # React Router (all routes)
-│   ├── pages/
-│   ├── components/
-│   ├── content/        # site copy, cloud FAQ, page-meta.ts, legal HTML bodies
-│   ├── hooks/          # usePageMeta, useAccount, …
-│   └── lib/            # platform detection, supabase client
-├── public/
-│   ├── css/
-│   ├── js/             # dev-tools.js (logo-test)
-│   ├── images/
-│   ├── _headers
-│   ├── _redirects      # SPA fallback /* → index.html
-│   ├── robots.txt
-│   └── sitemap.xml
-├── vite.config.ts
-└── package.json
+│   ├── pages/          # file-based routes (.astro)
+│   ├── layouts/        # BaseLayout (static <head> + SEO), LegalLayout
+│   ├── components/      # .astro chrome (Nav, Footer, ProductCards) + React islands
+│   │                   #   (Starfield, FaqAccordion, Audio/NotesDownload, Account)
+│   ├── content/        # site.ts, cloud.ts, page-meta.ts, legal/*.html
+│   ├── lib/            # platform.ts, supabase.ts, notes-version.ts (build-time fetch)
+│   └── styles/         # shared.css (global) + per-page CSS, bundled + content-hashed by Astro
+└── public/
+    ├── _headers        # security headers + immutable caching for /_astro/*
+    ├── _redirects      # legacy .html → clean-URL 301s, /pricing → /cloud/, /github
+    ├── robots.txt      # → sitemap-index.xml
+    └── images/
 ```
+
+## Tech stack
+
+- **Astro** (static) + **React 19** islands (`@astrojs/react`), `@astrojs/sitemap`
+- Plain CSS (no Tailwind), **TypeScript** strict + `noUncheckedIndexedAccess`
+- **pnpm**, **Biome** for lint/format
+- **Supabase** JS on `/account/` (auth; billing gated until Cloud launch)
+- Native browser View Transitions (no Astro `<ClientRouter />`)
 
 ## Deployment
 
-Hosted on Cloudflare Pages:
+**Cloudflare Pages Git integration** (no wrangler, no Actions-driven deploy):
 
 | Setting | Value |
 |---------|-------|
-| Root directory | *(leave empty — repo root)* |
-| Build command | `npm run build` |
-| Output directory | `website/dist` |
+| Root directory | `website` |
+| Build command | `pnpm build` |
+| Output directory | `dist` |
 
-The repo root [`package.json`](../package.json) runs the Vite build inside `website/`.
-
-**Alternative:** Root directory `website`, build `npm run build`, output `dist`.
-
-Pushes to `master` auto-deploy.
+Pushes to `master` deploy production; other branches get preview deploys. The repo-root
+[`package.json`](../package.json) also exposes a `build` script that runs the build inside `website/`.
 
 ### Deploy verification
 
-- Build log shows `vite build` completing
-- `curl -s https://boojy.org/ | grep assets/index` → `/assets/index-*.js`, not `main.tsx`
-- Browser smoke: hub starfield, `/audio/` downloads, `/account/` sign-in, fake URL → 404
-
-### Troubleshooting
-
-**Build failed with `ENOENT ... repo/package.json`?** Cloudflare ran the build at repo root without finding `package.json` — use the settings above (empty root directory + `website/dist` output).
-
-**Live site shows `/src/main.tsx`?** The Vite build did not run — check the deploy log for `vite build`.
-
-## Tech Stack
-
-- React 19 + TypeScript + Vite + React Router (all routes)
-- Supabase JS `@2.43.4` via npm on `/account/` (no CDN script tag)
+- `curl -s https://boojy.org/ | grep '<title>'` → real per-route title in the raw HTML (not an empty
+  `<div id="root">`)
+- `curl -sI https://boojy.org/privacy.html` → `301` to `/privacy/`
+- Browser smoke: hub starfield, `/audio/` download detection, `/account/` sign-in, fake URL → 404
 
 ## Links
 
 - **Live site:** [boojy.org](https://boojy.org)
-- **App repo:** [tyrbujac/boojy-audio](https://github.com/tyrbujac/boojy-audio)
 - **Project context:** [CLAUDE.md](../CLAUDE.md)

@@ -9,7 +9,12 @@ export default defineConfig({
   build: { format: 'directory' },
   integrations: [
     react(),
-    // /subscribed/ is a post-signup confirmation page — keep it out of the sitemap.
-    sitemap({ filter: (page) => !page.includes('/subscribed/') }),
+    // Keep no-SEO-value pages out of the sitemap:
+    //  - /subscribed/ : post-signup confirmation page
+    //  - /account/    : login-gated client:only island — renders nothing server-side,
+    //                   so submitting it invites a soft-404 / "crawled, not indexed".
+    sitemap({
+      filter: (page) => !page.includes('/subscribed/') && !page.includes('/account/'),
+    }),
   ],
 });

@@ -1,71 +1,50 @@
-# Boojy Audio
+# Boojy.org
 
-> **Music production without the barriers.**
-> A free, simple DAW for macOS and Windows.
+Source for **[boojy.org](https://boojy.org)** — the marketing website for the Boojy suite of free,
+open-source creative tools (Audio, Notes, and Cloud — rolling out soon).
 
----
+> **Looking for a product?** Boojy *Audio* (the DAW) lives at
+> [tyrbujac/boojy-audio](https://github.com/tyrbujac/boojy-audio), and *Notes* at
+> [boojyorg/boojy-notes](https://github.com/boojyorg/boojy-notes). **This repo is just the website.**
 
-## What is Boojy Audio?
+## Stack
 
-Boojy Audio is a free digital audio workstation (DAW) designed for beginners and hobbyists. No subscriptions, no paywalls, no complicated interfaces.
+A **static site built with [Astro](https://astro.build)** — every page ships fully-formed HTML (for
+SEO and social cards), with the interactive pieces layered back in as **React islands**. Plain CSS
+(no Tailwind), strict TypeScript, **pnpm**, and lint/format via **Biome**. No SSR and no server —
+it's pure SSG, deployed on **Cloudflare Pages**.
 
-**Perfect for:**
+## Quick start
 
-- Making your first beat
-- Recording podcasts
-- Learning music production
-- Sound design experiments
+The app lives in `website/`:
 
----
+```bash
+cd website
+pnpm install
+pnpm dev            # http://localhost:4321
+```
 
-## Download
+| Command | What it does |
+|---|---|
+| `pnpm dev` | Astro dev server |
+| `pnpm build` | Static build → `website/dist/` |
+| `pnpm preview` | Serve the production build locally |
+| `pnpm run check` | `astro check` — type/diagnostic gate |
+| `pnpm lint` | Biome lint + format check |
 
-**[Download from boojy.org](https://boojy.org)**
+## Deploy
 
-- macOS (Apple Silicon & Intel)
-- Windows
+**Cloudflare Pages Git integration** — pushes to `master` deploy production; branches get preview
+deploys. CI (`.github/workflows/ci.yml`) runs the gates on every PR. No wrangler, no Actions-driven
+deploy. Build settings: root `website`, command `pnpm build`, output `dist`.
 
-Currently in beta (v0.1.0).
+## More
 
----
-
-## Features
-
-- Simple, clean interface
-- Multi-track recording
-- Built-in instruments and effects
-- Audio file support (WAV, MP3, AIFF)
-- Keyboard shortcuts
-- Auto-save
-
----
-
-## Links
-
-- **Website:** [boojy.org](https://boojy.org)
-- **App Source Code:** [github.com/tyrbujac/boojy-audio](https://github.com/tyrbujac/boojy-audio)
-- **YouTube:** [@boojy](https://youtube.com/@boojy)
-- **Twitter/X:** [@boojyorg](https://twitter.com/boojyorg)
-
----
-
-## About This Repo
-
-This repository contains the source code for [boojy.org](https://boojy.org) — the marketing website.
-
-The site is live as a **React 19 + TypeScript + Vite** SPA on Cloudflare Pages.
-
-- **[website/README.md](website/README.md)** — local dev, routes, deploy settings, verification
-- **[CLAUDE.md](CLAUDE.md)** — project context for AI assistants and next steps
-
-For the Boojy Audio app source code, see [tyrbujac/boojy-audio](https://github.com/tyrbujac/boojy-audio).
-
----
+- **[website/README.md](website/README.md)** — routes, project structure, deploy verification
+- **[CLAUDE.md](CLAUDE.md)** — full architecture, conventions, and gotchas
 
 ## License
 
-Website: MIT License
-
----
+MIT
 
 **Built by [Tyr Bujac](https://github.com/tyrbujac)**
