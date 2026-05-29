@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
-  "compactPrompt": "When compacting this session, you MUST preserve verbatim: all active tasks and their checkbox state from dreams.md §1 (the Astro migration phases), any open incidents in dreams.md §2, the load-bearing rules from CLAUDE.md (static-first/no-Vercel, the CF Pages build-settings deploy trap, native view transitions / no ClientRouter, the glow pre-paint script rule), the exact file paths modified on this branch, and any precise error signatures currently under evaluation. Discard greeting filler, historical conversational prose, and superseded styling discussion.",
+  "compactPrompt": "When compacting this session, you MUST preserve verbatim: the active target + open milestone checkboxes from dreams.md §1, the load-bearing rules from CLAUDE.md and .claude/rules/ (static-first / no-SSR / never-Vercel, the CF Pages shared-build-settings trap, native view transitions / no ClientRouter, the glow pre-paint root-CSS-var script, the _headers cache-rule combine conflict), the exact file paths modified this session, and any precise error signatures currently under evaluation. Discard greeting filler, historical conversational prose, and superseded styling discussion.",
   "hooks": {
     "PostToolUse": [
       {
@@ -8,7 +8,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.tool_input.command // \"\"' | grep -qE '(pnpm( +run)? +(build|preview)|astro +(build|check))' && printf '%s' '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"CRITICAL: if structure/routes/architecture shifted, update CLAUDE.md, README.md, and dreams.md in the same change.\"}}' || true"
+            "command": "jq -r '.tool_input.command // \"\"' | grep -qE '(pnpm( +run)? +(build|preview)|astro +(build|check))' && printf '%s' '{\"hookSpecificOutput\":{\"hookEventName\":\"PostToolUse\",\"additionalContext\":\"CRITICAL: if structure/routes/architecture shifted, update CLAUDE.md, the relevant .claude/rules/ file, and README.md in the same change.\"}}' || true"
           }
         ]
       },
