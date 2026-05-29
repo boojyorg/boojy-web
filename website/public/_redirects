@@ -1,4 +1,15 @@
+# External shortlinks
 /github      https://github.com/boojyorg    301
-/notes/app   https://notes.boojy.org               301
-/pricing     /cloud                                 301
-/*           /index.html                            200
+/notes/app   https://notes.boojy.org        301
+
+# Legacy URLs → current routes (legal pages moved to clean URLs)
+/pricing         /cloud/        301
+/privacy.html    /privacy/      301
+/terms.html      /terms/        301
+/subscribed.html /subscribed/   301
+
+# Non-trailing-slash → trailing slash (site uses trailingSlash: 'always')
+/audio    /audio/      301
+/notes    /notes/      301
+/cloud    /cloud/      301
+/account  /account/    301
