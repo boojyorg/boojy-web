@@ -5,6 +5,34 @@ the next session. Newest entry on top.
 
 ---
 
+## 2026-05-29 · Code review (high) + fixes; doc sync · astro-migration
+
+### Session Work
+
+| Task | Outcome |
+|---|---|
+| Doc sync to as-built | Corrected legal-URL approach (clean `/privacy/` `/terms/` `/subscribed/` + 301s, not preserved `.html`) across CLAUDE.md + dreams.md; flipped dreams Phases 0–7 done; islands renamed Audio/NotesDownload; added prior ledger entry |
+| `/code-review high` | 6 finder angles + verify; refuted bfcache-morph, cloud.css-jump (no `[data-glow]` on `/cloud/`), non-color link capture. Surfaced 2 correctness + cleanup findings |
+| Fixed #1 download fallbacks | NotesDownload now SSRs a GitHub-releases fallback (was the macOS arm64 `.dmg`) → no-JS / Windows-ARM / Linux visitors never get the wrong-OS binary; both islands normalize `windows-arm64`→`windows-x64` |
+| Fixed #2 notes-version abort | A slow/aborted commit fetch falls back to `${tag.name} Beta` (own try) instead of discarding the fetched tag for the hardcoded string |
+| Fixed #3/#4/#7 cleanup | Extracted shared `components/PlatformIcons.tsx` (both islands drop duplicated SVGs); derived `showFallback` from the href sentinel; reused exported `DEFAULT_OG_IMAGE` in BaseLayout |
+
+### Gates
+
+| Gate | Result |
+|---|---|
+| `pnpm exec astro check` | ✅ 0 errors, 0 warnings (2 pre-existing deprecation hints) |
+| `pnpm build` | ✅ clean; verified download CTAs SSR the fallback, version `v0.4.0` baked |
+
+### Notes (handoff)
+
+Correctness findings closed. Remaining review items are low-severity cleanup, logged in `dreams.md`
+§3 (glow gradient duplication, 404 self-canonical, `clearOrigin` flatten, optional single download
+island). **Still pending: the merge + CF settings flip (Phase 7b), then Biome (Phase 8).** Branch is
+now 7 commits ahead of `master`.
+
+---
+
 ## 2026-05-29 · Execute Astro migration (Phases 0–7) · astro-migration
 
 ### Session Work

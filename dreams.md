@@ -71,6 +71,21 @@ _None open._
 - **GitHub API is 60 req/hr/IP unauthenticated** on shared CF build IPs — the notes-version fallback
   string covers the occasional rate-limit; no token needed.
 
+### Post-review cleanup (deferred, low severity)
+
+From `/code-review high` on the branch — correctness (#1 download fallbacks, #2 notes-version
+abort) and the icon/OG dedup (#3, #4, #7) are **fixed**. Remaining, optional:
+
+- **`BaseLayout.astro` glow gradient is duplicated** in the JS morph string and the 4 glow CSS
+  files — a stop change must touch all of them or the morph's last frame won't match the resting
+  state. (Animating a CSS custom property the gradient reads would remove the JS string.)
+- **404 canonical/og:url is `/404.html`** (no trailing slash, inconsistent with `trailingSlash:
+  'always'`); arguably a 404 shouldn't self-canonicalize.
+- **Glow morph `clearOrigin()` repeated at 4 exit points** — flatten with early returns so the
+  "always clear the override" invariant is structural, not manual.
+- **`AudioDownload`/`NotesDownload` are still two components** with parallel structure — a single
+  config-driven download island is the deeper (altitude) fix if it's worth a future pass.
+
 ### Deferred (not this migration)
 
 - Biome adoption (Phase 8, separate commit).
