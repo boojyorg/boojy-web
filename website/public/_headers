@@ -11,8 +11,8 @@
 /*.html
   Cache-Control: public, max-age=0, must-revalidate
 
-/*.css
-  Cache-Control: public, max-age=3600, must-revalidate
-
-/*.js
-  Cache-Control: public, max-age=3600, must-revalidate
+# NOTE: no /*.css or /*.js rules. Every CSS/JS file Astro builds is content-hashed
+# under /_astro/ (covered above). A generic /*.css or /*.js rule ALSO matches those
+# hashed files, and Cloudflare _headers *combines* all matching rules — that appends
+# a conflicting second Cache-Control (e.g. `…immutable, …max-age=3600, must-revalidate`).
+# There are no non-hashed CSS/JS assets, so such rules add nothing but the conflict.
