@@ -5,7 +5,7 @@ the next session. Newest entry on top.
 
 ---
 
-## 2026-05-29 · Verify prod deploy + adopt Biome (Phase 8) · chore/biome
+## 2026-05-29 · Verify prod deploy · adopt Biome (Phase 8) · add CI · → master
 
 ### Session Work
 
@@ -16,7 +16,9 @@ the next session. Newest entry on top.
 | Critical scoping catch | Biome parses `.astro` frontmatter as standalone JS → false-flagged **31 imports + 13 vars** used only in templates as unused. Auto-fix would have **stripped them and broken the build**. Excluded `.astro` (+ legal `.html` content) — `astro check` remains the `.astro` gate |
 | Lint dispositions | Fixed in code: 8 decorative SVGs → `aria-hidden`, `forEach` block body, dead empty CSS rule, `useArrowFunction` autofix, 2 `dangerouslySetInnerHtml` suppressions (fixed comment placement). Disabled (documented, recurring patterns): `noNonNullAssertion`, `noUnknownTypeSelector`, `useValidAnchor`. Per-line ignore: `noImportantStyles`, `noAriaHiddenOnFocusable` |
 | Reformat | Whole tree → 2-space (CSS was 4-space). Big but isolated diff — exactly why Biome was deferred to its own commit |
-| Doc sync | CLAUDE.md (migration live + Biome adopted + scope/disabled-rules note + deploy trap → past tense), dreams.md (Phases 7b/8 ✅, new deferred a→button item) |
+| Biome shipped | PR #2 merged → `master`; CF Pages rebuilt + deployed. **Hash-verified live**: prod `BaseLayout.css` hash == local post-Biome build (the `index.css` hash is stable because Astro minifies the whitespace away) |
+| Add GitHub Actions CI | `.github/workflows/ci.yml` — `verify` job runs Biome lint + astro check + build on PRs + `master`, in `website/`. **CI gates only; deploy stays CF Pages Git integration** (no wrangler/secrets — the lighter half of boojy-design's workflow). PR #3 ran green (27s) + CF preview check also passed, then merged |
+| Doc sync | CLAUDE.md (migration live + Biome adopted + scope/disabled-rules + deploy trap → past tense + CI/deploy split), dreams.md (Phases 7b/8 ✅, deferred a→button) |
 
 ### Gates
 
@@ -25,14 +27,26 @@ the next session. Newest entry on top.
 | `pnpm lint` (biome check) | ✅ 26 files, 0 diagnostics |
 | `pnpm exec astro check` | ✅ 0 errors, 0 warnings (2 pre-existing hints) |
 | `pnpm build` | ✅ 9 pages clean |
+| GitHub Actions CI (PR #3) | ✅ Lint·Check·Build pass (27s) + CF Pages preview pass |
+
+### Metrics (session footprint · `b471f22..2c89519`)
+
+4 commits (PR #2 Biome, PR #3 CI). **22 files, +1985 / −1565** (≈3550 churn). Breakdown:
+CSS reformat **+1662/−1518** (90% — mechanical 2-space, semantic-identical); TS/TSX **+54/−18**
+(the real code edits); config (biome.json/scripts/lock/ci.yml) **+190/−2**; docs **+79/−27**.
+Maps to **Phase 8 (Biome)** + post-migration CI tooling. Take the line count with salt — it's
+dominated by the one-time formatter sweep, not new behavior.
 
 ### Notes (handoff)
 
-Migration fully done + live; Biome adopted. **Open:** commit `chore/biome` (branch off merged
-`master`) → PR. The root `README.md` is still the **Boojy Audio** product readme, not the website —
-pre-existing mismatch, worth fixing in a separate doc pass. Deferred backlog (dreams §3): a→button
-semantic fix, glow-gradient duplication, 404 self-canonical, single download island, Tailwind.
-The local post-edit hook gates `astro check` only — consider adding `biome check` now that it's green.
+**Migration + Biome + CI all merged to `master` and live.** No open migration work. Next session
+(planned with user): SEO/perf audit of live `boojy.org` (web-perf skill), fix root `README.md`
+(still the **Boojy Audio** readme, not the website), and commit the untracked `.claude/` tooling
+(incl. the post-edit hook's nvm-PATH fix — currently local-only). User-side: resubmit
+`sitemap-index.xml` in Search Console; make "Lint · Check · Build" a required status check.
+Deferred backlog (dreams §3): a→button a11y, glow-gradient duplication, 404 self-canonical, single
+download island, Tailwind. The local post-edit hook still gates `astro check` only — could add
+`pnpm lint` now that Biome is green.
 
 ---
 
