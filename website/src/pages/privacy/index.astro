@@ -1,0 +1,16 @@
+---
+import privacyBody from '../../content/legal/privacy-body.html?raw';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LegalLayout from '../../layouts/LegalLayout.astro';
+---
+
+<BaseLayout path="/privacy/">
+  <LegalLayout
+    title="Privacy Policy"
+    updated="Last updated: January 8, 2026"
+    contentClassName="legal-content legal-content--dark"
+    bodyClassName="legal-body legal-body--narrow"
+  >
+    <Fragment set:html={privacyBody} />
+  </LegalLayout>
+</BaseLayout>

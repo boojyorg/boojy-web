@@ -1,0 +1,11 @@
+---
+import termsBody from '../../content/legal/terms-body.html?raw';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LegalLayout from '../../layouts/LegalLayout.astro';
+---
+
+<BaseLayout path="/terms/">
+  <LegalLayout title="Terms of Service" updated="Last updated: January 2026">
+    <Fragment set:html={termsBody} />
+  </LegalLayout>
+</BaseLayout>

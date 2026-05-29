@@ -212,6 +212,18 @@ body {
     border-radius: 1px;
 }
 
+.nav-toggle.open span:nth-child(1) {
+    transform: rotate(45deg) translateY(7px);
+}
+
+.nav-toggle.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.nav-toggle.open span:nth-child(3) {
+    transform: rotate(-45deg) translateY(-7px);
+}
+
 .nav-mobile-menu {
     display: none;
     position: absolute;

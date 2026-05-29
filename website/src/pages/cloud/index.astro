@@ -1,0 +1,74 @@
+---
+import { FaqAccordion } from '../../components/FaqAccordion';
+import { CLOUD_ETHICS, CLOUD_FAQ, CLOUD_PRICING, CLOUD_ROLLOUT_BANNER } from '../../content/cloud';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/cloud.css';
+---
+
+<BaseLayout path="/cloud/">
+  <section class="cloud-hero">
+    <div class="container">
+      <p class="cloud-rollout-banner">{CLOUD_ROLLOUT_BANNER}</p>
+      <h1 class="cloud-title">Boojy Cloud</h1>
+      <p class="cloud-subtitle">Your creative work, synced and safe — coming soon.</p>
+    </div>
+  </section>
+
+  <section class="pricing-section">
+    <div class="container">
+      <div class="pricing-cards">
+        {
+          CLOUD_PRICING.map((plan) => (
+            <div class:list={['pricing-card', { 'pricing-card-highlight': plan.highlight }]}>
+              <h2 class="pricing-name">{plan.name}</h2>
+              <div class="pricing-price">
+                <span class="pricing-amount">{plan.amount}</span>
+                <span class="pricing-period">{plan.period}</span>
+              </div>
+              <ul class="pricing-features">
+                {plan.features.map((feature) => (
+                  <li>
+                    <span class="check">✓</span> {feature}
+                  </li>
+                ))}
+              </ul>
+              <button
+                type="button"
+                class:list={['btn', plan.highlight ? 'btn-primary' : 'btn-secondary', 'pricing-btn']}
+                disabled
+              >
+                Coming soon
+              </button>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="ethics-section">
+    <div class="container">
+      <h2 class="section-title">We believe in fair software</h2>
+      <div class="ethics-grid">
+        {
+          CLOUD_ETHICS.map((item) => (
+            <div class="ethics-item">
+              <span class="ethics-check">✓</span>
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="cloud-faq-section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <FaqAccordion items={CLOUD_FAQ} client:visible />
+    </div>
+  </section>
+</BaseLayout>

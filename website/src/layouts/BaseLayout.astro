@@ -1,0 +1,183 @@
+---
+import { Starfield } from '../components/Starfield';
+import Footer from '../components/Footer.astro';
+import Nav from '../components/Nav.astro';
+import { getPageMeta, pageMetaUrl } from '../content/page-meta';
+import '../styles/shared.css';
+
+interface Props {
+  /** Route path used to resolve per-page SEO metadata + canonical/OG URL. */
+  path: string;
+}
+
+const { path } = Astro.props;
+const meta = getPageMeta(path);
+const url = pageMetaUrl(meta);
+const ogImage = meta.ogImage ?? 'https://boojy.org/images/Boojy_Image_Logo.png';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#13151C" />
+
+    <title>{meta.title}</title>
+    <meta name="description" content={meta.description} />
+    <link rel="canonical" href={url} />
+
+    <meta property="og:title" content={meta.ogTitle} />
+    <meta property="og:description" content={meta.ogDescription} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:image" content={ogImage} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={meta.ogTitle} />
+    <meta name="twitter:description" content={meta.ogDescription} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" type="image/png" href="/images/favicon.png" />
+    <link rel="apple-touch-icon" href="/images/favicon.png" />
+
+    <!-- Pre-paint glow origin: set the morph's start color on :root from the previous
+         page (stored in sessionStorage) BEFORE the glow element is parsed, so the glow
+         paints at the origin color first and the morph has nothing to flash from. The
+         glow CSS reads var(--glow-origin, var(--glow-color)). -->
+    <script is:inline>
+      (function () {
+        try {
+          var from = sessionStorage.getItem('boojy-glow-from');
+          if (from) {
+            var root = document.documentElement;
+            root.style.setProperty('--glow-origin', from);
+            var op = sessionStorage.getItem('boojy-glow-opacity-from');
+            if (op) root.style.setProperty('--glow-origin-opacity', op);
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <!-- Analytics (left verbatim; is:inline so Astro does not bundle/transform it). -->
+    <script
+      is:inline
+      defer
+      src="https://umami-production-fc39.up.railway.app/script.js"
+      data-website-id="863178bf-14fc-4b35-b45a-5e4ff4240862"></script>
+
+    <slot name="head" />
+  </head>
+  <body>
+    <Starfield client:idle />
+    <Nav />
+    <slot />
+    <Footer />
+
+    <!-- Glow morph + write-side capture. Runs after the DOM is parsed (the glow element
+         exists here). Reads the origin color from sessionStorage, animates the glow from
+         origin -> the page's own --glow-color over 2500ms, then clears the override so it
+         rests at the page color. The click listener stores the current glow color before
+         any internal navigation so the *next* page can morph from it. -->
+    <script is:inline>
+      (function () {
+        var COLOR_KEY = 'boojy-glow-from';
+        var OPACITY_KEY = 'boojy-glow-opacity-from';
+        var DURATION = 2500;
+
+        // Always consume the stored origin (even on pages with no glow) so a stale value
+        // can't leak into a later glow page.
+        var fromStr = sessionStorage.getItem(COLOR_KEY);
+        var fromOpacityStr = sessionStorage.getItem(OPACITY_KEY);
+        sessionStorage.removeItem(COLOR_KEY);
+        sessionStorage.removeItem(OPACITY_KEY);
+
+        function clearOrigin() {
+          var s = document.documentElement.style;
+          s.removeProperty('--glow-origin');
+          s.removeProperty('--glow-origin-opacity');
+        }
+
+        var glow = document.querySelector('[data-glow]');
+        if (glow) {
+          var computed = getComputedStyle(glow);
+          var targetStr = computed.getPropertyValue('--glow-color').trim();
+          var target = targetStr.split(',').map(Number);
+          var targetOpacity = parseFloat(computed.getPropertyValue('--glow-opacity')) || 0.75;
+
+          if (target.length === 3 && fromStr) {
+            var from = fromStr.split(',').map(Number);
+            var fromOpacity = fromOpacityStr ? parseFloat(fromOpacityStr) : targetOpacity;
+            var colorChanged =
+              from.length === 3 &&
+              from.some(function (v, i) {
+                return v !== target[i];
+              });
+            var opacityChanged = Math.abs(fromOpacity - targetOpacity) > 0.001;
+
+            if (colorChanged || opacityChanged) {
+              var start = performance.now();
+              var tick = function (now) {
+                var t = Math.min((now - start) / DURATION, 1);
+                var ease = 1 - Math.pow(1 - t, 3);
+                var r = Math.round(from[0] + (target[0] - from[0]) * ease);
+                var g = Math.round(from[1] + (target[1] - from[1]) * ease);
+                var b = Math.round(from[2] + (target[2] - from[2]) * ease);
+                var o = fromOpacity + (targetOpacity - fromOpacity) * ease;
+                glow.style.opacity = String(o);
+                glow.style.background =
+                  'radial-gradient(ellipse, rgba(' +
+                  r +
+                  ',' +
+                  g +
+                  ',' +
+                  b +
+                  ', 0.25) 0%, rgba(' +
+                  r +
+                  ',' +
+                  g +
+                  ',' +
+                  b +
+                  ', 0.12) 40%, transparent 70%)';
+                if (t < 1) {
+                  requestAnimationFrame(tick);
+                } else {
+                  glow.style.background = '';
+                  glow.style.opacity = '';
+                  clearOrigin();
+                }
+              };
+              requestAnimationFrame(tick);
+            } else {
+              clearOrigin();
+            }
+          } else {
+            clearOrigin();
+          }
+        } else {
+          clearOrigin();
+        }
+
+        // Write side: capture the current page's glow color before internal navigation.
+        document.addEventListener('click', function (event) {
+          var el = event.target;
+          if (!(el instanceof Element)) return;
+          var link = el.closest('a[href]');
+          if (!link) return;
+          var href = link.getAttribute('href');
+          if (!href || href.charAt(0) !== '/') return;
+          var g = document.querySelector('[data-glow]');
+          if (!g) return;
+          var cs = getComputedStyle(g);
+          var color = cs.getPropertyValue('--glow-color').trim();
+          if (!color) return;
+          sessionStorage.setItem(COLOR_KEY, color);
+          sessionStorage.setItem(
+            OPACITY_KEY,
+            String(parseFloat(cs.getPropertyValue('--glow-opacity')) || 0.75),
+          );
+        });
+      })();
+    </script>
+  </body>
+</html>

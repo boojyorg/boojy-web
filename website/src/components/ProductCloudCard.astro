@@ -1,0 +1,75 @@
+---
+import { GLOBE_ICON_PATHS, LAPTOP_ICON_PATH } from '../content/site';
+
+interface Props {
+  description: string;
+  cardClassName?: string;
+  ctaClassName?: string;
+  cta?: { kind: 'link'; href: string; label: string } | { kind: 'text'; label: string };
+}
+
+const {
+  description,
+  cardClassName = '',
+  ctaClassName = '',
+  cta = { kind: 'link', href: '/cloud/', label: 'Learn more →' },
+} = Astro.props;
+---
+
+<section class="product-cloud-section">
+  <div class="container">
+    <div class:list={['product-cloud-card', cardClassName]}>
+      <div class="product-cloud-heading">
+        <img
+          src="/images/boojy-logo.svg"
+          alt="Boojy"
+          class="product-cloud-heading-boojy"
+          loading="lazy"
+        />
+        <img
+          src="/images/cloud-text-logo.png"
+          alt="Cloud"
+          class="product-cloud-heading-cloud"
+          loading="lazy"
+        />
+      </div>
+      <div class="product-cloud-devices">
+        <svg
+          class="device-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d={LAPTOP_ICON_PATH} />
+        </svg>
+        <span class="sync-arrow">⇄</span>
+        <svg
+          class="device-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d={GLOBE_ICON_PATHS[0]}></path>
+          <path d={GLOBE_ICON_PATHS[1]}></path>
+        </svg>
+      </div>
+      <p class="product-cloud-description">{description}</p>
+      {
+        cta.kind === 'link' ? (
+          <a href={cta.href} class:list={['product-cloud-cta', ctaClassName]}>
+            {cta.label}
+          </a>
+        ) : (
+          <span class:list={['product-cloud-cta', ctaClassName]}>{cta.label}</span>
+        )
+      }
+    </div>
+  </div>
+</section>

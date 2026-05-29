@@ -52,10 +52,10 @@
     filter: blur(80px);
     pointer-events: none;
     z-index: 1;
-    opacity: var(--glow-opacity);
+    opacity: var(--glow-origin-opacity, var(--glow-opacity));
     background: radial-gradient(ellipse,
-        rgba(var(--glow-color), 0.25) 0%,
-        rgba(var(--glow-color), 0.12) 40%,
+        rgba(var(--glow-origin, var(--glow-color)), 0.25) 0%,
+        rgba(var(--glow-origin, var(--glow-color)), 0.12) 40%,
         transparent 70%);
     view-transition-name: hero-glow;
 }

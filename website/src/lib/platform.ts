@@ -10,6 +10,11 @@ export const PLATFORM_ICONS = {
 export type PlatformId = 'mac-arm64' | 'mac-x64' | 'windows-x64' | 'windows-arm64' | 'linux' | null;
 
 export function detectPlatform(): PlatformId {
+  // SSR-safe: the island is server-rendered at build time, where `navigator`/`document`
+  // do not exist. Return null so the build renders a universal default; the client
+  // re-detects on mount (see the download islands' useEffect).
+  if (typeof navigator === 'undefined' || typeof document === 'undefined') return null;
+
   const userAgent = navigator.userAgent;
   const platform = navigator.platform || (navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform || '';
 

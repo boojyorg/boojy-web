@@ -1,0 +1,9 @@
+---
+import { Account } from '../../components/Account';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/account.css';
+---
+
+<BaseLayout path="/account/">
+  <Account client:only="react" />
+</BaseLayout>

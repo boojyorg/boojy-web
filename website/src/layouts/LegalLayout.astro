@@ -1,0 +1,32 @@
+---
+import '../styles/legal.css';
+
+interface Props {
+  title: string;
+  updated: string;
+  contentClassName?: string;
+  bodyClassName?: string;
+}
+
+const {
+  title,
+  updated,
+  contentClassName = 'legal-content',
+  bodyClassName = 'legal-body',
+} = Astro.props;
+---
+
+<section class="legal-hero">
+  <div class="legal-hero-glow" aria-hidden="true" data-glow></div>
+  <div class="container">
+    <h1>{title}</h1>
+    <p>{updated}</p>
+  </div>
+</section>
+<section class={contentClassName}>
+  <div class="container">
+    <div class={bodyClassName}>
+      <slot />
+    </div>
+  </div>
+</section>

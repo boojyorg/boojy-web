@@ -1,0 +1,29 @@
+---
+import { PRODUCT_CARDS } from '../content/site';
+---
+
+<section class="products-section">
+  <div class="container">
+    <div class="product-cards reveal reveal-d3">
+      {
+        PRODUCT_CARDS.map((product) => (
+          <a href={product.href} class="product-card" data-product={product.id}>
+            <div class="product-card-img">
+              <img src={product.screenshot} alt={product.screenshotAlt} loading="lazy" />
+            </div>
+            <div class="product-card-body">
+              <img
+                src={product.logo}
+                alt={product.logoAlt}
+                class="product-card-logo"
+                loading="lazy"
+              />
+              <p class="product-card-description">{product.description}</p>
+              <span class="product-card-cta">Learn more →</span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
