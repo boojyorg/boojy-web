@@ -5,399 +5,401 @@
 
 /* === Hero === */
 .hub-hero {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding-top: 120px;
-    padding-bottom: var(--spacing-lg);
-    position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 120px;
+  padding-bottom: var(--spacing-lg);
+  position: relative;
 }
 
 .hub-hero .container {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
 .hub-hero-title {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .hub-hero-logo {
-    height: 4.55rem;
-    width: auto;
+  height: 4.55rem;
+  width: auto;
 }
 
 .hub-hero-icon {
-    height: 3.75rem;
-    width: auto;
+  height: 3.75rem;
+  width: auto;
 }
 
 .hub-hero-glow {
-    --glow-opacity: 0.75;
-    --glow-width: 1400px;
-    --glow-height: 994px;
-    --glow-color: 196, 197, 255;
+  --glow-opacity: 0.75;
+  --glow-width: 1400px;
+  --glow-height: 994px;
+  --glow-color: 196, 197, 255;
 
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, calc(-50% + 18px));
-    width: var(--glow-width);
-    height: var(--glow-height);
-    filter: blur(80px);
-    pointer-events: none;
-    z-index: 1;
-    opacity: var(--glow-origin-opacity, var(--glow-opacity));
-    background: radial-gradient(ellipse,
-        rgba(var(--glow-origin, var(--glow-color)), 0.25) 0%,
-        rgba(var(--glow-origin, var(--glow-color)), 0.12) 40%,
-        transparent 70%);
-    view-transition-name: hero-glow;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 18px));
+  width: var(--glow-width);
+  height: var(--glow-height);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--glow-origin-opacity, var(--glow-opacity));
+  background: radial-gradient(
+    ellipse,
+    rgba(var(--glow-origin, var(--glow-color)), 0.25) 0%,
+    rgba(var(--glow-origin, var(--glow-color)), 0.12) 40%,
+    transparent 70%
+  );
+  view-transition-name: hero-glow;
 }
 
 .hub-tagline {
-    font-size: 1.35rem;
-    font-weight: 400;
-    color: var(--color-text);
-    max-width: 600px;
-    margin: 0 auto var(--spacing-xs);
-    line-height: 1.5;
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--color-text);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-xs);
+  line-height: 1.5;
 }
 
 .hub-tagline-sub {
-    font-size: 1.35rem;
-    font-weight: 400;
-    color: var(--color-text-light);
-    margin: 0 auto;
-    line-height: 1.5;
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--color-text-light);
+  margin: 0 auto;
+  line-height: 1.5;
 }
 
 /* === Product Cards === */
 .products-section {
-    padding: var(--spacing-xl) 0 var(--spacing-2xl);
-    position: relative;
-    z-index: 1;
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  position: relative;
+  z-index: 1;
 }
 
 .product-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-xl);
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  margin: 0 auto;
 }
 
 .product-card {
-    background: var(--color-bg-card);
-    border-radius: var(--border-radius-lg);
-    border: 1px solid var(--color-border);
-    text-decoration: none;
-    color: var(--color-text);
-    transition: all 0.35s ease;
-    overflow: hidden;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: all 0.35s ease;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .product-card:hover {
-    transform: translateY(-6px);
-    border-color: var(--product-color, var(--color-accent));
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 30px var(--product-glow, rgba(245, 166, 35, 0.1));
+  transform: translateY(-6px);
+  border-color: var(--product-color, var(--color-accent));
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px var(--product-glow, rgba(245, 166, 35, 0.1));
 }
 
 /* Product accent colors */
 .product-card[data-product="audio"] {
-    --product-color: var(--color-audio);
-    --product-glow: rgba(74, 158, 245, 0.15);
+  --product-color: var(--color-audio);
+  --product-glow: rgba(74, 158, 245, 0.15);
 }
 
 .product-card[data-product="notes"] {
-    --product-color: var(--color-notes);
-    --product-glow: rgba(164, 202, 206, 0.15);
+  --product-color: var(--color-notes);
+  --product-glow: rgba(164, 202, 206, 0.15);
 }
 
 /* Screenshot area */
 .product-card-img {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-    background: var(--color-bg-dark);
-    border-bottom: 1px solid var(--color-border);
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--color-bg-dark);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .product-card-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.85;
-    transition: opacity 0.3s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  transition: opacity 0.3s ease;
 }
 
 .product-card:hover .product-card-img img {
-    opacity: 1;
+  opacity: 1;
 }
 
 /* Card body — center-aligned */
 .product-card-body {
-    padding: var(--spacing-lg);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+  padding: var(--spacing-lg);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .product-card-logo {
-    width: auto;
-    align-self: center;
-    margin-bottom: var(--spacing-sm);
-    position: relative;
-    top: -5px;
+  width: auto;
+  align-self: center;
+  margin-bottom: var(--spacing-sm);
+  position: relative;
+  top: -5px;
 }
 
 .product-card[data-product="audio"] .product-card-logo {
-    height: 2.1rem;
+  height: 2.1rem;
 }
 
 .product-card[data-product="notes"] .product-card-logo {
-    height: 1.95rem;
+  height: 1.95rem;
 }
 
 .product-card-description {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-    line-height: 1.65;
-    margin-bottom: var(--spacing-md);
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: var(--spacing-md);
 }
 
 /* Filled brand-color CTA */
 .product-card-cta {
-    display: inline-block;
-    padding: 0.6rem 1.5rem;
-    align-self: center;
-    border: none;
-    border-radius: var(--border-radius);
-    font-weight: 600;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    text-align: center;
-    margin-top: auto;
-    color: #0F1119;
+  display: inline-block;
+  padding: 0.6rem 1.5rem;
+  align-self: center;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  margin-top: auto;
+  color: #0f1119;
 }
 
 .product-card[data-product="audio"] .product-card-cta {
-    background: var(--color-audio);
+  background: var(--color-audio);
 }
 
 .product-card[data-product="notes"] .product-card-cta {
-    background: var(--color-notes);
+  background: var(--color-notes);
 }
 
 .product-card:hover .product-card-cta {
-    filter: brightness(1.15);
-    transform: translateY(-1px) scale(1.05);
+  filter: brightness(1.15);
+  transform: translateY(-1px) scale(1.05);
 }
 
 /* === Cloud Section Overrides === */
 .cloud-card {
-    max-width: none;
-    background: var(--color-cloud-card, var(--color-bg-card));
+  max-width: none;
+  background: var(--color-cloud-card, var(--color-bg-card));
 }
 
 .cloud-cta {
-    background: var(--color-cloud-cta, rgba(255, 255, 255, 0.85));
-    color: #0F1119;
+  background: var(--color-cloud-cta, rgba(255, 255, 255, 0.85));
+  color: #0f1119;
 }
 
 .cloud-cta:hover {
-    background: var(--color-cloud-cta-hover, rgba(255, 255, 255, 0.95));
-    transform: scale(1.05);
+  background: var(--color-cloud-cta-hover, rgba(255, 255, 255, 0.95));
+  transform: scale(1.05);
 }
 
 /* === Email Signup === */
 .hub-signup-section {
-    padding: 0 0 var(--spacing-2xl);
-    position: relative;
-    z-index: 1;
+  padding: 0 0 var(--spacing-2xl);
+  position: relative;
+  z-index: 1;
 }
 
 .hub-signup-box {
-    max-width: 600px;
-    margin: 0 auto;
-    background: var(--color-bg-card);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius-lg);
-    padding: 2.5rem 3rem;
-    text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 2.5rem 3rem;
+  text-align: center;
 }
 
 .hub-signup-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-sm);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
 }
 
 .hub-signup-description {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-    margin-bottom: var(--spacing-lg);
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  margin-bottom: var(--spacing-lg);
 }
 
 .hub-signup-form {
-    display: flex;
-    gap: var(--spacing-md);
-    flex-wrap: wrap;
-    justify-content: center;
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .hub-signup-input {
-    flex: 1;
-    min-width: 250px;
-    padding: 0.6rem 1rem;
-    background: var(--color-bg);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    color: var(--color-text);
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    transition: all 0.3s ease;
+  flex: 1;
+  min-width: 250px;
+  padding: 0.6rem 1rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
 }
 
 .hub-signup-input:focus {
-    outline: none;
-    border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
 }
 
 .hub-signup-input::placeholder {
-    color: var(--color-text-light);
-    opacity: 0.6;
+  color: var(--color-text-light);
+  opacity: 0.6;
 }
 
 .hub-signup-btn {
-    padding: 0.6rem 1.5rem;
-    background: var(--color-accent);
-    color: #0F1119;
-    font-weight: 700;
-    font-size: 0.9rem;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: var(--font-sans);
+  padding: 0.6rem 1.5rem;
+  background: var(--color-accent);
+  color: #0f1119;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-sans);
 }
 
 .hub-signup-btn:hover {
-    filter: brightness(1.15);
-    transform: translateY(-1px);
+  filter: brightness(1.15);
+  transform: translateY(-1px);
 }
 
 .hub-signup-success {
-    text-align: center;
-    padding: var(--spacing-lg);
-    animation: hubFadeIn 0.4s ease;
+  text-align: center;
+  padding: var(--spacing-lg);
+  animation: hubFadeIn 0.4s ease;
 }
 
 .hub-signup-success-icon {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-md);
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
 }
 
 .hub-signup-success h3 {
-    color: var(--color-primary);
-    font-size: 1.5rem;
-    margin-bottom: var(--spacing-sm);
+  color: var(--color-primary);
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-sm);
 }
 
 .hub-signup-success p {
-    color: var(--color-text-light);
-    font-size: 1rem;
+  color: var(--color-text-light);
+  font-size: 1rem;
 }
 
 .hub-signup-success strong {
-    color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 @keyframes hubFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === Responsive === */
 @media (max-width: 768px) {
-    .hub-hero {
-        padding-top: 90px;
-    }
+  .hub-hero {
+    padding-top: 90px;
+  }
 
-    .hub-hero-logo {
-        height: 3.575rem;
-    }
+  .hub-hero-logo {
+    height: 3.575rem;
+  }
 
-    .hub-hero-icon {
-        height: 2.8125rem;
-    }
+  .hub-hero-icon {
+    height: 2.8125rem;
+  }
 
-    .hub-tagline,
-    .hub-tagline-sub {
-        font-size: 1.15rem;
-    }
+  .hub-tagline,
+  .hub-tagline-sub {
+    font-size: 1.15rem;
+  }
 
-    .product-cards {
-        grid-template-columns: 1fr;
-        max-width: 420px;
-        gap: var(--spacing-lg);
-    }
+  .product-cards {
+    grid-template-columns: 1fr;
+    max-width: 420px;
+    gap: var(--spacing-lg);
+  }
 
-    .hub-signup-input {
-        min-width: 200px;
-    }
+  .hub-signup-input {
+    min-width: 200px;
+  }
 }
 
 @media (max-width: 480px) {
-    .hub-hero-title {
-        flex-direction: column;
-    }
+  .hub-hero-title {
+    flex-direction: column;
+  }
 
-    .hub-hero-logo {
-        height: 2.925rem;
-    }
+  .hub-hero-logo {
+    height: 2.925rem;
+  }
 
-    .hub-hero-icon {
-        height: 2.1875rem;
-    }
+  .hub-hero-icon {
+    height: 2.1875rem;
+  }
 
-    .hub-hero-glow {
-        --glow-width: 300px;
-        --glow-height: 200px;
-    }
+  .hub-hero-glow {
+    --glow-width: 300px;
+    --glow-height: 200px;
+  }
 
-    .hub-tagline,
-    .hub-tagline-sub {
-        font-size: 1rem;
-    }
+  .hub-tagline,
+  .hub-tagline-sub {
+    font-size: 1rem;
+  }
 
-    .hub-signup-box {
-        padding: 1.5rem;
-    }
+  .hub-signup-box {
+    padding: 1.5rem;
+  }
 
-    .hub-signup-form {
-        flex-direction: column;
-    }
+  .hub-signup-form {
+    flex-direction: column;
+  }
 
-    .hub-signup-input {
-        min-width: 0;
-    }
+  .hub-signup-input {
+    min-width: 0;
+  }
 }

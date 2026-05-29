@@ -98,9 +98,9 @@ export function NotesDownload({ versionText }: Props) {
           <div id="download-detected">
             <a className="btn btn-download" href={downloadHref}>
               <span className="btn-label">
-                {/* biome-ignore lint/security/noDangerouslySetInnerHtml: trusted local SVG string */}
                 <span
                   className="download-icon"
+                  // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted local SVG string
                   dangerouslySetInnerHTML={{ __html: downloadIconHtml }}
                 />
                 <span>Download</span>

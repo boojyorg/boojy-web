@@ -4,321 +4,327 @@
 
 /* === Hero === */
 .cloud-hero {
-    min-height: 40vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding-top: 100px;
-    padding-bottom: var(--spacing-lg);
-    background: var(--color-bg-dark);
-    position: relative;
-    overflow: hidden;
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 100px;
+  padding-bottom: var(--spacing-lg);
+  background: var(--color-bg-dark);
+  position: relative;
+  overflow: hidden;
 }
 
 .cloud-rollout-banner {
-    display: inline-block;
-    max-width: 42rem;
-    margin: 0 auto var(--spacing-lg);
-    padding: var(--spacing-sm) var(--spacing-md);
-    border: 1px solid var(--color-border);
-    border-radius: var(--border-radius);
-    background: rgba(44, 44, 50, 0.6);
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-    line-height: 1.5;
+  display: inline-block;
+  max-width: 42rem;
+  margin: 0 auto var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: rgba(44, 44, 50, 0.6);
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 /* Starfield */
 .cloud-hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
-        radial-gradient(1px 1px at 12% 18%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 28% 32%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(2px 2px at 42% 10%, rgba(255,255,255,0.6) 0%, transparent 100%),
-        radial-gradient(1px 1px at 58% 42%, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(1px 1px at 72% 28%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(2px 2px at 88% 35%, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(1px 1px at 18% 58%, rgba(255,255,255,0.35) 0%, transparent 100%),
-        radial-gradient(1px 1px at 32% 68%, rgba(255,255,255,0.45) 0%, transparent 100%),
-        radial-gradient(2px 2px at 55% 52%, rgba(255,255,255,0.5) 0%, transparent 100%),
-        radial-gradient(1px 1px at 68% 72%, rgba(255,255,255,0.3) 0%, transparent 100%);
-    pointer-events: none;
-    z-index: 0;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 28% 32%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 42% 10%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 58% 42%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 72% 28%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 88% 35%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 18% 58%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
+    radial-gradient(1px 1px at 32% 68%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
+    radial-gradient(2px 2px at 55% 52%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 68% 72%, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Nebula glow — teal for Cloud */
 .cloud-hero::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px;
-    height: 400px;
-    background: radial-gradient(ellipse at center,
-        rgba(164, 202, 206, 0.1) 0%,
-        rgba(164, 202, 206, 0.04) 40%,
-        transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-    filter: blur(60px);
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 400px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(164, 202, 206, 0.1) 0%,
+    rgba(164, 202, 206, 0.04) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
 }
 
 .cloud-hero .container {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
 .cloud-title {
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-sm);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
 }
 
 .cloud-subtitle {
-    font-size: 1.35rem;
-    color: var(--color-text-light);
-    font-weight: 400;
-    max-width: 500px;
-    margin: 0 auto;
-    line-height: 1.6;
+  font-size: 1.35rem;
+  color: var(--color-text-light);
+  font-weight: 400;
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 /* === Pricing Cards === */
 .pricing-section {
-    background: var(--color-bg);
-    padding: var(--spacing-3xl) 0;
+  background: var(--color-bg);
+  padding: var(--spacing-3xl) 0;
 }
 
 .pricing-cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-xl);
-    max-width: 700px;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .pricing-card {
-    background: rgba(51, 51, 51, 0.6);
-    backdrop-filter: blur(10px);
-    border-radius: var(--border-radius-lg);
-    padding: var(--spacing-2xl);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease;
+  background: rgba(51, 51, 51, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-2xl);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
 }
 
 .pricing-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 
 .pricing-card-highlight {
-    border-color: rgba(164, 202, 206, 0.3);
+  border-color: rgba(164, 202, 206, 0.3);
 }
 
 .pricing-card-highlight:hover {
-    border-color: rgba(164, 202, 206, 0.5);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(164, 202, 206, 0.1);
+  border-color: rgba(164, 202, 206, 0.5);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(164, 202, 206, 0.1);
 }
 
 .pricing-name {
-    font-size: 1.35rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: var(--spacing-md);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
 }
 
 .pricing-price {
-    margin-bottom: var(--spacing-xl);
-    display: flex;
-    align-items: baseline;
-    gap: 0.35rem;
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  align-items: baseline;
+  gap: 0.35rem;
 }
 
 .pricing-amount {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--color-primary);
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
 }
 
 .pricing-period {
-    font-size: 1rem;
-    color: var(--color-text-light);
+  font-size: 1rem;
+  color: var(--color-text-light);
 }
 
 .pricing-features {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 var(--spacing-xl);
-    flex-grow: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--spacing-xl);
+  flex-grow: 1;
 }
 
 .pricing-features li {
-    padding: var(--spacing-xs) 0;
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .pricing-features .check {
-    color: var(--color-accent);
-    font-weight: 700;
-    flex-shrink: 0;
+  color: var(--color-accent);
+  font-weight: 700;
+  flex-shrink: 0;
 }
 
 .pricing-btn {
-    width: 100%;
-    text-align: center;
+  width: 100%;
+  text-align: center;
 }
 
 .pricing-btn-current {
-    opacity: 0.5;
-    pointer-events: none;
-    cursor: default;
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: default;
 }
 
 /* === Ethics Section === */
 .ethics-section {
-    background: var(--color-bg-dark);
-    padding: var(--spacing-3xl) 0;
+  background: var(--color-bg-dark);
+  padding: var(--spacing-3xl) 0;
 }
 
 .ethics-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-xl);
-    max-width: 800px;
-    margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .ethics-item {
-    display: flex;
-    gap: var(--spacing-md);
-    align-items: flex-start;
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
 }
 
 .ethics-check {
-    color: var(--color-accent);
-    font-size: 1.25rem;
-    font-weight: 700;
-    flex-shrink: 0;
-    margin-top: 0.1rem;
+  color: var(--color-accent);
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
 }
 
 .ethics-item h3 {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--color-primary);
-    margin-bottom: 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  margin-bottom: 0.25rem;
 }
 
 .ethics-item p {
-    color: var(--color-text-light);
-    font-size: 0.9rem;
-    line-height: 1.5;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 /* === FAQ Section === */
 .cloud-faq-section {
-    background: var(--color-bg);
-    padding: var(--spacing-3xl) 0;
+  background: var(--color-bg);
+  padding: var(--spacing-3xl) 0;
 }
 
 .faq-list {
-    max-width: 700px;
-    margin: 0 auto;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .faq-item {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .faq-question {
-    width: 100%;
-    background: none;
-    border: none;
-    color: var(--color-primary);
-    font-size: 1.05rem;
-    font-weight: 600;
-    padding: var(--spacing-md) 0;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: var(--font-sans);
-    text-align: left;
-    transition: color 0.3s ease;
+  width: 100%;
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: var(--spacing-md) 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-sans);
+  text-align: left;
+  transition: color 0.3s ease;
 }
 
 .faq-question:hover {
-    color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .faq-arrow {
-    transition: transform 0.3s ease;
-    font-size: 0.9rem;
-    color: var(--color-text-light);
+  transition: transform 0.3s ease;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
 }
 
 .faq-item.active .faq-arrow {
-    transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .faq-answer {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.3s ease,
+    padding 0.3s ease;
 }
 
 .faq-item.active .faq-answer {
-    max-height: 200px;
-    padding-bottom: var(--spacing-md);
+  max-height: 200px;
+  padding-bottom: var(--spacing-md);
 }
 
 .faq-answer p {
-    color: var(--color-text-light);
-    font-size: 0.95rem;
-    line-height: 1.6;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 /* === Responsive === */
 @media (max-width: 768px) {
-    .cloud-hero {
-        min-height: 35vh;
-        padding-top: 80px;
-    }
+  .cloud-hero {
+    min-height: 35vh;
+    padding-top: 80px;
+  }
 
-    .cloud-title {
-        font-size: 2.25rem;
-    }
+  .cloud-title {
+    font-size: 2.25rem;
+  }
 
-    .pricing-cards {
-        grid-template-columns: 1fr;
-        max-width: 400px;
-    }
+  .pricing-cards {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+  }
 
-    .ethics-grid {
-        grid-template-columns: 1fr;
-    }
+  .ethics-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 480px) {
-    .cloud-title {
-        font-size: 1.85rem;
-    }
+  .cloud-title {
+    font-size: 1.85rem;
+  }
 
-    .cloud-subtitle {
-        font-size: 1.1rem;
-    }
+  .cloud-subtitle {
+    font-size: 1.1rem;
+  }
 }

@@ -6,9 +6,10 @@
 
 ## 1. 🎯 Active Engineering Target — Astro migration
 
-**Status (2026-05-29):** ✅ **Migration implemented on `astro-migration`** — Phases 0–7 done,
-`astro check` + `pnpm build` clean, manual walkthrough passed. SPA fully removed. **Remaining:**
-merge → `master` + flip CF Pages build settings in lockstep (deploy trap, §3), then Phase 8 (Biome).
+**Status (2026-05-29):** ✅ **Migration complete and live in production.** All phases done
+(0–8). PR #1 merged to `master` with CF Pages settings flipped in lockstep (root `website`, build
+`pnpm build`, output `dist`); `boojy.org` verified serving static HTML with real per-route meta and
+`.html`→clean-URL 301s. Biome adopted (Phase 8, own chore commit). No open migration work.
 Full spec: `docs/ASTRO_MIGRATION_PLAN.md`. Decisions as built: native view transitions / no
 `<ClientRouter />`; glow as pre-paint root-CSS-var script; build-time notes version; **legal pages
 on clean URLs `/privacy/` `/terms/` `/subscribed/` + 301s** (Astro can't emit a literal `.html`
@@ -38,9 +39,14 @@ scaffold; pnpm + TS-strict now, Biome deferred.
 - [x] **Phase 7 — Verify.** Verification checklist walked (SEO view-source, glow morph, nav,
   download panel, account, notes fallback, routing, redirects) — automated checks + manual
   walkthrough passed.
-- [ ] **Phase 7b — Merge.** Merge `astro-migration` → `master` **and** flip CF Pages build settings
-  (root `website`, build `pnpm build`, output `dist`) in the same step; confirm production deploy.
-- [ ] **Phase 8 — (separate, later) Biome** as its own chore commit.
+- [x] **Phase 7b — Merge.** PR #1 merged `astro-migration` → `master`; CF Pages build settings
+  flipped in lockstep (root `website`, build `pnpm build`, output `dist`); production deploy
+  confirmed serving Astro static HTML (verified live via curl: per-route titles/meta, `.html`→301s).
+- [x] **Phase 8 — Biome** (own chore commit on `chore/biome`). `@biomejs/biome` 2.4.16; `biome.json`
+  scopes to `.ts/.tsx/.js/.mjs/.json/.css` (excludes `.astro` + legal `.html`); recommended rules
+  with 3 documented disables (see CLAUDE.md); `pnpm lint` / `pnpm lint:fix` scripts. Whole tree
+  reformatted to 2-space; a11y `aria-hidden` added to decorative icons. `biome check`, `astro
+  check`, `pnpm build` all green.
 
 ## 2. 🧪 Workspace Feedback Loops & Incident Logs
 
@@ -88,7 +94,9 @@ abort) and the icon/OG dedup (#3, #4, #7) are **fixed**. Remaining, optional:
 
 ### Deferred (not this migration)
 
-- Biome adoption (Phase 8, separate commit).
+- **Semantic `<a href="#">` → `<button>` conversion** in `Account` + the download panels (the 7
+  `useValidAnchor` sites). Disabled in Biome for now; the proper fix touches CSS (`.platform-item`,
+  `.other-platforms-link`) so it's bundled with the styling/a11y pass, not the Biome chore.
 - Tailwind / shadcn restyle (separate task — styling stays plain CSS this pass).
 - SSR / Cloudflare adapter — not needed while static.
 - Always-live notes-version island — build-time bake is the chosen approach.

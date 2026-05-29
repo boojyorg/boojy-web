@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
 import type { User } from '@supabase/supabase-js';
+import { useCallback, useEffect, useState } from 'react';
 import { CLOUD_LAUNCHED, supabase } from '../lib/supabase';
 
 interface Profile {
@@ -146,8 +146,7 @@ export function useAccount() {
     }
   };
 
-  const displayName =
-    profile?.display_name ?? user?.user_metadata?.display_name ?? '—';
+  const displayName = profile?.display_name ?? user?.user_metadata?.display_name ?? '—';
   const tier = profile?.tier === 'orbit' ? 'Orbit' : 'Free';
   const tierClass = profile?.tier === 'orbit' ? 'dash-tier-orbit' : 'dash-tier-free';
 

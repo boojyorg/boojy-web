@@ -6,16 +6,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is the **boojy.org marketing website** repo (`boojy`). Solo project by Tyr.
 
-**The Vite + React SPA → Astro static-site migration is implemented on branch `astro-migration`**
-(all phases green: `astro check` + `pnpm build` clean, manual walkthrough passed). The SPA is fully
-removed — the tree is now Astro end to end. What's left before it's "done": **merge to `master` +
-flip the CF Pages build settings in lockstep** (see the deploy trap below), then the deferred Biome
-pass. Full spec: `docs/ASTRO_MIGRATION_PLAN.md`; live status: `dreams.md` §1.
+**The Vite + React SPA → Astro static-site migration is complete and live in production.** It
+merged to `master` (PR #1) with the CF Pages build settings flipped in lockstep, and `boojy.org`
+now serves fully-formed static HTML — verified live (real `<title>`/description/OG per route,
+legacy `.html` → clean-URL 301s). The SPA is fully removed; the tree is Astro end to end. Biome has
+since been adopted (its own chore commit, post-merge). Full spec: `docs/ASTRO_MIGRATION_PLAN.md`;
+live status: `dreams.md` §1.
 
 **Why the migration:** the SPA ships an empty `<div id="root">`, so crawlers and social scrapers
 see no title/description/OG tags. Astro ships fully-formed static HTML per page, fixing SEO, with
-the interactive pieces layered back in as React islands. Scope is **framework only** — the plain
-CSS, Supabase/Stripe logic, and copy are untouched; Tailwind and Biome are explicitly deferred.
+the interactive pieces layered back in as React islands. Scope was **framework only** — the plain
+CSS, Supabase/Stripe logic, and copy are untouched; Tailwind/shadcn restyle stays a separate future
+task.
 
 Two architectural anchors for any change:
 
@@ -45,26 +47,34 @@ pnpm dev                 # Astro dev server — the user runs this; don't auto-s
 pnpm build               # astro build → website/dist/
 pnpm preview             # serve the static build locally
 pnpm exec astro check    # type + diagnostic gate (the pre-commit gate)
+pnpm lint                # biome check (lint + format diagnostics)
+pnpm lint:fix            # biome check --write (apply formatting + safe fixes)
 ```
 
-No automated test suite yet, and **Biome is deferred** to a follow-up commit after the migration
-merges (so the migration diff stays reviewable). The gate today is `astro check` + a clean
-`pnpm build`.
+No automated test suite yet. The gate is `astro check` + a clean `pnpm build`; `pnpm lint` (Biome)
+is the lint/format gate. **Biome scope:** it lints/formats `.ts/.tsx/.js/.mjs/.json/.css` only —
+`.astro` and the legal `.html` content files are **excluded** (Biome parses `.astro` frontmatter as
+standalone JS and would false-flag every template-only import/var as unused; `astro check` is the
+gate for `.astro`). Three rules are off in `biome.json` for intentional, recurring patterns:
+`noNonNullAssertion` (deliberate `!` with `noUncheckedIndexedAccess`), `noUnknownTypeSelector`
+(false-positives on valid `::view-transition-*` CSS), `useValidAnchor` (intentional interactive
+anchors — semantic a→button conversion is deferred styling work).
 
 ## Shipping workflow
 
-1. **Branch** (never commit straight to `master`). Migration work is on `astro-migration`.
-2. **Green the gates:** `pnpm exec astro check` + `pnpm build`.
+1. **Branch** (never commit straight to `master`).
+2. **Green the gates:** `pnpm exec astro check` + `pnpm build` + `pnpm lint`.
 3. **Commit, push.**
 4. **Deploy is Cloudflare Pages Git integration** — a preview deploy per branch, production on
-   `master`. No wrangler, no GitHub Actions.
+   `master`. No wrangler, no GitHub Actions. CF build settings are now: root `website`, build
+   command `pnpm build`, output `dist`.
 
-> ⚠️ **Load-bearing deploy trap — CF Pages build settings are shared between production and
-> preview.** A Pages project has one build command / output dir, used for both. The moment you
-> switch it to `pnpm build` + `website/dist`, the next *production* build of `master` uses those
-> settings too — but `master` is still the SPA until merge, so that build breaks. **Change the CF
-> build settings in lockstep with merging `astro-migration` → `master`, not before.** Validate the
-> real build on the branch preview deployment until then.
+> ⚠️ **Deploy trap (resolved — kept as a reference).** CF Pages build settings are shared between
+> production and preview: one build command / output dir for both. During the migration this was
+> load-bearing — flipping the settings while `master` was still the SPA would have broken the next
+> production build, so they were flipped *in lockstep* with the PR #1 merge. The trap matters again
+> for any future framework-level change: validate on a branch preview deploy, and never point the
+> shared build settings at a build the current `master` can't produce.
 
 ## Architecture (Astro target)
 

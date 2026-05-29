@@ -7,7 +7,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "lint": "biome check",
+    "lint:fix": "biome check --write"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.6",
@@ -19,11 +21,15 @@
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@biomejs/biome": "2.4.16",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "typescript": "~5.8.3"
   },
   "pnpm": {
-    "onlyBuiltDependencies": ["esbuild", "sharp"]
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "sharp"
+    ]
   }
 }
