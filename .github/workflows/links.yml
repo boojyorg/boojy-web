@@ -50,7 +50,6 @@ jobs:
             --no-progress
             --max-retries 3
             --retry-wait-time 5
-            --exclude-mail
             --exclude 'w3\.org'
             --exclude 'schema\.org'
             --exclude 'supabase\.co'
