@@ -50,9 +50,11 @@ jobs:
             --no-progress
             --max-retries 3
             --retry-wait-time 5
+            --root-dir ${{ github.workspace }}/website/dist
             --exclude 'w3\.org'
             --exclude 'schema\.org'
             --exclude 'supabase\.co'
             --exclude 'umami-production-.*\.up\.railway\.app'
             --exclude 'api\.github\.com'
+            --exclude 'youtube\.com'
             'website/dist/**/*.html'
