@@ -14,7 +14,7 @@ interface AudioPlatform {
   pill?: string;
 }
 
-const AUDIO_BASE_URL = 'https://github.com/tyrbujac/boojy-audio/releases/latest/download/';
+const AUDIO_BASE_URL = 'https://github.com/boojyorg/boojy-audio/releases/latest/download/';
 
 const AUDIO_PLATFORMS: AudioPlatform[] = [
   {
@@ -58,7 +58,12 @@ function normalize(platform: PlatformId): PlatformId {
  * swaps in a direct download for the matched platform. `showFallback` is derived from the
  * href sentinel (`'#'` = no direct download yet) so there's a single source of truth.
  */
-export function AudioDownload() {
+interface Props {
+  /** Version string, fetched at build time and passed in so it lands in static HTML. */
+  versionText: string;
+}
+
+export function AudioDownload({ versionText }: Props) {
   const { panelRef, toggleRef, toggle, close, panelClassName } = usePlatformsPanel();
 
   const [downloadHref, setDownloadHref] = useState('#');
@@ -114,7 +119,7 @@ export function AudioDownload() {
         ) : (
           <div id="download-fallback">
             <a
-              href="https://github.com/tyrbujac/boojy-audio/releases/latest"
+              href="https://github.com/boojyorg/boojy-audio/releases/latest"
               target="_blank"
               rel="noreferrer"
               className="btn btn-download"
@@ -125,7 +130,7 @@ export function AudioDownload() {
         )}
       </div>
       <p className="hero-meta">
-        v0.1 Beta (<span>{platformLabel}</span>) · 28 Feb 2026 ·{' '}
+        {versionText} (<span>{platformLabel}</span>) ·{' '}
         <a href="#" className="other-platforms-link" ref={toggleRef} onClick={toggle}>
           Other platforms
         </a>
@@ -168,7 +173,7 @@ export function AudioDownload() {
         )}
         <a
           className="platform-item platform-github"
-          href="https://github.com/tyrbujac/boojy-audio/releases"
+          href="https://github.com/boojyorg/boojy-audio/releases"
           target="_blank"
           rel="noreferrer"
         >

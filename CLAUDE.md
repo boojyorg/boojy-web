@@ -83,7 +83,8 @@ rules are off in `biome.json` for intentional, recurring patterns: `noNonNullAss
   `Astro.url.pathname` at build time), `Footer.astro`, `ProductCards.astro`.
 * **`website/src/content/`** — `site.ts`, `cloud.ts`, `page-meta.ts`, `legal/*.html` (rendered via
   `set:html` with `?raw`). Copy + meta come from here; don't hardcode.
-* **`website/src/lib/`** — `platform.ts` (OS detect), `supabase.ts`, `notes-version.ts`.
+* **`website/src/lib/`** — `platform.ts` (OS detect), `supabase.ts`, `github-release.ts` (build-time
+  version + download-URL fetch for Audio & Notes).
 * **Backend facts (Supabase, Stripe) + the build-time Notes version → `.claude/rules/`** (loaded
   when you touch account/cloud/notes).
 

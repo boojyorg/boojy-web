@@ -3,12 +3,16 @@ import { NotesDownload } from '../../components/NotesDownload';
 import ProductCloudCard from '../../components/ProductCloudCard.astro';
 import { CLOUD_DESCRIPTION } from '../../content/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getNotesVersion } from '../../lib/notes-version';
+import { findAssetUrl, getLatestRelease } from '../../lib/github-release';
 import '../../styles/notes.css';
 
-// Build-time fetch — the version is baked into the static HTML and re-fetched on each
-// deploy. getNotesVersion never throws (falls back on any error/timeout).
-const versionText = await getNotesVersion();
+// Build-time fetch — version + real asset URLs are baked into the static HTML and
+// re-fetched on each deploy. getLatestRelease never throws (falls back on any
+// error/timeout). Notes' asset filenames embed the version, so the download URLs have
+// to come from the live release, not a hardcoded path.
+const release = await getLatestRelease('boojyorg/boojy-notes', { fallbackVersion: 'v0.3.0 Beta' });
+const macArm64Url = findAssetUrl(release.assets, /arm64\.dmg$/) ?? null;
+const winX64Url = findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null;
 ---
 
 <BaseLayout path="/notes/">
@@ -35,7 +39,12 @@ const versionText = await getNotesVersion();
         <img src="/images/Notes-text-logo.png" alt="Notes" class="notes-hero-product" />
       </div>
       <p class="notes-tagline reveal reveal-d1">Your notes. Your files. Your devices.</p>
-      <NotesDownload client:load versionText={versionText} />
+      <NotesDownload
+        client:load
+        versionText={release.versionText}
+        macArm64Url={macArm64Url}
+        winX64Url={winX64Url}
+      />
     </div>
   </section>
 
