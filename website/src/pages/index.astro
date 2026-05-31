@@ -1,7 +1,7 @@
 ---
+import ComingSoonCards from '../components/ComingSoonCards.astro';
+import { Feedback } from '../components/Feedback';
 import ProductCards from '../components/ProductCards.astro';
-import ProductCloudCard from '../components/ProductCloudCard.astro';
-import { CLOUD_DESCRIPTION } from '../content/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/hub.css';
 ---
@@ -17,10 +17,12 @@ import '../styles/hub.css';
       name: 'Boojy',
       url: 'https://boojy.org',
       logo: 'https://boojy.org/images/Boojy_Image_Logo.png',
-      description: 'Free, open-source creative software. Music production, note-taking, and cloud storage.',
+      description: 'Free creative software. Music production, note-taking, and cloud storage.',
       sameAs: ['https://github.com/boojyorg', 'https://youtube.com/@boojy'],
     })}
   />
+
+  <!-- Hero -->
   <section class="hub-hero">
     <div class="hub-hero-glow" aria-hidden="true" data-glow></div>
     <div class="container">
@@ -28,14 +30,38 @@ import '../styles/hub.css';
         <img src="/images/boojy-logo.svg" alt="Boojy" class="hub-hero-logo" />
         <img src="/images/Boojy_Image_Logo.png" alt="" class="hub-hero-icon" />
       </div>
-      <p class="hub-tagline reveal reveal-d1">Free, open-source creative software.</p>
-      <p class="hub-tagline-sub reveal reveal-d2">Made by Tyr.</p>
+      <p class="hub-tagline reveal reveal-d1">a creative suite</p>
+      <p class="hub-tagline-sub reveal reveal-d2">Free creative software. Made by Tyr.</p>
     </div>
   </section>
+
+  <!-- Audio + Notes -->
   <ProductCards />
-  <ProductCloudCard
-    cardClassName="cloud-card"
-    ctaClassName="cloud-cta"
-    description={CLOUD_DESCRIPTION}
-  />
+
+  <!-- Why Boojy — the personal story; this is the "about". -->
+  <section class="why-boojy">
+    <div class="container">
+      <div class="why-boojy-card">
+        <h2 class="why-boojy-title">Why Boojy</h2>
+        <p class="why-boojy-body">
+          I'm Tyr, a Computer Science student who started making music as a teenager. I loved making
+          and recording it, but a lot of the tools sat behind paywalls. Boojy is the suite of free,
+          open-source tools I wish I'd had: calm software that's yours to keep. You own your work, no
+          subscriptions, and each app goes open source once it's ready.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Coming soon — Design + Cloud as a muted second tier. -->
+  <ComingSoonCards />
+
+  <!-- Feedback — real form → Supabase Edge Function + Turnstile. -->
+  <section class="feedback" id="feedback">
+    <div class="container feedback-inner">
+      <h2 class="feedback-title">Found a bug? Got an idea?</h2>
+      <p class="feedback-sub">Tell me — it goes straight to my inbox.</p>
+      <Feedback client:visible />
+    </div>
+  </section>
 </BaseLayout>

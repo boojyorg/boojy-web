@@ -10,6 +10,7 @@ import { PRODUCT_CARDS } from '../content/site';
           <a href={product.href} class="product-card" data-product={product.id}>
             <div class="product-card-img">
               <img src={product.screenshot} alt={product.screenshotAlt} loading="lazy" />
+              <span class="product-card-badge">{product.badge}</span>
             </div>
             <div class="product-card-body">
               <img

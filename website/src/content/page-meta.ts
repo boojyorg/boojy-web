@@ -30,11 +30,11 @@ const meta = (
 export const PAGE_META: Record<string, PageMeta> = {
   '/': meta(
     'Boojy – Creative Tools',
-    'Boojy - Free, open-source creative tools. Audio, Notes, and Cloud storage rolling out soon.',
+    'Boojy - Free creative tools. Audio, Notes, and Cloud storage rolling out soon.',
     '/',
     DEFAULT_OG_IMAGE,
     'Boojy - Free Creative Tools',
-    'Free, open-source creative software. Music production, note-taking, and cloud storage rolling out soon.',
+    'Free creative software. Music production, note-taking, and cloud storage rolling out soon.',
   ),
   '/audio/': meta(
     'Boojy Audio – Free DAW for Beginners',

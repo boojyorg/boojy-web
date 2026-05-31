@@ -14,6 +14,7 @@
   "dependencies": {
     "@astrojs/react": "^5.0.6",
     "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/inter": "^5.2.8",
     "@supabase/supabase-js": "^2.43.4",
     "astro": "^6.4.2",
     "react": "^19.1.0",

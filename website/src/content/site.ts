@@ -14,6 +14,9 @@ export const GLOBE_ICON_PATHS = [
 
 export type ProductId = 'audio' | 'notes';
 
+/** Single source of truth for the early-access label shown on Audio + Notes. */
+export const EARLY_ACCESS = 'Early access';
+
 export interface ProductCardData {
   id: ProductId;
   href: string;
@@ -22,6 +25,8 @@ export interface ProductCardData {
   logo: string;
   logoAlt: string;
   description: string;
+  /** Stage badge, e.g. "Early access" — driven from one config value. */
+  badge: string;
 }
 
 export const PRODUCT_CARDS: ProductCardData[] = [
@@ -33,6 +38,7 @@ export const PRODUCT_CARDS: ProductCardData[] = [
     logo: '/images/audio-text-logo.png',
     logoAlt: 'Boojy Audio',
     description: 'A free, simple music studio. For macOS and Windows.',
+    badge: EARLY_ACCESS,
   },
   {
     id: 'notes',
@@ -42,6 +48,40 @@ export const PRODUCT_CARDS: ProductCardData[] = [
     logo: '/images/Notes-text-logo.png',
     logoAlt: 'Boojy Notes',
     description: 'A calm space for your thoughts. Write in markdown. Own your files.',
+    badge: EARLY_ACCESS,
+  },
+];
+
+/** Homepage "Coming soon" cards — Design + Cloud, a muted tier below the live apps. */
+export type ComingSoonId = 'design' | 'cloud';
+
+export interface ComingSoonItem {
+  id: ComingSoonId;
+  name: string;
+  description: string;
+  /** Card visual: a screenshot, or the gradient placeholder for Cloud (nothing to shoot). */
+  visual: { kind: 'image'; src: string; alt: string } | { kind: 'placeholder' };
+  /** Optional CTA (Cloud → waitlist; Design has no page yet, so no link/button). */
+  cta?: { href: string; label: string };
+}
+
+export const COMING_SOON: ComingSoonItem[] = [
+  {
+    id: 'design',
+    name: 'Boojy Design',
+    description: 'An image editor in the browser.',
+    visual: {
+      kind: 'image',
+      src: '/images/boojy-design-screenshot.png',
+      alt: 'Boojy Design interface',
+    },
+  },
+  {
+    id: 'cloud',
+    name: 'Boojy Cloud',
+    description: 'Sync your work across all your devices.',
+    visual: { kind: 'placeholder' },
+    cta: { href: '/cloud/', label: 'Join waitlist →' },
   },
 ];
 

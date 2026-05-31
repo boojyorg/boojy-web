@@ -3,6 +3,7 @@ import { Starfield } from '../components/Starfield';
 import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
 import { DEFAULT_OG_IMAGE, getPageMeta, pageMetaUrl } from '../content/page-meta';
+import '@fontsource-variable/inter';
 import '../styles/shared.css';
 
 interface Props {
@@ -40,6 +41,21 @@ const ogImage = meta.ogImage ?? DEFAULT_OG_IMAGE;
 
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <link rel="apple-touch-icon" href="/images/favicon.png" />
+
+    <!-- Accent A/B (dev scaffolding): `?accent=cool|gold` persists to localStorage and
+         sets data-accent on <html> before paint. Default = gold. To be removed once the
+         accent is chosen (the winner gets baked into :root in shared.css). -->
+    <script is:inline>
+      (function () {
+        try {
+          var q = new URLSearchParams(window.location.search).get('accent');
+          if (q === 'cool' || q === 'gold') localStorage.setItem('boojy-accent', q);
+          if (localStorage.getItem('boojy-accent') === 'cool') {
+            document.documentElement.setAttribute('data-accent', 'cool');
+          }
+        } catch (e) {}
+      })();
+    </script>
 
     <!-- Pre-paint glow origin: set the morph's start color on :root from the previous
          page (stored in sessionStorage) BEFORE the glow element is parsed, so the glow

@@ -9,7 +9,10 @@
   --color-primary: #f5f5f5;
   --color-primary-light: #ffffff;
   --color-primary-dark: #e5e5e5;
-  --color-accent: #f5a623;
+  /* Accent is stored as RGB components so a single override (the cool/gold A/B
+     toggle, and any rgba() glow) can swap the whole accent in one place. */
+  --accent-rgb: 245, 166, 35;
+  --color-accent: rgb(var(--accent-rgb));
   --color-accent-hover: #ffb940;
   --color-purple: #8b5cf6;
 
@@ -35,21 +38,33 @@
   --spacing-2xl: 4rem;
   --spacing-3xl: 6rem;
 
-  /* Typography */
+  /* Typography — Inter (shared across all Boojy apps; the website was the odd one out). */
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-display: "Inter Variable", -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Layout */
+  /* Layout — radius brought in to meet the apps (was 12/16; apps sit at 2–8px). */
   --max-width: 1200px;
-  --border-radius: 12px;
-  --border-radius-lg: 16px;
+  --border-radius-sm: 6px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+/* Accent A/B — `?accent=cool` (persisted to localStorage by the inline script in
+   BaseLayout) sets data-accent="cool" on <html>, swapping gold → periwinkle to match
+   the cosmic glow. Default (no attribute) stays gold. Dev-only scaffolding: the winner
+   gets baked into :root and this block + the toggle script are removed before merge. */
+:root[data-accent="cool"] {
+  --accent-rgb: 124, 140, 255;
+  --color-accent: rgb(var(--accent-rgb));
+  --color-accent-hover: #97a4ff;
 }
 
 /* === Reset & Base Styles === */
@@ -926,8 +941,45 @@ section {
   }
 }
 
+/* === Reduced Motion ===
+   Honor the OS "reduce motion" setting: no smooth scroll and reveals land visible
+   (no upward slide). The starfield — by far the biggest source of motion —
+   early-returns to a single static frame with no rAF loop and no shooting stars
+   (see Starfield.tsx). The remaining effects are brief, interaction-gated hover
+   transitions, which reduced-motion guidance treats as acceptable. The .reveal
+   override shares its base rule's specificity and comes later in this file, so it
+   wins the cascade without !important. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    animation: none;
+  }
+}
+
 /* === Responsive === */
+
+/* Nav collapses to the hamburger at ≤768px (was ≤480) — closes the 481–767px dead
+   zone where the centered product links could overlap the Account button. */
 @media (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-products,
+  .nav-signin,
+  .nav-github,
+  .nav-mobile-menu {
+    display: none;
+  }
+
+  .nav-mobile-menu.active {
+    display: flex;
+  }
+
   .section-title {
     font-size: 2rem;
   }
@@ -946,30 +998,6 @@ section {
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
     --spacing-3xl: 4rem;
-  }
-
-  .nav-toggle {
-    display: flex;
-  }
-
-  .nav-products {
-    display: none;
-  }
-
-  .nav-signin {
-    display: none;
-  }
-
-  .nav-github {
-    display: none;
-  }
-
-  .nav-mobile-menu {
-    display: none;
-  }
-
-  .nav-mobile-menu.active {
-    display: flex;
   }
 
   .section-title {

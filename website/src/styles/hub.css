@@ -63,16 +63,17 @@
 }
 
 .hub-tagline {
-  font-size: 1.35rem;
-  font-weight: 400;
+  font-size: clamp(1.3rem, 1rem + 1.3vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-text);
   max-width: 600px;
   margin: 0 auto var(--spacing-xs);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .hub-tagline-sub {
-  font-size: 1.35rem;
+  font-size: clamp(1rem, 0.9rem + 0.6vw, 1.2rem);
   font-weight: 400;
   color: var(--color-text-light);
   margin: 0 auto;
@@ -132,6 +133,24 @@
   overflow: hidden;
   background: var(--color-bg-dark);
   border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+/* Early-access badge — overlaid on the screenshot, tinted to the product accent. */
+.product-card-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+  background: rgba(8, 10, 18, 0.72);
+  backdrop-filter: blur(4px);
+  color: var(--product-color, var(--color-text-light));
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .product-card-img img {
@@ -338,6 +357,248 @@
   }
 }
 
+/* Shared eyebrow heading for the lower sections. */
+.why-boojy-title,
+.coming-soon-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+/* === Why Boojy === (prose in a bordered card, accent edge ties into the A/B) */
+.why-boojy {
+  padding: var(--spacing-2xl) 0;
+}
+
+.why-boojy-card {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-accent);
+  border-radius: var(--border-radius-lg);
+}
+
+.why-boojy-title {
+  margin-bottom: var(--spacing-md);
+}
+
+.why-boojy-body {
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+/* === Coming soon === (Design + Cloud as cards, muted second tier) */
+.coming-soon {
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+}
+
+.coming-soon-title {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.85;
+}
+
+/* Muted so these never read as "available now"; neutral hover (no product accent). */
+.coming-soon-card {
+  opacity: 0.78;
+  transition:
+    opacity 0.3s ease,
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.coming-soon-card:hover {
+  opacity: 1;
+  transform: translateY(-4px);
+  border-color: var(--color-border);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Neutral badge (the early-access badge is accent-tinted; this one stays grey). */
+.coming-soon-badge {
+  color: var(--color-text-light);
+}
+
+.coming-soon-name {
+  margin-bottom: var(--spacing-xs);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+/* Cloud has no screenshot — a subtle gradient + cloud glyph stands in. */
+.cloud-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(124, 140, 255, 0.18), transparent 70%),
+    var(--color-bg-dark);
+}
+
+.cloud-placeholder svg {
+  width: 56px;
+  height: 56px;
+  color: var(--color-text-light);
+  opacity: 0.55;
+}
+
+/* Grey CTA (coming-soon cards carry no product accent colour). */
+.coming-soon-cta-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-text);
+}
+
+.coming-soon-card:hover .coming-soon-cta-btn {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.coming-soon-soon {
+  margin-top: auto;
+  align-self: center;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--color-text-light);
+}
+
+/* === Feedback === (real form → Supabase Edge Function + Turnstile) */
+.feedback {
+  padding: var(--spacing-2xl) 0 var(--spacing-3xl);
+}
+
+.feedback-inner {
+  max-width: 560px;
+  text-align: center;
+}
+
+.feedback-title {
+  margin-bottom: var(--spacing-xs);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.feedback-sub {
+  margin-bottom: var(--spacing-lg);
+  font-size: 1rem;
+  color: var(--color-text-light);
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  text-align: left;
+}
+
+.feedback-row {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.feedback-input,
+.feedback-select,
+.feedback-textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.feedback-select {
+  flex-shrink: 0;
+  width: auto;
+  min-width: 8.5rem;
+  cursor: pointer;
+}
+
+.feedback-input:focus,
+.feedback-select:focus,
+.feedback-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+}
+
+.feedback-input::placeholder,
+.feedback-textarea::placeholder {
+  color: var(--color-text-light);
+  opacity: 0.6;
+}
+
+.feedback-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.feedback-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Reserve the widget's height so the layout doesn't jump when it loads. */
+.feedback-turnstile {
+  min-height: 65px;
+}
+
+.feedback-submit {
+  padding: 0.6rem 1.6rem;
+  background: var(--color-accent);
+  color: #0f1119;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+.feedback-submit:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.feedback-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.feedback-error {
+  font-size: 0.85rem;
+  color: #ff8a80;
+}
+
+.feedback-success {
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--color-text);
+}
+
+.feedback-success-icon {
+  margin-bottom: var(--spacing-sm);
+  font-size: 2.5rem;
+}
+
 /* === Responsive === */
 @media (max-width: 768px) {
   .hub-hero {
@@ -352,9 +613,8 @@
     height: 2.8125rem;
   }
 
-  .hub-tagline,
-  .hub-tagline-sub {
-    font-size: 1.15rem;
+  .why-boojy-body {
+    font-size: 1.05rem;
   }
 
   .product-cards {
@@ -386,9 +646,17 @@
     --glow-height: 200px;
   }
 
-  .hub-tagline,
-  .hub-tagline-sub {
-    font-size: 1rem;
+  /* Feedback: email + type stack, button goes full width. */
+  .feedback-row {
+    flex-direction: column;
+  }
+
+  .feedback-select {
+    width: 100%;
+  }
+
+  .feedback-submit {
+    width: 100%;
   }
 
   .hub-signup-box {
