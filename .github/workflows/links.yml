@@ -1,0 +1,59 @@
+name: Links
+
+# Builds the site and checks every link in the output — the guard that catches a rotted
+# download/release URL (e.g. a deleted release asset) before a visitor clicks a dead link.
+# Runs on PRs and weekly (release URLs can rot between commits). This is intentionally a
+# SEPARATE workflow from the required "Lint · Check · Build" gate, so a transient external
+# 404 reports red without blocking a merge. The app lives in website/.
+
+on:
+  pull_request:
+    branches: [master]
+  schedule:
+    - cron: "0 7 * * 1" # Mondays 07:00 UTC
+  workflow_dispatch:
+
+concurrency:
+  group: links-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  linkcheck:
+    name: Check links in the built site
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: website/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+
+      - name: Check links with lychee
+        uses: lycheeverse/lychee-action@v2
+        env:
+          # Lets lychee authenticate github.com requests so the release/download URL
+          # checks don't hit the unauthenticated rate limit.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          fail: true
+          args: >-
+            --no-progress
+            --max-retries 3
+            --retry-wait-time 5
+            --exclude-mail
+            --exclude 'w3\.org'
+            --exclude 'schema\.org'
+            --exclude 'supabase\.co'
+            --exclude 'umami-production-.*\.up\.railway\.app'
+            --exclude 'api\.github\.com'
+            'website/dist/**/*.html'

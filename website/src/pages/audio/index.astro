@@ -2,7 +2,13 @@
 import { AudioDownload } from '../../components/AudioDownload';
 import ProductCloudCard from '../../components/ProductCloudCard.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getLatestRelease } from '../../lib/github-release';
 import '../../styles/audio.css';
+
+// Build-time fetch — the version is baked into the static HTML and re-fetched on each
+// deploy. getLatestRelease never throws (falls back on any error/timeout). Audio ships
+// stable, version-less asset names, so only the version string needs the live release.
+const release = await getLatestRelease('boojyorg/boojy-audio', { fallbackVersion: 'v0.3.2 Beta' });
 ---
 
 <BaseLayout path="/audio/">
@@ -29,7 +35,7 @@ import '../../styles/audio.css';
         <img src="/images/audio-text-logo.png" alt="Audio" class="audio-hero-product" />
       </div>
       <p class="audio-tagline reveal reveal-d1">Music production without the barriers.</p>
-      <AudioDownload client:load />
+      <AudioDownload client:load versionText={release.versionText} />
     </div>
   </section>
 

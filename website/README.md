@@ -52,7 +52,7 @@ website/
 │   ├── components/      # .astro chrome (Nav, Footer, ProductCards) + React islands
 │   │                   #   (Starfield, FaqAccordion, Audio/NotesDownload, Account)
 │   ├── content/        # site.ts, cloud.ts, page-meta.ts, legal/*.html
-│   ├── lib/            # platform.ts, supabase.ts, notes-version.ts (build-time fetch)
+│   ├── lib/            # platform.ts, supabase.ts, github-release.ts (build-time version/URL fetch)
 │   └── styles/         # shared.css (global) + per-page CSS, bundled + content-hashed by Astro
 └── public/
     ├── _headers        # security headers + immutable caching for /_astro/*

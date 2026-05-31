@@ -4,34 +4,14 @@ import { detectPlatform, type PlatformId, platformIconHtml } from '../lib/platfo
 import { GitHubPlatformIcon, PlatformIcon } from './PlatformIcons';
 import { WebIcon } from './WebIcon';
 
-const NOTES_PLATFORMS = [
-  {
-    id: 'mac-arm64',
-    label: 'Silicon',
-    name: 'macOS',
-    href: 'https://github.com/boojyorg/boojy-notes/releases/download/v0.1.3/Boojy-Notes-0.1.3-arm64.dmg',
-  },
-  {
-    id: 'mac-x64',
-    label: 'Intel',
-    name: 'macOS',
-    disabled: true,
-    pill: 'Coming soon',
-  },
-  {
-    id: 'windows-x64',
-    label: 'Windows',
-    name: 'Windows',
-    href: 'https://github.com/boojyorg/boojy-notes/releases/download/v0.1.3/Boojy-Notes-Setup-0.1.3.exe',
-  },
-  {
-    id: 'linux',
-    label: 'Linux',
-    name: 'Linux',
-    disabled: true,
-    pill: 'Coming soon',
-  },
-] as const;
+interface NotesPlatform {
+  id: string;
+  label: string;
+  name: string;
+  href?: string;
+  disabled?: boolean;
+  pill?: string;
+}
 
 const RELEASES_URL = 'https://github.com/boojyorg/boojy-notes/releases/latest';
 
@@ -43,6 +23,10 @@ function normalize(platform: PlatformId): PlatformId {
 interface Props {
   /** Version string, fetched at build time and passed in so it lands in static HTML. */
   versionText: string;
+  /** Direct macOS (Apple Silicon) .dmg URL from the latest release; null if unresolved. */
+  macArm64Url: string | null;
+  /** Direct Windows installer URL from the latest release; null if unresolved. */
+  winX64Url: string | null;
 }
 
 /**
@@ -51,7 +35,7 @@ interface Props {
  * handed the wrong-OS binary — then the client detects the OS on mount and swaps in a direct
  * download. `showFallback` is derived from the href sentinel (`'#'` = no direct download yet).
  */
-export function NotesDownload({ versionText }: Props) {
+export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
   const { panelRef, toggleRef, toggle, close, panelClassName } = usePlatformsPanel();
 
   const [downloadHref, setDownloadHref] = useState('#');
@@ -59,9 +43,17 @@ export function NotesDownload({ versionText }: Props) {
   const [downloadIconHtml, setDownloadIconHtml] = useState(platformIconHtml(null));
   const showFallback = downloadHref === '#';
 
-  const selectPlatform = (platform: (typeof NOTES_PLATFORMS)[number]) => {
-    if ('disabled' in platform && platform.disabled) return;
-    if (!('href' in platform) || !platform.href) return;
+  // Real (version-stamped) asset URLs from the build-time release fetch; if that failed,
+  // fall back to the releases page so no affordance is ever a dead link.
+  const platforms: NotesPlatform[] = [
+    { id: 'mac-arm64', label: 'Silicon', name: 'macOS', href: macArm64Url ?? RELEASES_URL },
+    { id: 'mac-x64', label: 'Intel', name: 'macOS', disabled: true, pill: 'Coming soon' },
+    { id: 'windows-x64', label: 'Windows', name: 'Windows', href: winX64Url ?? RELEASES_URL },
+    { id: 'linux', label: 'Linux', name: 'Linux', disabled: true, pill: 'Coming soon' },
+  ];
+
+  const selectPlatform = (platform: NotesPlatform) => {
+    if (platform.disabled || !platform.href) return;
     setDownloadHref(platform.href);
     setSelectedPlatform(platform.id);
     setDownloadIconHtml(platformIconHtml(platform.id as PlatformId));
@@ -70,13 +62,14 @@ export function NotesDownload({ versionText }: Props) {
 
   useEffect(() => {
     const detected = normalize(detectPlatform());
-    const match = NOTES_PLATFORMS.find((item) => item.id === detected && 'href' in item);
-    if (match && 'href' in match && match.href) {
-      setDownloadHref(match.href);
-      setSelectedPlatform(match.id);
+    const href =
+      detected === 'mac-arm64' ? macArm64Url : detected === 'windows-x64' ? winX64Url : null;
+    if (detected && href) {
+      setDownloadHref(href);
+      setSelectedPlatform(detected);
       setDownloadIconHtml(platformIconHtml(detected));
     }
-  }, []);
+  }, [macArm64Url, winX64Url]);
 
   return (
     <div className="notes-cta reveal reveal-d2">
@@ -122,7 +115,7 @@ export function NotesDownload({ versionText }: Props) {
         </a>
       </p>
       <div className={panelClassName} ref={panelRef}>
-        {NOTES_PLATFORMS.map((platform) =>
+        {platforms.map((platform) =>
           'disabled' in platform && platform.disabled ? (
             <span
               key={platform.id}
