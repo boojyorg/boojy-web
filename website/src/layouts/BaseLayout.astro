@@ -3,18 +3,32 @@ import { Starfield } from '../components/Starfield';
 import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
 import { DEFAULT_OG_IMAGE, getPageMeta, pageMetaUrl } from '../content/page-meta';
-import '@fontsource-variable/inter';
+import '../styles/inter.css';
 import '../styles/shared.css';
 
 interface Props {
   /** Route path used to resolve per-page SEO metadata + canonical/OG URL. */
   path: string;
+  /** Override title/description for routes not in PAGE_META (e.g. dynamic news posts). */
+  title?: string;
+  description?: string;
+  ogImage?: string;
 }
 
-const { path } = Astro.props;
-const meta = getPageMeta(path);
+const { path, title, description, ogImage: ogImageProp } = Astro.props;
+const base = getPageMeta(path);
+// Overrides win; `path` is always authoritative for the canonical/OG URL (the base
+// can be the 404 fallback for routes absent from PAGE_META, like news posts).
+const meta = {
+  ...base,
+  path,
+  title: title ?? base.title,
+  description: description ?? base.description,
+  ogTitle: title ?? base.ogTitle,
+  ogDescription: description ?? base.ogDescription,
+};
 const url = pageMetaUrl(meta);
-const ogImage = meta.ogImage ?? DEFAULT_OG_IMAGE;
+const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
 ---
 
 <!doctype html>
@@ -41,21 +55,6 @@ const ogImage = meta.ogImage ?? DEFAULT_OG_IMAGE;
 
     <link rel="icon" type="image/png" href="/images/favicon.png" />
     <link rel="apple-touch-icon" href="/images/favicon.png" />
-
-    <!-- Accent A/B (dev scaffolding): `?accent=cool|gold` persists to localStorage and
-         sets data-accent on <html> before paint. Default = gold. To be removed once the
-         accent is chosen (the winner gets baked into :root in shared.css). -->
-    <script is:inline>
-      (function () {
-        try {
-          var q = new URLSearchParams(window.location.search).get('accent');
-          if (q === 'cool' || q === 'gold') localStorage.setItem('boojy-accent', q);
-          if (localStorage.getItem('boojy-accent') === 'cool') {
-            document.documentElement.setAttribute('data-accent', 'cool');
-          }
-        } catch (e) {}
-      })();
-    </script>
 
     <!-- Pre-paint glow origin: set the morph's start color on :root from the previous
          page (stored in sessionStorage) BEFORE the glow element is parsed, so the glow

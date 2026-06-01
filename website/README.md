@@ -10,16 +10,18 @@ File-based, under `src/pages/`. All routes are directory routes (`trailingSlash:
 
 | Route | Notes |
 |-------|-------|
-| `/` | Hub — product cards, Cloud teaser |
+| `/` | Hub — 2×2 product grid (Audio · Notes · Cloud · Design), Why Boojy, latest-news teaser, feedback form |
 | `/audio/` | OS-aware download CTA + platforms panel (island) |
 | `/notes/` | Web CTA + downloads; version baked at build time from the GitHub API |
-| `/cloud/` | Preview pricing; checkout disabled until launch (`CLOUD_LAUNCHED`) |
+| `/cloud/` | Free tier (live — powers Notes sync) + Orbit (paid, coming); per-plan status, no FAQ |
+| `/news/`, `/news/<post>/` | Monthly "what's new" notes — `news` content collection (one `.md` per post) |
 | `/account/` | Supabase auth; billing UI gated by `CLOUD_LAUNCHED` (`client:only` island) |
 | `/privacy/`, `/terms/` | Legal content via `LegalLayout` (clean URLs; old `.html` 301 → here) |
 | `/subscribed/` | Post-signup confirmation |
 | `*` (404) | `404.astro` → `dist/404.html`, served by Cloudflare for unmatched paths |
 
-Cloud storage is **rolling out soon** — preview pricing on `/cloud/`, no live checkout.
+Cloud's **free tier is live** (Boojy Notes syncs through it); the **paid Orbit tier is coming**, with
+Boojy Audio support to follow. Nav: **Audio · Notes · Cloud · Account**.
 
 ## Local development
 
@@ -50,10 +52,11 @@ website/
 │   ├── pages/          # file-based routes (.astro)
 │   ├── layouts/        # BaseLayout (static <head> + SEO), LegalLayout
 │   ├── components/      # .astro chrome (Nav, Footer, ProductCards) + React islands
-│   │                   #   (Starfield, FaqAccordion, Audio/NotesDownload, Account)
-│   ├── content/        # site.ts, cloud.ts, page-meta.ts, legal/*.html
+│   │                   #   (Starfield, FaqAccordion, Audio/NotesDownload, Account, Feedback)
+│   ├── content.config.ts # `news` content collection (glob over content/news/*.md)
+│   ├── content/        # site.ts, cloud.ts, page-meta.ts, legal/*.html, news/*.md
 │   ├── lib/            # platform.ts, supabase.ts, github-release.ts (build-time version/URL fetch)
-│   └── styles/         # shared.css (global) + per-page CSS, bundled + content-hashed by Astro
+│   └── styles/         # inter.css (latin subset), shared.css (global) + per-page CSS, hashed by Astro
 └── public/
     ├── _headers        # security headers + immutable caching for /_astro/*
     ├── _redirects      # legacy .html → clean-URL 301s, /pricing → /cloud/, /github

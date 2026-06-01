@@ -1,9 +1,15 @@
 ---
-import ComingSoonCards from '../components/ComingSoonCards.astro';
+import { getCollection } from 'astro:content';
 import { Feedback } from '../components/Feedback';
 import ProductCards from '../components/ProductCards.astro';
+import { WHY_POINTS, WHY_STORY } from '../content/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import '../styles/hub.css';
+
+// Newest news post → the homepage "Latest" teaser (null if none written yet).
+const latestNews = (await getCollection('news')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+)[0];
 ---
 
 <BaseLayout path="/">
@@ -35,33 +41,55 @@ import '../styles/hub.css';
     </div>
   </section>
 
-  <!-- Audio + Notes -->
+  <!-- Product grid — Audio · Notes · Cloud · Design (2×2). -->
   <ProductCards />
 
-  <!-- Why Boojy — the personal story; this is the "about". -->
+  <!-- Why Boojy — personal story + the promises. The "about". A centered card. -->
   <section class="why-boojy">
     <div class="container">
       <div class="why-boojy-card">
         <h2 class="why-boojy-title">Why Boojy</h2>
-        <p class="why-boojy-body">
-          I'm Tyr, a Computer Science student who started making music as a teenager. I loved making
-          and recording it, but a lot of the tools sat behind paywalls. Boojy is the suite of free,
-          open-source tools I wish I'd had: calm software that's yours to keep. You own your work, no
-          subscriptions, and each app goes open source once it's ready.
-        </p>
+        <p class="why-boojy-lead">{WHY_STORY}</p>
+        <ul class="why-boojy-points">
+          {
+            WHY_POINTS.map((point) => (
+              <li class="why-point">
+                <span class="why-point-check" aria-hidden="true">✓</span>
+                <span class="why-point-text">
+                  <strong class="why-point-label">{point.label}</strong>
+                  <span class="why-point-detail">{point.detail}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- Coming soon — Design + Cloud as a muted second tier. -->
-  <ComingSoonCards />
+  <!-- Latest — newest /news post, the "this is alive" closer before the feedback ask. -->
+  {
+    latestNews && (
+      <section class="hub-news">
+        <div class="container">
+          <a href={`/news/${latestNews.id}/`} class="hub-news-card">
+            <span class="hub-news-eyebrow">Latest · {latestNews.data.title}</span>
+            <p class="hub-news-summary">{latestNews.data.summary}</p>
+            <span class="hub-news-cta">All news →</span>
+          </a>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Feedback — real form → Supabase Edge Function + Turnstile. -->
   <section class="feedback" id="feedback">
-    <div class="container feedback-inner">
-      <h2 class="feedback-title">Found a bug? Got an idea?</h2>
-      <p class="feedback-sub">Tell me — it goes straight to my inbox.</p>
-      <Feedback client:visible />
+    <div class="container">
+      <div class="feedback-inner">
+        <h2 class="feedback-title">Found a bug? Got an idea?</h2>
+        <p class="feedback-sub">Tell me — it goes straight to my inbox.</p>
+        <Feedback client:visible />
+      </div>
     </div>
   </section>
 </BaseLayout>

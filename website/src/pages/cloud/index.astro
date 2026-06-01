@@ -1,6 +1,5 @@
 ---
-import { FaqAccordion } from '../../components/FaqAccordion';
-import { CLOUD_ETHICS, CLOUD_FAQ, CLOUD_PRICING, CLOUD_ROLLOUT_BANNER } from '../../content/cloud';
+import { CLOUD_AUDIO_NOTE, CLOUD_ETHICS, CLOUD_INTRO, CLOUD_PRICING } from '../../content/cloud';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import '../../styles/cloud.css';
 ---
@@ -8,9 +7,8 @@ import '../../styles/cloud.css';
 <BaseLayout path="/cloud/">
   <section class="cloud-hero">
     <div class="container">
-      <p class="cloud-rollout-banner">{CLOUD_ROLLOUT_BANNER}</p>
       <h1 class="cloud-title">Boojy Cloud</h1>
-      <p class="cloud-subtitle">Your creative work, synced and safe — coming soon.</p>
+      <p class="cloud-subtitle">{CLOUD_INTRO}</p>
     </div>
   </section>
 
@@ -20,6 +18,14 @@ import '../../styles/cloud.css';
         {
           CLOUD_PRICING.map((plan) => (
             <div class:list={['pricing-card', { 'pricing-card-highlight': plan.highlight }]}>
+              <span
+                class:list={[
+                  'pricing-status',
+                  plan.status === 'live' ? 'pricing-status-live' : 'pricing-status-coming',
+                ]}
+              >
+                {plan.status === 'live' ? 'Live now' : 'Coming'}
+              </span>
               <h2 class="pricing-name">{plan.name}</h2>
               <div class="pricing-price">
                 <span class="pricing-amount">{plan.amount}</span>
@@ -32,17 +38,35 @@ import '../../styles/cloud.css';
                   </li>
                 ))}
               </ul>
-              <button
-                type="button"
-                class:list={['btn', plan.highlight ? 'btn-primary' : 'btn-secondary', 'pricing-btn']}
-                disabled
-              >
-                Coming soon
-              </button>
+              {plan.cta ? (
+                <a
+                  href={plan.cta.href}
+                  class:list={[
+                    'btn',
+                    plan.highlight ? 'btn-primary' : 'btn-secondary',
+                    'pricing-btn',
+                  ]}
+                >
+                  {plan.cta.label}
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  class:list={[
+                    'btn',
+                    plan.highlight ? 'btn-primary' : 'btn-secondary',
+                    'pricing-btn',
+                  ]}
+                  disabled
+                >
+                  Coming soon
+                </button>
+              )}
             </div>
           ))
         }
       </div>
+      <p class="cloud-audio-note">{CLOUD_AUDIO_NOTE}</p>
     </div>
   </section>
 
@@ -62,13 +86,6 @@ import '../../styles/cloud.css';
           ))
         }
       </div>
-    </div>
-  </section>
-
-  <section class="cloud-faq-section">
-    <div class="container">
-      <h2 class="section-title">Frequently Asked Questions</h2>
-      <FaqAccordion items={CLOUD_FAQ} client:visible />
     </div>
   </section>
 </BaseLayout>

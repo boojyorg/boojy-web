@@ -1,5 +1,7 @@
-export const CLOUD_ROLLOUT_BANNER =
-  'Cloud storage is rolling out soon. Pricing below is planned — create an account to be ready when sync goes live.';
+export const CLOUD_INTRO =
+  'Boojy Cloud is already live: Boojy Notes syncs free across your devices, up to 500 MB. A paid tier with more storage is on the way.';
+
+export const CLOUD_AUDIO_NOTE = 'Coming to Boojy Audio next.';
 
 export const CLOUD_PRICING = [
   {
@@ -7,6 +9,9 @@ export const CLOUD_PRICING = [
     amount: '$0',
     period: '/ forever',
     highlight: false,
+    status: 'live',
+    // Free sync lives inside the Notes app, so point people there.
+    cta: { label: 'Get Boojy Notes →', href: '/notes/' },
     features: ['500 MB storage', 'Sync across devices', 'All app features'],
   },
   {
@@ -14,6 +19,9 @@ export const CLOUD_PRICING = [
     amount: '$5',
     period: '/ month',
     highlight: true,
+    status: 'coming',
+    // Waitlist deferred until the capture backend exists — no CTA yet.
+    cta: null,
     features: ['10 GB storage', 'Everything in Free', 'Priority support'],
   },
 ] as const;
@@ -41,6 +49,8 @@ export const CLOUD_ETHICS = [
   },
 ] as const;
 
+// Deferred: the Cloud FAQ section is hidden for now (pre-launch, no real questions yet).
+// Kept here so it can be restored once the paid tier ships. See dreams.md / roadmap memory.
 export const CLOUD_FAQ = [
   {
     question: 'What happens if I cancel?',

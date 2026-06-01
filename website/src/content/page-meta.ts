@@ -60,6 +60,14 @@ export const PAGE_META: Record<string, PageMeta> = {
     'Boojy Cloud - Sync Your Creative Work',
     'Sync your creative work across all your devices. Rolling out soon — preview pricing and FAQ.',
   ),
+  '/news/': meta(
+    'News – Boojy',
+    'Monthly notes on what is new and improved across Boojy — Audio, Notes, and Cloud.',
+    '/news/',
+    DEFAULT_OG_IMAGE,
+    'Boojy News',
+    'Monthly notes on what is new and improved across Boojy.',
+  ),
   '/account/': meta(
     'Boojy – Account',
     'Boojy Account - Sign in to sync your notes and manage your Boojy Cloud subscription.',

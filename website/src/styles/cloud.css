@@ -16,19 +16,6 @@
   overflow: hidden;
 }
 
-.cloud-rollout-banner {
-  display: inline-block;
-  max-width: 42rem;
-  margin: 0 auto var(--spacing-lg);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
-  background: rgba(44, 44, 50, 0.6);
-  color: var(--color-text-light);
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
 /* Starfield */
 .cloud-hero::before {
   content: "";
@@ -108,6 +95,7 @@
 }
 
 .pricing-card {
+  position: relative;
   background: rgba(51, 51, 51, 0.6);
   backdrop-filter: blur(10px);
   border-radius: var(--border-radius-lg);
@@ -116,6 +104,31 @@
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
+}
+
+/* Per-plan status pill — "Live now" (Free) vs "Coming" (Orbit). */
+.pricing-status {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pricing-status-live {
+  color: #8fe3a8;
+  background: rgba(95, 200, 130, 0.14);
+  border: 1px solid rgba(95, 200, 130, 0.4);
+}
+
+.pricing-status-coming {
+  color: var(--color-text-light);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--color-border);
 }
 
 .pricing-card:hover {
@@ -192,6 +205,14 @@
   cursor: default;
 }
 
+/* "Coming to Boojy Audio next." — quiet line under the plans. */
+.cloud-audio-note {
+  margin: var(--spacing-xl) auto 0;
+  text-align: center;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+}
+
 /* === Ethics Section === */
 .ethics-section {
   background: var(--color-bg-dark);
@@ -231,71 +252,6 @@
   color: var(--color-text-light);
   font-size: 0.9rem;
   line-height: 1.5;
-}
-
-/* === FAQ Section === */
-.cloud-faq-section {
-  background: var(--color-bg);
-  padding: var(--spacing-3xl) 0;
-}
-
-.faq-list {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.faq-item {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.faq-question {
-  width: 100%;
-  background: none;
-  border: none;
-  color: var(--color-primary);
-  font-size: 1.05rem;
-  font-weight: 600;
-  padding: var(--spacing-md) 0;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-family: var(--font-sans);
-  text-align: left;
-  transition: color 0.3s ease;
-}
-
-.faq-question:hover {
-  color: var(--color-accent);
-}
-
-.faq-arrow {
-  transition: transform 0.3s ease;
-  font-size: 0.9rem;
-  color: var(--color-text-light);
-}
-
-.faq-item.active .faq-arrow {
-  transform: rotate(90deg);
-}
-
-.faq-answer {
-  max-height: 0;
-  overflow: hidden;
-  transition:
-    max-height 0.3s ease,
-    padding 0.3s ease;
-}
-
-.faq-item.active .faq-answer {
-  max-height: 200px;
-  padding-bottom: var(--spacing-md);
-}
-
-.faq-answer p {
-  color: var(--color-text-light);
-  font-size: 0.95rem;
-  line-height: 1.6;
 }
 
 /* === Responsive === */

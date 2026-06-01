@@ -1,0 +1,9 @@
+{
+  "name": "boojy-screenshot-tool",
+  "private": true,
+  "type": "module",
+  "description": "Claude Code visual-iteration helper. Isolated from website/ deps on purpose.",
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  }
+}

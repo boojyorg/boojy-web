@@ -8,8 +8,11 @@ const activeProduct = path.startsWith('/audio/')
   ? 'audio'
   : path.startsWith('/notes/')
     ? 'notes'
-    : undefined;
+    : path.startsWith('/cloud/')
+      ? 'cloud'
+      : undefined;
 const accountActive = path.startsWith('/account/');
+const newsActive = path.startsWith('/news/');
 ---
 
 <nav class="navbar" id="navbar">
@@ -29,9 +32,15 @@ const accountActive = path.startsWith('/account/');
         class:list={['nav-product', { active: activeProduct === 'notes' }]}
         data-product="notes">Notes</a
       >
+      <a
+        href="/cloud/"
+        class:list={['nav-product', { active: activeProduct === 'cloud' }]}
+        data-product="cloud">Cloud</a
+      >
     </div>
 
     <div class="nav-right">
+      <a href="/news/" class:list={['nav-news', { active: newsActive }]}>News</a>
       <a
         href="https://github.com/boojyorg"
         target="_blank"
@@ -62,7 +71,13 @@ const accountActive = path.startsWith('/account/');
         class:list={['nav-mobile-link', { active: activeProduct === 'notes' }]}
         data-product="notes">Notes</a
       >
+      <a
+        href="/cloud/"
+        class:list={['nav-mobile-link', { active: activeProduct === 'cloud' }]}
+        data-product="cloud">Cloud</a
+      >
       <a href="/account/" class:list={['nav-mobile-link', { active: accountActive }]}>Account</a>
+      <a href="/news/" class:list={['nav-mobile-link', { active: newsActive }]}>News</a>
       <a href="https://github.com/boojyorg" target="_blank" class="nav-mobile-link" rel="noreferrer">GitHub</a>
     </div>
   </div>

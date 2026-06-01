@@ -9,25 +9,33 @@
   --color-primary: #f5f5f5;
   --color-primary-light: #ffffff;
   --color-primary-dark: #e5e5e5;
-  /* Accent is stored as RGB components so a single override (the cool/gold A/B
-     toggle, and any rgba() glow) can swap the whole accent in one place. */
-  --accent-rgb: 245, 166, 35;
+  /* Accent is stored as RGB components so any rgba() glow can reuse it and the whole
+     accent swaps in one place. Periwinkle blue (chosen 2026-06-01, was gold). */
+  --accent-rgb: 124, 140, 255;
   --color-accent: rgb(var(--accent-rgb));
-  --color-accent-hover: #ffb940;
-  --color-purple: #8b5cf6;
+  --color-accent-hover: #97a4ff;
 
   /* Product Colors */
   --color-audio: #4a9ef5;
   --color-notes: #a4cace;
+  --color-design: #ffa500;
 
   /* UI Colors (matched to Boojy Notes palette) */
   --color-bg: #13151c;
   --color-bg-card: #2c2c32;
+  --color-bg-card-dark: #0c0e1a; /* near-black space-theme card tint (tunable) */
   --color-bg-dark: #040412;
   --color-bg-alt: #2c2c32;
   --color-text: #e8eaf0;
   --color-text-light: #9b9eb0;
   --color-border: #3a3d4a;
+
+  /* Card surfaces, grouped so product vs. narrative cards recolour independently
+     (chosen 2026-06-01): product cards stay neutral grey (they pop forward);
+     narrative cards (Why / news) go near-black to recede into the cosmic backdrop.
+     The feedback card opts back out to grey (see hub.css). */
+  --card-product-bg: var(--color-bg-card);
+  --card-narrative-bg: var(--color-bg-card-dark);
 
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -55,16 +63,6 @@
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-}
-
-/* Accent A/B — `?accent=cool` (persisted to localStorage by the inline script in
-   BaseLayout) sets data-accent="cool" on <html>, swapping gold → periwinkle to match
-   the cosmic glow. Default (no attribute) stays gold. Dev-only scaffolding: the winner
-   gets baked into :root and this block + the toggle script are removed before merge. */
-:root[data-accent="cool"] {
-  --accent-rgb: 124, 140, 255;
-  --color-accent: rgb(var(--accent-rgb));
-  --color-accent-hover: #97a4ff;
 }
 
 /* === Reset & Base Styles === */
@@ -166,6 +164,11 @@ body {
   color: #a4cace;
 }
 
+.nav-product[data-product="cloud"]:hover,
+.nav-product[data-product="cloud"].active {
+  color: #ffffff;
+}
+
 .nav-product.active {
   font-weight: 700;
 }
@@ -190,6 +193,20 @@ body {
 }
 
 .nav-github:hover {
+  color: var(--color-text);
+}
+
+/* News — a quiet utility text link by the GitHub icon (not a product pillar, not a button). */
+.nav-news {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  transition: color 0.3s ease;
+}
+
+.nav-news:hover,
+.nav-news.active {
   color: var(--color-text);
 }
 
@@ -272,6 +289,11 @@ body {
 .nav-mobile-link[data-product="notes"]:hover,
 .nav-mobile-link[data-product="notes"].active {
   color: #a4cace;
+}
+
+.nav-mobile-link[data-product="cloud"]:hover,
+.nav-mobile-link[data-product="cloud"].active {
+  color: #ffffff;
 }
 
 .nav-mobile-link:hover {
@@ -387,7 +409,7 @@ body {
 .btn-primary:hover {
   background: var(--color-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(245, 166, 35, 0.35);
+  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.35);
 }
 
 .btn-secondary {
@@ -654,7 +676,7 @@ section {
 .form-textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
 }
 
 .form-input::placeholder {
@@ -783,7 +805,7 @@ section {
 .product-cloud-card {
   margin: 0 auto;
   max-width: 900px;
-  background: var(--color-bg-card);
+  background: var(--card-product-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
   padding: 2.5rem 3rem;
@@ -796,6 +818,21 @@ section {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.4),
     0 0 30px rgba(255, 255, 255, 0.06);
+}
+
+/* Cloud status pill — white (Cloud's accent), only rendered when a `badge` prop is passed. */
+.product-cloud-badge {
+  display: inline-block;
+  margin-bottom: var(--spacing-md);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .product-cloud-heading {
@@ -970,6 +1007,7 @@ section {
   }
 
   .nav-products,
+  .nav-news,
   .nav-signin,
   .nav-github,
   .nav-mobile-menu {
