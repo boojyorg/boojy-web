@@ -63,6 +63,8 @@ export function Starfield() {
     const ctx: CanvasRenderingContext2D = context;
 
     const dpr = window.devicePixelRatio || 1;
+    // Reduced motion: render one static frame, no animation loop, no shooting stars.
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let animId = 0;
     let stars: Star[] = [];
     let lastW = 0;
@@ -139,7 +141,7 @@ export function Starfield() {
       }
 
       ctx.globalAlpha = 1;
-      animId = requestAnimationFrame(draw);
+      if (!reduceMotion) animId = requestAnimationFrame(draw);
     }
 
     const styleEl = document.createElement('style');
@@ -184,7 +186,8 @@ export function Starfield() {
       resizeTimer = window.setTimeout(() => {
         cancelAnimationFrame(animId);
         generate();
-        animId = requestAnimationFrame(draw);
+        if (reduceMotion) draw(0);
+        else animId = requestAnimationFrame(draw);
       }, 150);
     }
 
@@ -193,8 +196,12 @@ export function Starfield() {
     resizeObserver.observe(document.documentElement);
 
     generate();
-    animId = requestAnimationFrame(draw);
-    scheduleNext();
+    if (reduceMotion) {
+      draw(0); // single static frame; draw() won't re-schedule under reduced motion
+    } else {
+      animId = requestAnimationFrame(draw);
+      scheduleNext();
+    }
 
     return () => {
       cancelAnimationFrame(animId);

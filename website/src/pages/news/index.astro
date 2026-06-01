@@ -1,0 +1,40 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/news.css';
+
+const posts = (await getCollection('news')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout path="/news/">
+  <section class="news-hero">
+    <div class="container">
+      <h1 class="news-title">News</h1>
+      <p class="news-subtitle">Monthly notes on what's new across Boojy.</p>
+    </div>
+  </section>
+
+  <section class="news-list-section">
+    <div class="container">
+      {
+        posts.length === 0 ? (
+          <p class="news-empty">No posts yet — check back soon.</p>
+        ) : (
+          <ul class="news-list">
+            {posts.map((post) => (
+              <li class="news-entry">
+                <a href={`/news/${post.id}/`} class="news-entry-link">
+                  <span class="news-entry-month">{post.data.title}</span>
+                  <p class="news-entry-summary">{post.data.summary}</p>
+                  <span class="news-entry-cta">Read →</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

@@ -5,6 +5,8 @@ interface Props {
   description: string;
   cardClassName?: string;
   ctaClassName?: string;
+  /** Optional status pill (e.g. "Live · Free") shown above the heading. */
+  badge?: string;
   cta?: { kind: 'link'; href: string; label: string } | { kind: 'text'; label: string };
 }
 
@@ -12,6 +14,7 @@ const {
   description,
   cardClassName = '',
   ctaClassName = '',
+  badge,
   cta = { kind: 'link', href: '/cloud/', label: 'Learn more →' },
 } = Astro.props;
 ---
@@ -19,6 +22,7 @@ const {
 <section class="product-cloud-section">
   <div class="container">
     <div class:list={['product-cloud-card', cardClassName]}>
+      {badge && <span class="product-cloud-badge">{badge}</span>}
       <div class="product-cloud-heading">
         <img
           src="/images/boojy-logo.svg"

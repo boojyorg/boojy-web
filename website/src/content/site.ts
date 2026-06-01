@@ -12,38 +12,109 @@ export const GLOBE_ICON_PATHS = [
   'M2 12h20',
 ] as const;
 
-export type ProductId = 'audio' | 'notes';
+export type ProductId = 'audio' | 'notes' | 'cloud' | 'design';
 
+/**
+ * Suite-wide release-stage ladder. Each app sits on one rung; the label is the
+ * single source of truth for the stage badge shown on its card/band. As an app
+ * matures, bump its `stage` here and every surface updates.
+ */
+export type Stage = 'early-access' | 'beta' | 'full-release';
+export const STAGE_LABELS: Record<Stage, string> = {
+  'early-access': 'Early access',
+  beta: 'Beta',
+  'full-release': 'Full release',
+};
+
+/**
+ * Homepage product grid — one unified 2×2 of all four products. Audio/Notes/Cloud
+ * are live (a `stage` badge + a "Learn more" link); Design is off-ladder
+ * (`comingSoon`: muted card, "Coming soon" badge, no link). Products without a
+ * screenshot (Design) use a gradient + glyph placeholder; the `name` is the
+ * logo-image fallback for any product without a text logo.
+ */
 export interface ProductCardData {
   id: ProductId;
-  href: string;
-  screenshot: string;
-  screenshotAlt: string;
-  logo: string;
-  logoAlt: string;
+  /** Card destination. Omitted for products with no page yet (Design) → non-link card. */
+  href?: string;
+  /** Card image: an app screenshot/preview, or the gradient + glyph placeholder. */
+  visual: { kind: 'image'; src: string; alt: string } | { kind: 'placeholder' };
+  /** Text-logo image; omit to render the plain product `name` instead. */
+  logo?: { src: string; alt: string };
+  /** Product name — logo-image fallback + a11y label. */
+  name: string;
   description: string;
+  /** Ladder badge (Audio/Notes/Cloud). Omit + set `comingSoon` for off-ladder items. */
+  stage?: Stage;
+  /** Off-ladder, not yet shipped (Design): muted card, "Coming soon" badge, no CTA. */
+  comingSoon?: boolean;
 }
 
 export const PRODUCT_CARDS: ProductCardData[] = [
   {
     id: 'audio',
     href: '/audio/',
-    screenshot: '/images/screenshot-main-interface.png',
-    screenshotAlt: 'Boojy Audio interface',
-    logo: '/images/audio-text-logo.png',
-    logoAlt: 'Boojy Audio',
+    visual: {
+      kind: 'image',
+      src: '/images/screenshot-main-interface.png',
+      alt: 'Boojy Audio interface',
+    },
+    logo: { src: '/images/audio-text-logo.png', alt: 'Boojy Audio' },
+    name: 'Boojy Audio',
     description: 'A free, simple music studio. For macOS and Windows.',
+    stage: 'early-access',
   },
   {
     id: 'notes',
     href: '/notes/',
-    screenshot: '/images/notes-screenshot-v0.1.png',
-    screenshotAlt: 'Boojy Notes interface',
-    logo: '/images/Notes-text-logo.png',
-    logoAlt: 'Boojy Notes',
+    visual: {
+      kind: 'image',
+      src: '/images/notes-screenshot-v0.1.png',
+      alt: 'Boojy Notes interface',
+    },
+    logo: { src: '/images/Notes-text-logo.png', alt: 'Boojy Notes' },
+    name: 'Boojy Notes',
     description: 'A calm space for your thoughts. Write in markdown. Own your files.',
+    stage: 'early-access',
+  },
+  {
+    id: 'cloud',
+    href: '/cloud/',
+    visual: { kind: 'image', src: '/images/cloud-preview.jpg', alt: 'Boojy Cloud' },
+    logo: { src: '/images/cloud-text-logo.png', alt: 'Boojy Cloud' },
+    name: 'Boojy Cloud',
+    description:
+      'Optional cloud storage that syncs Boojy Notes across your devices. Coming to more Boojy apps soon.',
+    stage: 'early-access',
+  },
+  {
+    id: 'design',
+    visual: { kind: 'placeholder' },
+    logo: { src: '/images/design-text-logo.png', alt: 'Boojy Design' },
+    name: 'Boojy Design',
+    description: 'An image editor in the browser. Draw, edit, and design.',
+    comingSoon: true,
   },
 ];
 
 export const CLOUD_DESCRIPTION =
-  'Every Boojy app works offline, no account needed. Cloud storage is rolling out soon — sync across devices, free up to 500 MB when it launches.';
+  'Every Boojy app works offline, no account needed. Cloud already syncs Boojy Notes across your devices — free, up to 500 MB. Paid storage and Boojy Audio support are next.';
+
+/**
+ * "Why Boojy" — the homepage's about block. The personal story (left column)
+ * + the brand promises as a scannable checklist (right column). The promises
+ * are the differentiators that used to be buried in the prose.
+ */
+export const WHY_STORY =
+  "Hi, I'm Tyr, a computer science student. I started making music as a teenager, but a lot of the tools I wanted sat behind paywalls. So I'm building the calm, free creative suite I wish I'd had.";
+
+export interface WhyPoint {
+  label: string;
+  detail: string;
+}
+
+export const WHY_POINTS: WhyPoint[] = [
+  { label: 'Always free', detail: 'Every app and feature, free to download and use.' },
+  { label: "Open source, once it's ready", detail: "Each app's code opens up as it matures." },
+  { label: 'Yours to keep', detail: 'Local-first and offline. Your files stay yours.' },
+];

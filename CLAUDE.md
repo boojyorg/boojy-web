@@ -70,19 +70,25 @@ rules are off in `biome.json` for intentional, recurring patterns: `noNonNullAss
 
 ## Architecture
 
-* **`website/src/pages/`** — file-based routes: `index`, `audio/`, `notes/`, `cloud/`, `account/`,
-  `privacy/`, `terms/`, `subscribed/`, `404`. Legal/subscribed pages use **clean URLs** + 301s from
-  the old `.html` (see `.claude/rules/caching-and-deploy.md`).
+* **`website/src/pages/`** — file-based routes: `index`, `audio/`, `notes/`, `cloud/`, `news/`
+  (`index` archive + `[...slug]` post pages from the `news` collection), `account/`, `privacy/`,
+  `terms/`, `subscribed/`, `404`. Legal/subscribed pages use **clean URLs** + 301s from the old
+  `.html` (see `.claude/rules/caching-and-deploy.md`).
 * **`website/src/layouts/`** — `BaseLayout.astro` owns the full static `<head>` (title, description,
   canonical, OG, theme-color, favicons, umami) from `content/page-meta.ts`. `LegalLayout.astro` for
   privacy/terms. (View-transition + glow rules: `.claude/rules/view-transitions-and-glow.md`.)
 * **Islands (React, logic unchanged):** `Starfield` (`client:idle`), `FaqAccordion`
-  (`client:visible`), `AudioDownload` / `NotesDownload` (`client:load`; OS detect runs in
-  `useEffect` so they SSR a universal default), `Account` (`client:only="react"` — behind login).
+  (`client:visible`; **currently unmounted** — was only on `/cloud`, whose FAQ is deferred —
+  component kept for when it returns), `AudioDownload` / `NotesDownload` (`client:load`; OS detect runs in
+  `useEffect` so they SSR a universal default), `Account` (`client:only="react"` — behind login),
+  `Feedback` (`client:visible`; homepage form → `feedback` Edge Function + Turnstile —
+  see `.claude/rules/feedback.md`).
 * **Static `.astro` chrome:** `Nav.astro` (+ inline toggle/scroll script; active route from
   `Astro.url.pathname` at build time), `Footer.astro`, `ProductCards.astro`.
 * **`website/src/content/`** — `site.ts`, `cloud.ts`, `page-meta.ts`, `legal/*.html` (rendered via
-  `set:html` with `?raw`). Copy + meta come from here; don't hardcode.
+  `set:html` with `?raw`). Copy + meta come from here; don't hardcode. **Content collection:** `news`
+  (defined in `src/content.config.ts`, glob loader over `src/content/news/*.md`) — one markdown file
+  per monthly post; a new post = a new `.md` file (title/date/summary frontmatter + prose body).
 * **`website/src/lib/`** — `platform.ts` (OS detect), `supabase.ts`, `github-release.ts` (build-time
   version + download-URL fetch for Audio & Notes).
 * **Backend facts (Supabase, Stripe) + the build-time Notes version → `.claude/rules/`** (loaded
@@ -94,6 +100,8 @@ rules are off in `biome.json` for intentional, recurring patterns: `noNonNullAss
   across existing `lib/` code, not just new files. Handle it; use `import type` for type-only imports.
 * **CSS lives in `src/styles/`** (not `public/css/`) so Astro bundles + content-hashes it.
   `shared.css` is global in `BaseLayout`; per-page CSS is imported in each page's frontmatter.
+  Inter loads via `src/styles/inter.css` (a hand-rolled latin + latin-ext `@font-face`, **not** the
+  full `@fontsource-variable/inter` import — the other 5 subsets are latin-only dead weight in `dist`).
 * **Keep the docs current.** Structure/roadmap changes update this file (and the relevant
   `.claude/rules/` file + `README.md`) in the same commit.
 

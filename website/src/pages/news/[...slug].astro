@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/news.css';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('news');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout
+  path={`/news/${post.id}/`}
+  title={`${post.data.title} – Boojy News`}
+  description={post.data.summary}
+>
+  <article class="news-post">
+    <div class="container news-post-inner">
+      <a href="/news/" class="news-back">← News</a>
+      <h1 class="news-post-title">{post.data.title}</h1>
+      <div class="news-post-body">
+        <Content />
+      </div>
+    </div>
+  </article>
+</BaseLayout>

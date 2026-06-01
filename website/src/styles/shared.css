@@ -9,22 +9,33 @@
   --color-primary: #f5f5f5;
   --color-primary-light: #ffffff;
   --color-primary-dark: #e5e5e5;
-  --color-accent: #f5a623;
-  --color-accent-hover: #ffb940;
-  --color-purple: #8b5cf6;
+  /* Accent is stored as RGB components so any rgba() glow can reuse it and the whole
+     accent swaps in one place. Periwinkle blue (chosen 2026-06-01, was gold). */
+  --accent-rgb: 124, 140, 255;
+  --color-accent: rgb(var(--accent-rgb));
+  --color-accent-hover: #97a4ff;
 
   /* Product Colors */
   --color-audio: #4a9ef5;
   --color-notes: #a4cace;
+  --color-design: #ffa500;
 
   /* UI Colors (matched to Boojy Notes palette) */
   --color-bg: #13151c;
   --color-bg-card: #2c2c32;
+  --color-bg-card-dark: #0c0e1a; /* near-black space-theme card tint (tunable) */
   --color-bg-dark: #040412;
   --color-bg-alt: #2c2c32;
   --color-text: #e8eaf0;
   --color-text-light: #9b9eb0;
   --color-border: #3a3d4a;
+
+  /* Card surfaces, grouped so product vs. narrative cards recolour independently
+     (chosen 2026-06-01): product cards stay neutral grey (they pop forward);
+     narrative cards (Why / news) go near-black to recede into the cosmic backdrop.
+     The feedback card opts back out to grey (see hub.css). */
+  --card-product-bg: var(--color-bg-card);
+  --card-narrative-bg: var(--color-bg-card-dark);
 
   /* Spacing */
   --spacing-xs: 0.5rem;
@@ -35,15 +46,17 @@
   --spacing-2xl: 4rem;
   --spacing-3xl: 6rem;
 
-  /* Typography */
+  /* Typography — Inter (shared across all Boojy apps; the website was the odd one out). */
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, sans-serif;
+    "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+  --font-display: "Inter Variable", -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Layout */
+  /* Layout — radius brought in to meet the apps (was 12/16; apps sit at 2–8px). */
   --max-width: 1200px;
-  --border-radius: 12px;
-  --border-radius-lg: 16px;
+  --border-radius-sm: 6px;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -151,6 +164,11 @@ body {
   color: #a4cace;
 }
 
+.nav-product[data-product="cloud"]:hover,
+.nav-product[data-product="cloud"].active {
+  color: #ffffff;
+}
+
 .nav-product.active {
   font-weight: 700;
 }
@@ -175,6 +193,20 @@ body {
 }
 
 .nav-github:hover {
+  color: var(--color-text);
+}
+
+/* News — a quiet utility text link by the GitHub icon (not a product pillar, not a button). */
+.nav-news {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+  transition: color 0.3s ease;
+}
+
+.nav-news:hover,
+.nav-news.active {
   color: var(--color-text);
 }
 
@@ -257,6 +289,11 @@ body {
 .nav-mobile-link[data-product="notes"]:hover,
 .nav-mobile-link[data-product="notes"].active {
   color: #a4cace;
+}
+
+.nav-mobile-link[data-product="cloud"]:hover,
+.nav-mobile-link[data-product="cloud"].active {
+  color: #ffffff;
 }
 
 .nav-mobile-link:hover {
@@ -372,7 +409,7 @@ body {
 .btn-primary:hover {
   background: var(--color-accent-hover);
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(245, 166, 35, 0.35);
+  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.35);
 }
 
 .btn-secondary {
@@ -639,7 +676,7 @@ section {
 .form-textarea:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
 }
 
 .form-input::placeholder {
@@ -768,7 +805,7 @@ section {
 .product-cloud-card {
   margin: 0 auto;
   max-width: 900px;
-  background: var(--color-bg-card);
+  background: var(--card-product-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
   padding: 2.5rem 3rem;
@@ -781,6 +818,21 @@ section {
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.4),
     0 0 30px rgba(255, 255, 255, 0.06);
+}
+
+/* Cloud status pill — white (Cloud's accent), only rendered when a `badge` prop is passed. */
+.product-cloud-badge {
+  display: inline-block;
+  margin-bottom: var(--spacing-md);
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .product-cloud-heading {
@@ -926,8 +978,46 @@ section {
   }
 }
 
+/* === Reduced Motion ===
+   Honor the OS "reduce motion" setting: no smooth scroll and reveals land visible
+   (no upward slide). The starfield — by far the biggest source of motion —
+   early-returns to a single static frame with no rAF loop and no shooting stars
+   (see Starfield.tsx). The remaining effects are brief, interaction-gated hover
+   transitions, which reduced-motion guidance treats as acceptable. The .reveal
+   override shares its base rule's specificity and comes later in this file, so it
+   wins the cascade without !important. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    animation: none;
+  }
+}
+
 /* === Responsive === */
+
+/* Nav collapses to the hamburger at ≤768px (was ≤480) — closes the 481–767px dead
+   zone where the centered product links could overlap the Account button. */
 @media (max-width: 768px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-products,
+  .nav-news,
+  .nav-signin,
+  .nav-github,
+  .nav-mobile-menu {
+    display: none;
+  }
+
+  .nav-mobile-menu.active {
+    display: flex;
+  }
+
   .section-title {
     font-size: 2rem;
   }
@@ -946,30 +1036,6 @@ section {
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
     --spacing-3xl: 4rem;
-  }
-
-  .nav-toggle {
-    display: flex;
-  }
-
-  .nav-products {
-    display: none;
-  }
-
-  .nav-signin {
-    display: none;
-  }
-
-  .nav-github {
-    display: none;
-  }
-
-  .nav-mobile-menu {
-    display: none;
-  }
-
-  .nav-mobile-menu.active {
-    display: flex;
   }
 
   .section-title {

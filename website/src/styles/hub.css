@@ -3,14 +3,39 @@
    Canvas starfield + gold accent
    =================================== */
 
+/* === Cosmic backdrop ===
+   Homepage-only (hub.css is a per-page import). Layered onto `body` with
+   `background-attachment: fixed`, so it paints BEHIND the fixed starfield canvas
+   (body background is always backmost) — stars twinkle over real nebula depth,
+   the hero glow (z-index 1) still floats above. Nebula stays cool/indigo on
+   purpose: a gold bloom (when accent=gold) would read as a sunset, not space. */
+body {
+  background-color: #04050d;
+  background-image:
+/* edge vignette — pulls focus to centre, deepens the void at the corners */
+    radial-gradient(ellipse 125% 95% at 50% 36%, transparent 46%, rgba(0, 0, 0, 0.7) 100%),
+    /* top-centre periwinkle bloom — depth behind the hero glow */
+    radial-gradient(ellipse 95% 62% at 50% 2%, rgba(130, 146, 255, 0.2), transparent 58%),
+    /* faint diagonal galactic band sweeping across the field */
+    linear-gradient(122deg, transparent 30%, rgba(120, 116, 210, 0.1) 50%, transparent 68%),
+    /* lower-left violet drift */
+    radial-gradient(ellipse 78% 58% at 14% 82%, rgba(96, 82, 188, 0.22), transparent 62%),
+    /* lower-right cool-teal depth */
+    radial-gradient(ellipse 68% 52% at 92% 60%, rgba(62, 122, 168, 0.16), transparent 58%),
+    /* base vertical wash — lighter mid, void at top + bottom */
+    linear-gradient(180deg, #080a18 0%, #0c0e20 42%, #0a0b1a 72%, #05060f 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
 /* === Hero === */
 .hub-hero {
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: 120px;
-  padding-bottom: var(--spacing-lg);
+  padding-top: 140px;
+  padding-bottom: var(--spacing-2xl);
   position: relative;
 }
 
@@ -63,16 +88,17 @@
 }
 
 .hub-tagline {
-  font-size: 1.35rem;
-  font-weight: 400;
+  font-size: clamp(1.3rem, 1rem + 1.3vw, 1.65rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
   color: var(--color-text);
   max-width: 600px;
   margin: 0 auto var(--spacing-xs);
-  line-height: 1.5;
+  line-height: 1.4;
 }
 
 .hub-tagline-sub {
-  font-size: 1.35rem;
+  font-size: clamp(1rem, 0.9rem + 0.6vw, 1.2rem);
   font-weight: 400;
   color: var(--color-text-light);
   margin: 0 auto;
@@ -81,7 +107,7 @@
 
 /* === Product Cards === */
 .products-section {
-  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  padding: var(--spacing-2xl) 0 var(--spacing-3xl);
   position: relative;
   z-index: 1;
 }
@@ -94,7 +120,7 @@
 }
 
 .product-card {
-  background: var(--color-bg-card);
+  background: var(--card-product-bg);
   border-radius: var(--border-radius-lg);
   border: 1px solid var(--color-border);
   text-decoration: none;
@@ -111,7 +137,7 @@
   border-color: var(--product-color, var(--color-accent));
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.4),
-    0 0 30px var(--product-glow, rgba(245, 166, 35, 0.1));
+    0 0 30px var(--product-glow, rgba(var(--accent-rgb), 0.1));
 }
 
 /* Product accent colors */
@@ -125,6 +151,16 @@
   --product-glow: rgba(164, 202, 206, 0.15);
 }
 
+.product-card[data-product="cloud"] {
+  --product-color: #ffffff;
+  --product-glow: rgba(255, 255, 255, 0.12);
+}
+
+.product-card[data-product="design"] {
+  --product-color: var(--color-design);
+  --product-glow: rgba(255, 165, 0, 0.15);
+}
+
 /* Screenshot area */
 .product-card-img {
   width: 100%;
@@ -132,6 +168,24 @@
   overflow: hidden;
   background: var(--color-bg-dark);
   border-bottom: 1px solid var(--color-border);
+  position: relative;
+}
+
+/* Early-access badge — overlaid on the screenshot, tinted to the product accent. */
+.product-card-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.25em 0.7em;
+  border-radius: 999px;
+  background: rgba(8, 10, 18, 0.72);
+  backdrop-filter: blur(4px);
+  color: var(--product-color, var(--color-text-light));
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .product-card-img img {
@@ -171,6 +225,23 @@
   height: 1.95rem;
 }
 
+.product-card[data-product="cloud"] .product-card-logo {
+  height: 1.95rem;
+}
+
+.product-card[data-product="design"] .product-card-logo {
+  height: 2.5rem;
+}
+
+/* Text-logo fallback for any product without a logo image. */
+.product-card-name {
+  align-self: center;
+  margin-bottom: var(--spacing-sm);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
 .product-card-description {
   color: var(--color-text-light);
   font-size: 0.95rem;
@@ -201,25 +272,13 @@
   background: var(--color-notes);
 }
 
+.product-card[data-product="cloud"] .product-card-cta {
+  background: #ffffff;
+}
+
 .product-card:hover .product-card-cta {
   filter: brightness(1.15);
   transform: translateY(-1px) scale(1.05);
-}
-
-/* === Cloud Section Overrides === */
-.cloud-card {
-  max-width: none;
-  background: var(--color-cloud-card, var(--color-bg-card));
-}
-
-.cloud-cta {
-  background: var(--color-cloud-cta, rgba(255, 255, 255, 0.85));
-  color: #0f1119;
-}
-
-.cloud-cta:hover {
-  background: var(--color-cloud-cta-hover, rgba(255, 255, 255, 0.95));
-  transform: scale(1.05);
 }
 
 /* === Email Signup === */
@@ -232,7 +291,7 @@
 .hub-signup-box {
   max-width: 600px;
   margin: 0 auto;
-  background: var(--color-bg-card);
+  background: var(--card-narrative-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
   padding: 2.5rem 3rem;
@@ -275,7 +334,7 @@
 .hub-signup-input:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.15);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
 }
 
 .hub-signup-input::placeholder {
@@ -338,6 +397,330 @@
   }
 }
 
+/* Eyebrow heading (Why Boojy). */
+.why-boojy-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+/* === Why Boojy === — the "about", a centered card. Story as one warm paragraph,
+   the promises as a checklist beneath a hairline rule. */
+.why-boojy {
+  padding: var(--spacing-3xl) 0;
+}
+
+.why-boojy-card {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background: var(--card-narrative-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+}
+
+.why-boojy-title {
+  margin-bottom: var(--spacing-md);
+  /* Mono near-white, deliberately NOT the accent — keeps this eyebrow calm/white
+     while the rest of the accent (news eyebrow, links, CTAs) is blue. */
+  color: #d4d9e6;
+}
+
+.why-boojy-lead {
+  max-width: 52ch;
+  margin: 0 auto;
+  font-size: 1.15rem;
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+/* Promises — a checklist under a hairline rule. Left-aligned text inside a
+   narrow centred column (centred multi-line copy is hard to scan). */
+.why-boojy-points {
+  list-style: none;
+  max-width: 420px;
+  margin: var(--spacing-lg) auto 0;
+  padding: var(--spacing-lg) 0 0;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  text-align: left;
+}
+
+.why-point {
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+
+.why-point-check {
+  flex-shrink: 0;
+  margin-top: 0.15em;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.why-point-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.why-point-label {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.why-point-detail {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-light);
+}
+
+/* === Coming-soon product card (Design) === — same shell + opacity as a live card;
+   it reads as not-yet-available through its neutral badge and disabled CTA, not by
+   dimming (a dimmed card turned translucent and let the cosmic backdrop bleed through). */
+.coming-soon-card {
+  transition:
+    transform 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.coming-soon-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Neutral badge (the stage badge is accent-tinted; this one stays grey). */
+.coming-soon-badge {
+  color: var(--color-text-light);
+}
+
+/* No screenshot yet — a subtle gradient + glyph stands in (Design). */
+.card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(255, 165, 0, 0.16), transparent 70%),
+    var(--color-bg-dark);
+}
+
+.card-placeholder svg {
+  width: 56px;
+  height: 56px;
+  color: var(--color-text-light);
+  opacity: 0.55;
+}
+
+/* Disabled CTA (Design) — same shape as the live "Learn more" button but a muted
+   fill, default cursor, and no hover lift, so it clearly reads as not-yet-clickable. */
+.product-card-cta-disabled {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--color-text-light);
+  cursor: default;
+}
+
+.product-card:hover .product-card-cta-disabled {
+  filter: none;
+  transform: none;
+}
+
+/* === Latest news teaser === (links to the newest /news post) */
+.hub-news {
+  padding: 0 0 var(--spacing-2xl);
+}
+
+.hub-news-card {
+  display: block;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--card-narrative-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.hub-news-card:hover {
+  border-color: var(--color-accent);
+  transform: translateY(-3px);
+}
+
+.hub-news-eyebrow {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-xs);
+}
+
+.hub-news-summary {
+  margin: 0 0 var(--spacing-sm);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.hub-news-cta {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+/* === Feedback === (real form → Supabase Edge Function + Turnstile) */
+.feedback {
+  padding: var(--spacing-3xl) 0;
+}
+
+.feedback-inner {
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: center;
+  padding: var(--spacing-xl);
+  /* Grey on purpose — stands apart from the near-black narrative cards as the
+     closing call-to-action (not part of the recede-into-space group). */
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+}
+
+.feedback-title {
+  margin-bottom: var(--spacing-xs);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.feedback-sub {
+  margin-bottom: var(--spacing-lg);
+  font-size: 1rem;
+  color: var(--color-text-light);
+}
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  text-align: left;
+}
+
+.feedback-row {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.feedback-input,
+.feedback-select,
+.feedback-textarea {
+  width: 100%;
+  padding: 0.7rem 0.9rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.feedback-select {
+  flex-shrink: 0;
+  width: auto;
+  min-width: 8.5rem;
+  cursor: pointer;
+}
+
+.feedback-input:focus,
+.feedback-select:focus,
+.feedback-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.15);
+}
+
+.feedback-input::placeholder,
+.feedback-textarea::placeholder {
+  color: var(--color-text-light);
+  opacity: 0.6;
+}
+
+.feedback-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.feedback-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+/* Reserve the widget's height so the layout doesn't jump when it loads. */
+.feedback-turnstile {
+  min-height: 65px;
+}
+
+.feedback-submit {
+  padding: 0.6rem 1.6rem;
+  background: var(--color-accent);
+  color: #0f1119;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition:
+    filter 0.2s ease,
+    transform 0.2s ease;
+}
+
+.feedback-submit:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.feedback-submit:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.feedback-error {
+  font-size: 0.85rem;
+  color: #ff8a80;
+}
+
+.feedback-success {
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--color-text);
+}
+
+.feedback-success-icon {
+  margin-bottom: var(--spacing-sm);
+  font-size: 2.5rem;
+}
+
 /* === Responsive === */
 @media (max-width: 768px) {
   .hub-hero {
@@ -352,9 +735,8 @@
     height: 2.8125rem;
   }
 
-  .hub-tagline,
-  .hub-tagline-sub {
-    font-size: 1.15rem;
+  .why-boojy-lead {
+    font-size: 1.05rem;
   }
 
   .product-cards {
@@ -386,9 +768,17 @@
     --glow-height: 200px;
   }
 
-  .hub-tagline,
-  .hub-tagline-sub {
-    font-size: 1rem;
+  /* Feedback: email + type stack, button goes full width. */
+  .feedback-row {
+    flex-direction: column;
+  }
+
+  .feedback-select {
+    width: 100%;
+  }
+
+  .feedback-submit {
+    width: 100%;
   }
 
   .hub-signup-box {

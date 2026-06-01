@@ -5,6 +5,12 @@ name: Links
 # Runs on PRs and weekly (release URLs can rot between commits). This is intentionally a
 # SEPARATE workflow from the required "Lint · Check · Build" gate, so a transient external
 # 404 reports red without blocking a merge. The app lives in website/.
+#
+# boojy.org (our own origin) is excluded: the only absolute self-references in the build are
+# the canonical / og:url / og:image tags, which point at PRODUCTION. A page added in a PR
+# doesn't exist at boojy.org until that PR deploys, so checking them remotely 404s every new
+# page (chicken-and-egg). Navigable internal links are root-relative and still verified
+# against dist via --root-dir; this checker's real job is catching rotted EXTERNAL URLs.
 
 on:
   pull_request:
@@ -51,6 +57,7 @@ jobs:
             --max-retries 3
             --retry-wait-time 5
             --root-dir ${{ github.workspace }}/website/dist
+            --exclude 'boojy\.org'
             --exclude 'w3\.org'
             --exclude 'schema\.org'
             --exclude 'supabase\.co'
