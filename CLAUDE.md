@@ -27,11 +27,11 @@ Two architectural anchors for any change:
 
 | Repo | Path | Purpose |
 |------|------|---------|
-| `boojy` (this) | `Boojy/` | Marketing website — boojy.org |
+| `boojy` (this) | `boojy-web/` | Marketing website — boojy.org |
 | `boojy-notes` | `../boojy-notes/` | Notes app — notes.boojy.org |
 | `boojy-cloud` | `../boojy-cloud/` | Supabase Edge Functions + migrations |
 | `boojy-design` | `../boojy-design/` | Web image editor (the `.claude` system here came from it) |
-| `Boojy Audio` | `../Boojy Audio/` | DAW |
+| `Boojy Audio` | `../boojy-audio/` | DAW |
 
 ## Commands
 
