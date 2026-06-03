@@ -1,3 +1,7 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
 # Private documents (not committed)
 docs/private/
 docs/BUSINESS_PLAN.md
