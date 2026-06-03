@@ -45,6 +45,6 @@ deploy. Build settings: root `website`, command `pnpm build`, output `dist`.
 
 ## License
 
-MIT
+GPLv3 — see [LICENSE](LICENSE). Copyright (c) 2025–2026 Tyr Bujac.
 
 **Built by [Tyr Bujac](https://github.com/tyrbujac)**
