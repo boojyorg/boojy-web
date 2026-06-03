@@ -13,7 +13,7 @@ static site** (SSG + React islands), live in production. It replaced a Vite + Re
 HTML per page (real `<title>`/description/OG), with the interactive pieces layered back in as React
 islands. Scope of that migration was **framework only** — the plain CSS, Supabase/Stripe logic, and
 copy were untouched; a Tailwind/shadcn restyle is a separate future task. Historical spec:
-`docs/ASTRO_MIGRATION_PLAN.md`.
+`docs/archive/ASTRO_MIGRATION_PLAN.md`.
 
 Two architectural anchors for any change:
 
