@@ -1,9 +1,9 @@
 # CLAUDE.md
 
-Guidance for Claude Code working in this repository. **Always-true rules live here**; per-area
-gotchas live in **`.claude/rules/`** (loaded when you touch matching files); the active target +
-open milestones live in **`dreams.md`**; incidental learnings live in **auto memory**; history lives
-in **`git log`**.
+Local guidance for Boojy Web (boojy.org). **Suite-wide process/conventions live in the root
+`~/Documents/Projects/boojy/CLAUDE.md`** (memory model, changelog/release, branch discipline,
+context-hygiene, working prefs); this file is the app-specific architecture, stack, and gotchas.
+Per-area gotchas live in **`.claude/rules/`**; the active target lives in **`dreams.md`**.
 
 ## What this is (read first)
 
@@ -27,11 +27,11 @@ Two architectural anchors for any change:
 
 | Repo | Path | Purpose |
 |------|------|---------|
-| `boojy` (this) | `Boojy/` | Marketing website — boojy.org |
+| `boojy` (this) | `boojy-web/` | Marketing website — boojy.org |
 | `boojy-notes` | `../boojy-notes/` | Notes app — notes.boojy.org |
 | `boojy-cloud` | `../boojy-cloud/` | Supabase Edge Functions + migrations |
 | `boojy-design` | `../boojy-design/` | Web image editor (the `.claude` system here came from it) |
-| `Boojy Audio` | `../Boojy Audio/` | DAW |
+| `Boojy Audio` | `../boojy-audio/` | DAW |
 
 ## Commands
 
@@ -39,7 +39,7 @@ All from `website/`. **pnpm.**
 
 ```bash
 pnpm install
-pnpm dev                 # Astro dev server — the user runs this; don't auto-start it
+pnpm dev                 # Astro dev server
 pnpm build               # astro build → website/dist/
 pnpm preview             # serve the static build locally
 pnpm exec astro check    # type + diagnostic gate
@@ -58,15 +58,16 @@ rules are off in `biome.json` for intentional, recurring patterns: `noNonNullAss
 `!` with `noUncheckedIndexedAccess`), `noUnknownTypeSelector` (false-positives on valid
 `::view-transition-*` CSS), `useValidAnchor` (deferred a→button styling work).
 
-## Shipping workflow
+## Shipping (repo-specific)
 
-1. **Branch** (never commit straight to `master` — it's branch-protected and requires the
-   "Lint · Check · Build" CI check, so every change needs a branch + PR).
-2. **Green the gates:** `pnpm exec astro check` + `pnpm build` + `pnpm lint`.
-3. **Commit, push, open a PR.**
-4. **Deploy is Cloudflare Pages Git integration** (preview per branch, production on `master`).
-   GitHub Actions runs CI gates only, never the deploy. ⚠️ **CF build settings are shared
-   prod/preview** — before any framework-level build change, read `.claude/rules/caching-and-deploy.md`.
+General branch discipline → root `CLAUDE.md`. Web specifics:
+
+* `master` is **branch-protected** and requires the "Lint · Check · Build" CI check — every change
+  needs a branch + PR.
+* **Local gates:** `pnpm exec astro check` + `pnpm build` + `pnpm lint` (the same three CI runs).
+* **Deploy is Cloudflare Pages Git integration** (preview per branch, production on `master`).
+  GitHub Actions runs CI gates only, never the deploy. ⚠️ **CF build settings are shared
+  prod/preview** — before any framework-level build change, read `.claude/rules/caching-and-deploy.md`.
 
 ## Architecture
 
@@ -102,27 +103,12 @@ rules are off in `biome.json` for intentional, recurring patterns: `noNonNullAss
   `shared.css` is global in `BaseLayout`; per-page CSS is imported in each page's frontmatter.
   Inter loads via `src/styles/inter.css` (a hand-rolled latin + latin-ext `@font-face`, **not** the
   full `@fontsource-variable/inter` import — the other 5 subsets are latin-only dead weight in `dist`).
-* **Keep the docs current.** Structure/roadmap changes update this file (and the relevant
-  `.claude/rules/` file + `README.md`) in the same commit.
 
-## Memory
+## Memory & docs (repo-specific)
 
-* **`dreams.md`** — read at the start of every session for the **active engineering target + open
-  milestones** (§1 only). Flip `- [ ]` → `- [x]` as work lands. No incident log, no backlog: git log
-  is the history, auto memory holds incidental learnings.
-* **`.claude/rules/`** — one topic per file (per-area gotchas + durable backend facts), loaded when
-  you touch matching files. (Treat as organization; conditional loading is still flaky as of early
-  2026, so genuinely global rules stay in this file.)
-* **auto memory** — captures debugging insights + workflow learnings across sessions. Skim `/memory`
-  after a big refactor.
+General memory model + context-hygiene → root `CLAUDE.md`. Web specifics:
 
-## Context Hygiene Gate
-
-Monitor session context. When utilization crosses ~50%, pause active loops, summarize the current
-task + files touched, update `dreams.md`, and run `/compact`.
-
-**Cost discipline** (a 2026-05-29 session ran $55 in one sitting). Two things drove almost all of
-it: **subagent-heavy work** (each subagent is its own request stream) and **long context** (>150k
-tokens) — overwhelmingly large-context *cache reads*, not new generation. So: be deliberate about
-spawning subagents (consider a cheaper model for simple ones), `/compact` mid-task, and `/clear`
-when switching tasks.
+* **`dreams.md`** — §1 only: the active engineering target + open milestones. Roadmap sequence lives
+  in `docs/ROADMAP.md`; unscheduled items in `docs/BACKLOG.md`.
+* **`.claude/rules/`** — one topic per file (per-area gotchas + durable backend facts: Supabase,
+  Stripe, caching/deploy, view-transitions/glow, feedback). Loaded when you touch matching files.
