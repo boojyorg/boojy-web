@@ -7,7 +7,7 @@ Per-area gotchas live in **`.claude/rules/`**; the active target lives in **`dre
 
 ## What this is (read first)
 
-This is the **boojy.org marketing website** repo (`boojy`). Solo project by Tyr. It's an **Astro
+This is the **boojy.org marketing website** repo (`boojy-web`). Solo project by Tyr. It's an **Astro
 static site** (SSG + React islands), live in production. It replaced a Vite + React SPA whose empty
 `<div id="root">` was invisible to crawlers and social scrapers; Astro ships fully-formed static
 HTML per page (real `<title>`/description/OG), with the interactive pieces layered back in as React
@@ -27,7 +27,7 @@ Two architectural anchors for any change:
 
 | Repo | Path | Purpose |
 |------|------|---------|
-| `boojy` (this) | `boojy-web/` | Marketing website — boojy.org |
+| `boojy-web` (this) | `boojy-web/` | Marketing website — boojy.org |
 | `boojy-notes` | `../boojy-notes/` | Notes app — notes.boojy.org |
 | `boojy-cloud` | `../boojy-cloud/` | Supabase Edge Functions + migrations |
 | `boojy-design` | `../boojy-design/` | Web image editor (the `.claude` system here came from it) |
