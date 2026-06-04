@@ -9,6 +9,9 @@ paths:
 
 # Release version + download URLs (build-time fetch)
 
+> Broader flow — how versions reach the site, the per-release checklist, and the planned
+> auto-rebuild — lives in [`docs/WEBSITE-VERSION-UPDATES.md`](../../docs/WEBSITE-VERSION-UPDATES.md).
+
 - `lib/github-release.ts` exports `getLatestRelease(repo, opts)`: **one** request to
   `/repos/<owner>/<repo>/releases?per_page=1` (newest published release, **pre-releases included** —
   `/releases/latest` skips the betas these apps ship), returning `versionText`, `tag`, `dateText`,
