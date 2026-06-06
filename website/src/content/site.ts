@@ -56,7 +56,7 @@ export const PRODUCT_CARDS: ProductCardData[] = [
     href: '/audio/',
     visual: {
       kind: 'image',
-      src: '/images/screenshot-main-interface.png',
+      src: '/images/audio-screenshot-v0.5.2.png',
       alt: 'Boojy Audio interface',
     },
     logo: { src: '/images/audio-text-logo.png', alt: 'Boojy Audio' },

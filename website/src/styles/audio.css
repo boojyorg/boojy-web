@@ -86,16 +86,6 @@
   z-index: 2;
 }
 
-/* Audio web CTA — blue fill */
-.btn-web-audio {
-  background: var(--color-audio);
-  color: #0f1119;
-}
-.btn-web-audio:hover {
-  filter: brightness(1.15);
-  transform: translateY(-1px);
-}
-
 /* === Screenshot === */
 .audio-screenshot-section {
   padding: 10px 0 var(--spacing-lg);
@@ -118,9 +108,9 @@
   display: block;
 }
 
-/* === Features Grid === */
-.audio-features-section {
-  padding: var(--spacing-lg) 0 var(--spacing-xl);
+/* === Value-prop Cards === */
+.audio-cards-section {
+  padding: var(--spacing-lg) 0 0;
   position: relative;
   z-index: 1;
 }
@@ -167,20 +157,95 @@
   color: var(--color-text-light);
   font-size: 0.95rem;
   line-height: 1.6;
+}
+
+/* === Features Checklist === */
+.audio-features-section {
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
   position: relative;
   z-index: 1;
 }
 
-/* === Cloud Card Overrides === */
-.audio-cloud-card:hover {
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+/* One shared card: "Features" title, then Current / Coming Soon columns inside */
+.audio-features-card {
+  background: #040412;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.audio-cloud-cta {
+.audio-features-card h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.audio-features-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  position: relative;
+}
+
+/* White hairline divider, centred in the gap between the two columns */
+.audio-features-columns::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
   background: rgba(255, 255, 255, 0.15);
+}
+
+.audio-features-col h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-text-light);
-  cursor: default;
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+.audio-feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.audio-feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.audio-feature-list strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.audio-feature-check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: #4ade80; /* green = shipped */
+}
+
+/* Coming-soon column — same card, orange arrows instead of blue checks */
+.audio-features-col-soon .audio-feature-check {
+  color: #ffa500;
 }
 
 /* === Subscribed Page === */
@@ -241,6 +306,16 @@
   .audio-features-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
+  }
+
+  .audio-features-columns {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  /* Stacked columns: no vertical divider */
+  .audio-features-columns::before {
+    display: none;
   }
 }
 
