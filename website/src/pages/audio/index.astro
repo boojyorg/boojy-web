@@ -130,10 +130,12 @@ const comingSoon = [
 
   <section class="audio-features-section">
     <div class="container">
-      <div class="audio-features-columns">
-        <div class="audio-features-col reveal">
-          <h2>Features</h2>
-          <ul class="audio-feature-list">
+      <div class="audio-features-card reveal">
+        <h2>Features</h2>
+        <div class="audio-features-columns">
+          <div class="audio-features-col">
+            <h3>Current</h3>
+            <ul class="audio-feature-list">
             {
               features.map((item) => (
                 <li>
@@ -155,11 +157,11 @@ const comingSoon = [
                 </li>
               ))
             }
-          </ul>
-        </div>
-        <div class="audio-features-col audio-features-col-soon reveal reveal-d1">
-          <h2>Coming Soon</h2>
-          <ul class="audio-feature-list">
+            </ul>
+          </div>
+          <div class="audio-features-col audio-features-col-soon">
+            <h3>Coming Soon</h3>
+            <ul class="audio-feature-list">
             {
               comingSoon.map((item) => (
                 <li>
@@ -182,7 +184,8 @@ const comingSoon = [
                 </li>
               ))
             }
-          </ul>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

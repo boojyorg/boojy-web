@@ -166,27 +166,36 @@
   z-index: 1;
 }
 
-/* Columns stretch to equal height (6 items each keeps the lists balanced too) */
-.audio-features-columns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-xl);
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.audio-features-col {
+/* One shared card: "Features" title, then Current / Coming Soon columns inside */
+.audio-features-card {
   background: #040412;
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-xl);
   border: 1px solid var(--color-border);
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.audio-features-col h2 {
-  font-size: 1.2rem;
+.audio-features-card h2 {
+  font-size: 1.4rem;
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: var(--spacing-md);
+}
+
+.audio-features-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+}
+
+.audio-features-col h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-sm);
 }
 
 .audio-feature-list {
@@ -217,7 +226,7 @@
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  color: var(--color-audio);
+  color: #4ade80; /* green = shipped */
 }
 
 /* Coming-soon column — same card, orange arrows instead of blue checks */
@@ -288,7 +297,6 @@
   .audio-features-columns {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
-    max-width: 500px;
   }
 }
 
