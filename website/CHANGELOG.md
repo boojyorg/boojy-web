@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Improvements
+- **`/audio` page refresh for v0.5.2** — removed the disabled "Open in Web" button (the app
+  doesn't run in the browser yet) and the Boojy Cloud card; replaced the three generic feature
+  cards with a two-column checklist: "What's in Boojy Audio" (v0.5.2-verified, VST3-only — the
+  old card over-claimed AU support) and "Coming soon" (v0.6 "Sound" scope only). Release
+  fallback version bumped to v0.5.2 Beta.
+
 ## 2026-05-23 (deploy)
 
 ### Added

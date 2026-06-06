@@ -1,6 +1,5 @@
 ---
 import { AudioDownload } from '../../components/AudioDownload';
-import ProductCloudCard from '../../components/ProductCloudCard.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLatestRelease } from '../../lib/github-release';
 import '../../styles/audio.css';
@@ -8,7 +7,30 @@ import '../../styles/audio.css';
 // Build-time fetch — the version is baked into the static HTML and re-fetched on each
 // deploy. getLatestRelease never throws (falls back on any error/timeout). Audio ships
 // stable, version-less asset names, so only the version string needs the live release.
-const release = await getLatestRelease('boojyorg/boojy-audio', { fallbackVersion: 'v0.3.2 Beta' });
+const release = await getLatestRelease('boojyorg/boojy-audio', { fallbackVersion: 'v0.5.2 Beta' });
+
+// Feature checklist — mirrors boojy-audio's FEATURE_TRACKER for the tagged release.
+// "Coming soon" lists only the next release (v0.6 "Sound") — it's a public commitment,
+// so keep it to what's actually scheduled.
+const features = [
+  { title: 'Multi-track timeline', detail: 'audio and MIDI side by side' },
+  { title: 'Recording', detail: 'mic or interface, MIDI keyboard, count-in, punch in/out' },
+  { title: 'Piano roll', detail: 'velocity, quantize, scale highlighting' },
+  { title: 'Mixer', detail: 'faders, pan, mute/solo, send and return buses' },
+  { title: 'Built-in effects', detail: 'EQ, compressor, reverb, delay, chorus' },
+  { title: 'VST3 plugins', detail: 'instruments and effects, saved with your project' },
+  { title: 'Sampler', detail: 'load any sound and play it across the keyboard' },
+  { title: 'Audio editing', detail: 'split, trim, time-stretch, pitch shift' },
+  { title: 'Export', detail: 'WAV, MP3, per-track stems, MIDI in and out' },
+  { title: 'Completely free', detail: 'no subscriptions, no paywalls' },
+];
+
+const comingSoon = [
+  { title: 'Drum kit', detail: 'pad grid with starter sounds' },
+  { title: 'Automation', detail: 'draw volume and pan changes over time' },
+  { title: 'Input monitoring', detail: 'hear yourself while you record' },
+  { title: 'More clip tools', detail: 'join, reverse, normalize' },
+];
 ---
 
 <BaseLayout path="/audio/">
@@ -54,63 +76,61 @@ const release = await getLatestRelease('boojyorg/boojy-audio', { fallbackVersion
 
   <section class="audio-features-section">
     <div class="container">
-      <div class="audio-features-grid">
-        <div class="audio-feature-card">
-          <svg
-            class="audio-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="m9 12 2 2 4-4"></path>
-          </svg>
-          <h3>Completely Free</h3>
-          <p>No subscriptions, no paywalls. Free forever.</p>
+      <div class="audio-features-columns">
+        <div class="audio-features-col reveal">
+          <h2>What's in Boojy Audio</h2>
+          <ul class="audio-feature-list">
+            {
+              features.map((item) => (
+                <li>
+                  <svg
+                    class="audio-feature-check"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span>
+                    <strong>{item.title}</strong> — {item.detail}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
         </div>
-        <div class="audio-feature-card">
-          <svg
-            class="audio-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-          </svg>
-          <h3>Plugin Support</h3>
-          <p>Use VST3 and AU instruments and effects.</p>
-        </div>
-        <div class="audio-feature-card">
-          <svg
-            class="audio-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-          </svg>
-          <h3>Beginner Friendly</h3>
-          <p>Clean interface. No overwhelming menus.</p>
+        <div class="audio-features-col audio-features-col-soon reveal reveal-d1">
+          <h2>Coming soon</h2>
+          <ul class="audio-feature-list">
+            {
+              comingSoon.map((item) => (
+                <li>
+                  <svg
+                    class="audio-feature-check"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                  <span>
+                    <strong>{item.title}</strong> — {item.detail}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
         </div>
       </div>
     </div>
   </section>
-
-  <ProductCloudCard
-    cardClassName="audio-cloud-card"
-    ctaClassName="audio-cloud-cta"
-    description="Sync your projects across devices. Coming soon to Boojy Audio."
-    cta={{ kind: 'text', label: 'Coming soon' }}
-  />
 </BaseLayout>

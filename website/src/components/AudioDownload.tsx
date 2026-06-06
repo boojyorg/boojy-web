@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { usePlatformsPanel } from '../hooks/usePlatformsPanel';
 import { detectPlatform, type PlatformId, platformIconHtml } from '../lib/platform';
 import { GitHubPlatformIcon, PlatformIcon } from './PlatformIcons';
-import { WebIcon } from './WebIcon';
 
 interface AudioPlatform {
   id: string;
@@ -95,14 +94,6 @@ export function AudioDownload({ versionText }: Props) {
   return (
     <div className="audio-cta reveal reveal-d2">
       <div className="hero-buttons">
-        <a className="btn btn-web-audio btn-disabled">
-          <span className="btn-label">
-            <span className="web-icon">
-              <WebIcon />
-            </span>
-            Open in Web
-          </span>
-        </a>
         {!showFallback ? (
           <div id="download-detected">
             <a className="btn btn-download" href={downloadHref}>
