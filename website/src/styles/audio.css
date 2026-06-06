@@ -181,6 +181,7 @@
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: var(--spacing-md);
+  text-align: center;
 }
 
 .audio-features-columns {
