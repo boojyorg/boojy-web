@@ -177,10 +177,10 @@
 }
 
 .audio-features-card h2 {
-  font-size: 1.4rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-text);
-  margin-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
   text-align: center;
 }
 
@@ -188,6 +188,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-xl);
+  position: relative;
+}
+
+/* White hairline divider, centred in the gap between the two columns */
+.audio-features-columns::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .audio-features-col h3 {
@@ -197,6 +209,7 @@
   text-transform: uppercase;
   color: var(--color-text-light);
   margin-bottom: var(--spacing-sm);
+  text-align: center;
 }
 
 .audio-feature-list {
@@ -298,6 +311,11 @@
   .audio-features-columns {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
+  }
+
+  /* Stacked columns: no vertical divider */
+  .audio-features-columns::before {
+    display: none;
   }
 }
 
