@@ -23,22 +23,35 @@ in its `.astro` frontmatter at build time:
 The fetch never breaks the build (AbortController + try/catch → `fallbackVersion`), and the download
 components fall back to the releases page if an asset URL is unresolved, so no link is ever dead.
 
+The version string is the **tag only** (`v0.5.4 · 6 June 2026`) — no "Beta"/stage word. The release
+stage shown to users ("Early access" etc.) is the card/band badge, driven solely by `Stage` in
+`content/site.ts`; keeping a stage word out of the version string is what stops the two drifting.
+
+**Screenshots are refreshed per minor milestone only** (v0.6, v0.7 …), never for patch releases —
+a screenshot lagging the version string by a few patches is expected and fine. At each milestone,
+capture a new one and update the `src` references (`site.ts` + the product page).
+
 ### Release checklist (boojy-notes / boojy-audio)
 
 1. Bump the version, update `CHANGELOG.md`, commit.
-2. Tag (`git tag v0.x.x`) and push the tag; publish the GitHub Release with the built assets.
-3. **Redeploy the website** so the build re-fetches the new version. Until the deploy-hook below is
-   wired, that means a push/redeploy of the `boojy` repo (or a manual CF "Retry deployment").
+2. Tag (`git tag v0.x.x`) and push the tag; **publish** the GitHub Release with the built assets.
+3. Publishing triggers the site rebuild automatically (see below) — verify boojy.org shows the new
+   version a few minutes later.
 4. Keep the `fallbackVersion` in the page frontmatter roughly current so a rate-limited build doesn't
    look stale.
 
 ---
 
-## Planned: auto-rebuild on release (Phase 2)
+## Auto-rebuild on release (Phase 2 — wired)
 
 Because versions are baked at build time, a new app release only appears after the website rebuilds.
-The planned fix is a **Cloudflare Pages Deploy Hook** POSTed from each app repo's release workflow, so
-publishing a release triggers a website rebuild automatically — no manual redeploy. See `dreams.md`.
+Each app repo has a `.github/workflows/site-rebuild.yml` that POSTs the site's **Cloudflare Pages
+Deploy Hook** on `release: published` (not tag push — the tag only builds the *draft*), so publishing
+a release rebuilds boojy.org automatically.
+
+It needs the **`CF_PAGES_DEPLOY_HOOK_URL`** secret in each app repo (CF dashboard → Pages project →
+Settings → Builds & deployments → Deploy hooks); the workflow no-ops with a log line until the
+secret is set.
 
 ---
 

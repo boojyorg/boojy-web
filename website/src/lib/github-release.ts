@@ -6,7 +6,7 @@ export interface ReleaseAsset {
 }
 
 export interface LatestRelease {
-  /** Full display string, e.g. `v0.3.0 Beta · 29 May 2026`. */
+  /** Full display string, e.g. `v0.3.0 · 29 May 2026`. */
   versionText: string;
   /** Raw tag, e.g. `v0.3.0` — `null` when unresolved (fetch failed). */
   tag: string | null;
@@ -17,10 +17,12 @@ export interface LatestRelease {
 }
 
 interface Options {
-  /** Shown verbatim as `versionText` if the fetch fails (e.g. `v0.3.0 Beta`). */
+  /**
+   * Shown verbatim as `versionText` if the fetch fails (e.g. `v0.3.0`). Tag only — no
+   * stage word: the release stage is the card/band badge's job (`Stage` in `content/site.ts`),
+   * not the version string's.
+   */
   fallbackVersion: string;
-  /** Word placed after the tag in `versionText`. Default `Beta`. */
-  channel?: string;
 }
 
 interface GitHubRelease {
@@ -41,7 +43,7 @@ interface GitHubRelease {
  */
 export async function getLatestRelease(
   repo: string,
-  { fallbackVersion, channel = 'Beta' }: Options,
+  { fallbackVersion }: Options,
 ): Promise<LatestRelease> {
   const fallback: LatestRelease = {
     versionText: fallbackVersion,
@@ -76,7 +78,7 @@ export async function getLatestRelease(
     }));
 
     return {
-      versionText: `${release.tag_name} ${channel}${dateText ? ` · ${dateText}` : ''}`,
+      versionText: `${release.tag_name}${dateText ? ` · ${dateText}` : ''}`,
       tag: release.tag_name,
       dateText,
       assets,

@@ -10,7 +10,7 @@ import '../../styles/notes.css';
 // re-fetched on each deploy. getLatestRelease never throws (falls back on any
 // error/timeout). Notes' asset filenames embed the version, so the download URLs have
 // to come from the live release, not a hardcoded path.
-const release = await getLatestRelease('boojyorg/boojy-notes', { fallbackVersion: 'v0.3.0 Beta' });
+const release = await getLatestRelease('boojyorg/boojy-notes', { fallbackVersion: 'v0.3.0' });
 const macArm64Url = findAssetUrl(release.assets, /arm64\.dmg$/) ?? null;
 const winX64Url = findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null;
 ---

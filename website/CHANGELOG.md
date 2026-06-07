@@ -9,6 +9,14 @@
   value-prop cards. Plugin card corrected to VST3-only (it over-claimed AU support); Coming
   Soon sticks to the v0.6 "Sound" scope. New v0.5.2 screenshot (here + the homepage product
   card); release fallback version bumped to v0.5.2 Beta.
+- **Version strings are tag-only** — `getLatestRelease` no longer appends a "Beta" channel word
+  (the /audio page said "Beta" while the homepage badge said "Early access"; the `Stage` badge in
+  `site.ts` is now the single source of the stage word). Fallbacks bumped: Audio `v0.5.4`,
+  Notes `v0.3.0`.
+- **Auto-rebuild on release (P2)** — boojy-audio and boojy-notes gained a `site-rebuild.yml`
+  workflow that POSTs the CF Pages Deploy Hook on `release: published`, so a newly published app
+  release rebuilds boojy.org and shows the new version without a manual redeploy (pending the
+  `CF_PAGES_DEPLOY_HOOK_URL` secret).
 
 ## 2026-05-23 (deploy)
 

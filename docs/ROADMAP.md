@@ -16,8 +16,10 @@ ASCII-mockup sign-off before code.
   Design) driven by `PRODUCT_CARDS` in `site.ts`, release-stage ladder (Early access → Beta → Full
   release), centered "Why Boojy" card, `/news/` content collection (prose monthly notes), and the
   feedback form island. Remaining homepage tails (React-weight, CWV) tracked in `dreams.md`.
-- **P2 — Release automation.** CF Pages Deploy Hook POSTed from each app's release workflow so a new
-  tag rebuilds boojy.org automatically (baked versions currently only refresh on the next deploy).
+- **P2 — Release automation 🔶 (wired, needs secret).** `site-rebuild.yml` in boojy-audio (#74) and
+  boojy-notes (#25) POSTs the CF Pages Deploy Hook on `release: published` so a new release rebuilds
+  boojy.org automatically. Remaining: create the Deploy Hook in the CF dashboard and set
+  `CF_PAGES_DEPLOY_HOOK_URL` in both app repos. Flow doc: `docs/WEBSITE-VERSION-UPDATES.md`.
 - **P3 — Narrative.** Roadmap/updates storytelling beyond `/news/` as the suite matures.
 - **P4 — Feedback backend + Cloud waitlist.** Build the `feedback` Edge Function (Turnstile verify →
   `feedback` table) in boojy-cloud; the Cloud paid-tier email waitlist follows the same pattern

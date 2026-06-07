@@ -9,8 +9,8 @@ paths:
 
 # Release version + download URLs (build-time fetch)
 
-> Broader flow — how versions reach the site, the per-release checklist, and the planned
-> auto-rebuild — lives in [`docs/WEBSITE-VERSION-UPDATES.md`](../../docs/WEBSITE-VERSION-UPDATES.md).
+> Broader flow — how versions reach the site, the per-release checklist, and the auto-rebuild
+> deploy hook — lives in [`docs/WEBSITE-VERSION-UPDATES.md`](../../docs/WEBSITE-VERSION-UPDATES.md).
 
 - `lib/github-release.ts` exports `getLatestRelease(repo, opts)`: **one** request to
   `/repos/<owner>/<repo>/releases?per_page=1` (newest published release, **pre-releases included** —
@@ -29,5 +29,10 @@ paths:
 - Repo owner is **`boojyorg`** for both apps (`boojyorg/boojy-audio`, `boojyorg/boojy-notes`). The old
   `tyrbujac/boojy-audio` only survives as a 301 — never reintroduce it.
 - No GitHub token needed: the unauthenticated API is 60 req/hr per IP on shared CF build IPs, and the
-  fallback string covers the occasional rate-limit. (Future: a CF Deploy Hook from each app's release
-  workflow auto-rebuilds the site so a new tag goes live without a manual deploy — see `dreams.md`.)
+  fallback string covers the occasional rate-limit.
+- **`versionText` is the tag only — no stage word.** "Early access"/"Beta" is the card badge's job
+  (`Stage` in `content/site.ts`); a stage word baked into the version string is what let the /audio
+  page say "Beta" while the homepage said "Early access". Don't reintroduce a `channel` option.
+- **Auto-rebuild is wired:** each app repo's `.github/workflows/site-rebuild.yml` POSTs the CF Pages
+  Deploy Hook on `release: published`, so a newly published release rebuilds the site without a
+  manual deploy (needs the `CF_PAGES_DEPLOY_HOOK_URL` secret in the app repo).

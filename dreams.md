@@ -10,14 +10,23 @@
 **Website audit roadmap** (approved 2026-05-31; full sequence in `docs/ROADMAP.md`).
 **P0 (download rot) and P1 (homepage rebuild) have shipped** — the premium homepage, unified 2×2
 product grid, periwinkle accent, cosmic backdrop, `/news/` content collection, and the feedback
-form island all landed via the homepage-phase1 merge. Next up is **P2 (release automation)**, then
-P3 narrative, P4 feedback backend + Cloud waitlist, P5 brand/product-registry, P6 testing floor.
+form island all landed via the homepage-phase1 merge. **P2 (release automation) is wired** —
+`site-rebuild.yml` PRs in boojy-audio (#74) + boojy-notes (#25) POST the CF Pages Deploy Hook on
+`release: published`; remaining: create the hook + set the secret (below). Also in flight: the
+/audio page refresh (`feat/audio-page-v052`) — version string is now tag-only (no "Beta"; the
+Early-access badge owns the stage word). Then P3 narrative, P4 feedback backend + Cloud waitlist,
+P5 brand/product-registry, P6 testing floor.
 
 ### Open milestones (next pickups)
 
-- [ ] **(P2) Auto-rebuild on release.** CF Pages Deploy Hook POSTed from each app repo's release
-  workflow so a new tag rebuilds boojy.org without a manual redeploy. Until then, baked versions only
-  refresh on the next deploy.
+- [ ] **(P2, user) Create the CF Pages Deploy Hook + secret.** CF dashboard → boojy-web Pages
+  project → Settings → Builds & deployments → Deploy hooks → create one (e.g. `app-release`), then
+  `gh secret set CF_PAGES_DEPLOY_HOOK_URL --repo boojyorg/boojy-audio` (and `…/boojy-notes`) with
+  the hook URL. The workflows no-op until the secret exists. Then merge #74 / #25.
+- [ ] **(user, at v0.6 release) Fresh /audio screenshot.** Policy (2026-06-07): screenshots are
+  refreshed per **minor milestone** (v0.6, v0.7 …), never for patches — the current
+  `audio-screenshot-v0.5.2.png` stays until Audio v0.6 ships. Then capture + update the two `src`
+  references in `site.ts` + `audio/index.astro`.
 - [ ] **(P4, boojy-cloud — separate PR) Feedback Edge Function.** The homepage `Feedback.tsx` island
   is live but its backend isn't built: verify the Turnstile token → insert into a new `feedback`
   table + migration. Also needs a real Turnstile **site key** (swap the test key in `Feedback.tsx`)
