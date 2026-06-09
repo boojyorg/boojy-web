@@ -13,6 +13,9 @@
   the nav, mobile menu, and footer; `/design → /design/` redirect added.
 
 ### Improvements
+- **Canonical product order is now Audio · Notes · Design · Cloud** — apps by maturity, with the
+  Cloud service last (it's not an app). Applied to the desktop nav, mobile menu, footer, and the
+  homepage 2×2 product grid.
 - **`/design` meta line links to GitHub** — `boojy-design` is now public at
   `boojyorg/boojy-design`, so the hero meta line gained a GitHub link (matching `/audio`/`/notes`).
 - **`/design` CTA polish** — the "Open in Web" button now matches the Notes hero CTA (globe icon +
