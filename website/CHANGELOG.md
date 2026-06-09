@@ -13,6 +13,8 @@
   the nav, mobile menu, and footer; `/design → /design/` redirect added.
 
 ### Improvements
+- **`/design` meta line links to GitHub** — `boojy-design` is now public at
+  `boojyorg/boojy-design`, so the hero meta line gained a GitHub link (matching `/audio`/`/notes`).
 - **`/design` CTA polish** — the "Open in Web" button now matches the Notes hero CTA (globe icon +
   label) with a `v0.4.0 · Early access` meta line beneath it, and the Design wordmark in the hero is
   ~15% larger across all breakpoints. Removed the unused `CLOUD_DESCRIPTION` string from `site.ts`.
