@@ -13,6 +13,9 @@
   the nav, mobile menu, and footer; `/design → /design/` redirect added.
 
 ### Improvements
+- **`/design` CTA polish** — the "Open in Web" button now matches the Notes hero CTA (globe icon +
+  label) with a `v0.4.0 · Early access` meta line beneath it, and the Design wordmark in the hero is
+  ~15% larger across all breakpoints. Removed the unused `CLOUD_DESCRIPTION` string from `site.ts`.
 - **`/cloud` rebuilt as a free-only service page** — dropped the paid "Orbit" tier entirely
   (pricing cards, the "We believe in fair software" subscription-ethics section, and the paid FAQ
   removed). Now mirrors `/audio` + `/notes`: wordmark hero with a **white** nebula glow, a

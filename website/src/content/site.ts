@@ -102,9 +102,6 @@ export const PRODUCT_CARDS: ProductCardData[] = [
   },
 ];
 
-export const CLOUD_DESCRIPTION =
-  'Every Boojy app works offline, no account needed. Cloud already syncs Boojy Notes across your devices — free, up to 500 MB. Paid storage and Boojy Audio support are next.';
-
 /**
  * "Why Boojy" — the homepage's about block. The personal story (left column)
  * + the brand promises as a scannable checklist (right column). The promises
