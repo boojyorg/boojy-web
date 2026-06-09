@@ -1,90 +1,147 @@
 ---
-import { CLOUD_AUDIO_NOTE, CLOUD_ETHICS, CLOUD_INTRO, CLOUD_PRICING } from '../../content/cloud';
+import { CLOUD_AUDIO_NOTE, CLOUD_INTRO } from '../../content/cloud';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import '../../styles/cloud.css';
+
+// Cloud is a service, not an app — no screenshot. The hero shows the wordmark (over a
+// white glow so the black "Cloud" text reads on the dark hero), then a device-sync
+// diagram stands in for the app screenshot Audio/Notes use.
+const cloudFeatures = [
+  {
+    title: 'Cross-device sync',
+    detail: 'Edit on your laptop, pick up on your phone. Your notes follow you, automatically.',
+  },
+  {
+    title: 'Quick & quiet',
+    detail: 'Syncs in the background the instant you make a change. You never wait on it.',
+  },
+  {
+    title: 'Always optional',
+    detail: 'Every Boojy app works fully offline, no account needed. Turn Cloud on only if you want it.',
+  },
+];
+
+const cloudCurrent = [
+  { title: 'Syncs Boojy Notes', detail: 'live today, across web and desktop' },
+  { title: '500 MB, free', detail: 'no card, no subscription' },
+  { title: 'Encrypted', detail: 'in transit (TLS) and at rest' },
+  { title: 'No lock-in', detail: 'your notes stay plain Markdown on your device' },
+];
+
+const cloudComing = [
+  { title: 'Boojy Audio sync', detail: 'projects and settings across your devices' },
+  { title: 'More apps over time', detail: 'one account, every Boojy app' },
+];
 ---
 
 <BaseLayout path="/cloud/">
   <section class="cloud-hero">
+    <div class="cloud-hero-glow" aria-hidden="true" data-glow></div>
     <div class="container">
-      <h1 class="cloud-title">Boojy Cloud</h1>
-      <p class="cloud-subtitle">{CLOUD_INTRO}</p>
+      <div class="cloud-hero-title reveal">
+        <img src="/images/boojy-logo.svg" alt="Boojy" class="cloud-hero-logo" />
+        <img src="/images/cloud-text-logo.png" alt="Cloud" class="cloud-hero-product" />
+      </div>
+      <p class="cloud-tagline reveal reveal-d1">Your notes, on every device.</p>
+      <p class="cloud-subtitle reveal reveal-d1">{CLOUD_INTRO}</p>
+      <div class="cloud-cta reveal reveal-d2">
+        <a href="/notes/" class="btn btn-cloud">Get Boojy Notes →</a>
+      </div>
     </div>
   </section>
 
-  <section class="pricing-section">
+  <!-- Device-sync diagram — stands in for the app screenshot Audio/Notes show -->
+  <section class="cloud-sync-section">
     <div class="container">
-      <div class="pricing-cards">
+      <div class="cloud-sync-diagram reveal reveal-d3">
+        <div class="sync-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="18" height="12" x="3" y="4" rx="2" ry="2"></rect>
+            <path d="M2 20h20"></path>
+          </svg>
+          <span>Desktop</span>
+        </div>
+
+        <div class="sync-link" aria-hidden="true"><span class="sync-pulse"></span></div>
+
+        <div class="sync-hub">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+          </svg>
+        </div>
+
+        <div class="sync-link" aria-hidden="true"><span class="sync-pulse sync-pulse-rev"></span></div>
+
+        <div class="sync-node">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect>
+            <path d="M12 18h.01"></path>
+          </svg>
+          <span>Phone</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 value props -->
+  <section class="cloud-features-section">
+    <div class="container">
+      <div class="cloud-features-grid">
         {
-          CLOUD_PRICING.map((plan) => (
-            <div class:list={['pricing-card', { 'pricing-card-highlight': plan.highlight }]}>
-              <span
-                class:list={[
-                  'pricing-status',
-                  plan.status === 'live' ? 'pricing-status-live' : 'pricing-status-coming',
-                ]}
-              >
-                {plan.status === 'live' ? 'Live now' : 'Coming'}
-              </span>
-              <h2 class="pricing-name">{plan.name}</h2>
-              <div class="pricing-price">
-                <span class="pricing-amount">{plan.amount}</span>
-                <span class="pricing-period">{plan.period}</span>
-              </div>
-              <ul class="pricing-features">
-                {plan.features.map((feature) => (
-                  <li>
-                    <span class="check">✓</span> {feature}
-                  </li>
-                ))}
-              </ul>
-              {plan.cta ? (
-                <a
-                  href={plan.cta.href}
-                  class:list={[
-                    'btn',
-                    plan.highlight ? 'btn-primary' : 'btn-secondary',
-                    'pricing-btn',
-                  ]}
-                >
-                  {plan.cta.label}
-                </a>
-              ) : (
-                <button
-                  type="button"
-                  class:list={[
-                    'btn',
-                    plan.highlight ? 'btn-primary' : 'btn-secondary',
-                    'pricing-btn',
-                  ]}
-                  disabled
-                >
-                  Coming soon
-                </button>
-              )}
+          cloudFeatures.map((item) => (
+            <div class="cloud-feature-card reveal">
+              <h3>{item.title}</h3>
+              <p>{item.detail}</p>
             </div>
           ))
         }
       </div>
-      <p class="cloud-audio-note">{CLOUD_AUDIO_NOTE}</p>
     </div>
   </section>
 
-  <section class="ethics-section">
+  <!-- Current / Coming Soon checklist (mirrors /notes) -->
+  <section class="cloud-checklist-section">
     <div class="container">
-      <h2 class="section-title">We believe in fair software</h2>
-      <div class="ethics-grid">
-        {
-          CLOUD_ETHICS.map((item) => (
-            <div class="ethics-item">
-              <span class="ethics-check">✓</span>
-              <div>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </div>
-            </div>
-          ))
-        }
+      <div class="cloud-checklist-card reveal">
+        <h2>What's synced</h2>
+        <div class="cloud-checklist-columns">
+          <div class="cloud-checklist-col">
+            <h3>Current</h3>
+            <ul class="cloud-checklist-list">
+              {
+                cloudCurrent.map((item) => (
+                  <li>
+                    <svg class="cloud-checklist-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <span>
+                      <strong>{item.title}</strong> — {item.detail}
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="cloud-checklist-col cloud-checklist-col-soon">
+            <h3>Coming Soon</h3>
+            <ul class="cloud-checklist-list">
+              {
+                cloudComing.map((item) => (
+                  <li>
+                    <svg class="cloud-checklist-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                    <span>
+                      <strong>{item.title}</strong> — {item.detail}
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+        <p class="cloud-audio-note">{CLOUD_AUDIO_NOTE}</p>
       </div>
     </div>
   </section>

@@ -1,62 +1,20 @@
 /* ===================================
    BOOJY CLOUD - Page Styles
+   Free-only service page. Mirrors /audio + /notes: wordmark hero (white glow),
+   a device-sync diagram in place of the app screenshot, 3 value props, and a
+   Current / Coming Soon checklist. No pricing / subscription UI.
    =================================== */
 
-/* === Hero === */
+/* === Hero (mirrors /notes, white glow) === */
 .cloud-hero {
-  min-height: 40vh;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding-top: 100px;
-  padding-bottom: var(--spacing-lg);
-  background: var(--color-bg-dark);
+  padding-top: 120px;
+  padding-bottom: calc(var(--spacing-sm) + 20px);
   position: relative;
-  overflow: hidden;
-}
-
-/* Starfield */
-.cloud-hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image:
-    radial-gradient(1px 1px at 12% 18%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 28% 32%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
-    radial-gradient(2px 2px at 42% 10%, rgba(255, 255, 255, 0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 58% 42%, rgba(255, 255, 255, 0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 72% 28%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
-    radial-gradient(2px 2px at 88% 35%, rgba(255, 255, 255, 0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 18% 58%, rgba(255, 255, 255, 0.35) 0%, transparent 100%),
-    radial-gradient(1px 1px at 32% 68%, rgba(255, 255, 255, 0.45) 0%, transparent 100%),
-    radial-gradient(2px 2px at 55% 52%, rgba(255, 255, 255, 0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 68% 72%, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* Nebula glow — teal for Cloud */
-.cloud-hero::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 400px;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(164, 202, 206, 0.1) 0%,
-    rgba(164, 202, 206, 0.04) 40%,
-    transparent 70%
-  );
-  pointer-events: none;
-  z-index: 0;
-  filter: blur(60px);
+  z-index: 5;
 }
 
 .cloud-hero .container {
@@ -64,223 +22,387 @@
   z-index: 2;
 }
 
-.cloud-title {
-  font-size: 3rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-sm);
+/* White nebula glow — Audio is blue, Notes is grey, Cloud is white. Doubles as a
+   backlight so the wordmark's black "Cloud" text reads on the dark hero. */
+.cloud-hero-glow {
+  --glow-opacity: 0.8;
+  --glow-width: 1400px;
+  --glow-height: 994px;
+  --glow-color: 255, 255, 255;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 18px));
+  width: var(--glow-width);
+  height: var(--glow-height);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--glow-origin-opacity, var(--glow-opacity));
+  background: radial-gradient(
+    ellipse,
+    rgba(var(--glow-origin, var(--glow-color)), 0.25) 0%,
+    rgba(var(--glow-origin, var(--glow-color)), 0.12) 40%,
+    transparent 70%
+  );
+  view-transition-name: hero-glow;
+}
+
+.cloud-hero-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.cloud-hero-logo {
+  height: 4.55rem;
+  width: auto;
+  position: relative;
+  left: -2px;
+}
+
+.cloud-hero-product {
+  height: 3.2rem;
+  width: auto;
+  position: relative;
+  top: -2px;
+  left: 6px;
+}
+
+.cloud-tagline {
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--color-text);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-sm);
+  line-height: 1.5;
 }
 
 .cloud-subtitle {
-  font-size: 1.35rem;
+  font-size: 1.05rem;
   color: var(--color-text-light);
   font-weight: 400;
-  max-width: 500px;
-  margin: 0 auto;
+  max-width: 540px;
+  margin: 0 auto var(--spacing-lg);
   line-height: 1.6;
 }
 
-/* === Pricing Cards === */
-.pricing-section {
-  background: var(--color-bg);
-  padding: var(--spacing-3xl) 0;
+.cloud-cta {
+  display: flex;
+  justify-content: center;
 }
 
-.pricing-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-xl);
-  max-width: 700px;
-  margin: 0 auto;
+/* Translucent glass button (matches the Notes "Open in Web" CTA) */
+.btn-cloud {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  color: #e8eaf0;
+}
+.btn-cloud:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
 }
 
-.pricing-card {
+/* === Device-sync diagram (screenshot stand-in) === */
+.cloud-sync-section {
+  padding: 10px 0 var(--spacing-lg);
   position: relative;
-  background: rgba(51, 51, 51, 0.6);
-  backdrop-filter: blur(10px);
+  z-index: 4;
+}
+
+.cloud-sync-diagram {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.75rem, 4vw, 2.5rem);
+  max-width: 620px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+  background: var(--color-bg-card-dark, #0c0e1a);
+  border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
-  padding: var(--spacing-2xl);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sync-node {
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-text-light);
 }
 
-/* Per-plan status pill — "Live now" (Free) vs "Coming" (Orbit). */
-.pricing-status {
-  position: absolute;
-  top: var(--spacing-md);
-  right: var(--spacing-md);
-  padding: 0.2rem 0.6rem;
-  border-radius: 999px;
-  font-size: 0.65rem;
-  font-weight: 700;
+.sync-node svg {
+  width: 44px;
+  height: 44px;
+}
+
+.sync-node span {
+  font-size: 0.72rem;
+  font-weight: 600;
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.pricing-status-live {
-  color: #8fe3a8;
-  background: rgba(95, 200, 130, 0.14);
-  border: 1px solid rgba(95, 200, 130, 0.4);
-}
-
-.pricing-status-coming {
-  color: var(--color-text-light);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--color-border);
-}
-
-.pricing-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-}
-
-.pricing-card-highlight {
-  border-color: rgba(164, 202, 206, 0.3);
-}
-
-.pricing-card-highlight:hover {
-  border-color: rgba(164, 202, 206, 0.5);
-  box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(164, 202, 206, 0.1);
-}
-
-.pricing-name {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: var(--spacing-md);
-}
-
-.pricing-price {
-  margin-bottom: var(--spacing-xl);
-  display: flex;
-  align-items: baseline;
-  gap: 0.35rem;
-}
-
-.pricing-amount {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--color-primary);
-}
-
-.pricing-period {
-  font-size: 1rem;
-  color: var(--color-text-light);
-}
-
-.pricing-features {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 var(--spacing-xl);
-  flex-grow: 1;
-}
-
-.pricing-features li {
-  padding: var(--spacing-xs) 0;
-  color: var(--color-text-light);
-  font-size: 0.95rem;
+/* Central cloud hub — white, glowing */
+.sync-hub {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  justify-content: center;
+  color: #fff;
+  filter: drop-shadow(0 0 14px rgba(255, 255, 255, 0.35));
 }
 
-.pricing-features .check {
-  color: var(--color-accent);
-  font-weight: 700;
-  flex-shrink: 0;
+.sync-hub svg {
+  width: 64px;
+  height: 64px;
 }
 
-.pricing-btn {
-  width: 100%;
-  text-align: center;
+/* Connecting line + a dot that travels along it to suggest sync flow */
+.sync-link {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  max-width: 110px;
+  background: linear-gradient(90deg, transparent, rgba(164, 202, 206, 0.5), transparent);
+  border-radius: 2px;
 }
 
-.pricing-btn-current {
-  opacity: 0.5;
-  pointer-events: none;
-  cursor: default;
+.sync-pulse {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+  animation: sync-travel 2.4s linear infinite;
 }
 
-/* "Coming to Boojy Audio next." — quiet line under the plans. */
-.cloud-audio-note {
-  margin: var(--spacing-xl) auto 0;
-  text-align: center;
-  color: var(--color-text-light);
-  font-size: 0.95rem;
+.sync-pulse-rev {
+  animation-direction: reverse;
+  animation-delay: 1.2s;
 }
 
-/* === Ethics Section === */
-.ethics-section {
-  background: var(--color-bg-dark);
-  padding: var(--spacing-3xl) 0;
+@keyframes sync-travel {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
 }
 
-.ethics-grid {
+@media (prefers-reduced-motion: reduce) {
+  .sync-pulse {
+    animation: none;
+    left: 50%;
+  }
+}
+
+/* === Feature cards (mirrors /notes value-prop boxes) === */
+.cloud-features-section {
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.cloud-features-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-xl);
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
-.ethics-item {
-  display: flex;
-  gap: var(--spacing-md);
-  align-items: flex-start;
+.cloud-feature-card {
+  background: var(--color-bg-card-dark, #0c0e1a);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+  text-align: center;
 }
 
-.ethics-check {
-  color: var(--color-accent);
-  font-size: 1.25rem;
-  font-weight: 700;
-  flex-shrink: 0;
-  margin-top: 0.1rem;
+.cloud-feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(164, 202, 206, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.ethics-item h3 {
-  font-size: 1rem;
+.cloud-feature-card h3 {
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-primary);
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.5rem;
 }
 
-.ethics-item p {
+.cloud-feature-card p {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* === Current / Coming Soon checklist (mirrors /notes) === */
+.cloud-checklist-section {
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
+  position: relative;
+  z-index: 1;
+}
+
+.cloud-checklist-card {
+  background: var(--color-bg-card-dark, #0c0e1a);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.cloud-checklist-card h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.cloud-checklist-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  position: relative;
+}
+
+.cloud-checklist-columns::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.cloud-checklist-col h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+.cloud-checklist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cloud-checklist-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.cloud-checklist-list strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.cloud-checklist-check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: #a4cace; /* cloud teal = shipped */
+}
+
+.cloud-checklist-col-soon .cloud-checklist-check {
+  color: #ffa500; /* orange = coming soon */
+}
+
+/* "Coming to Boojy Audio next." — quiet line under the checklist */
+.cloud-audio-note {
+  margin: var(--spacing-lg) auto 0;
+  text-align: center;
   color: var(--color-text-light);
   font-size: 0.9rem;
-  line-height: 1.5;
 }
 
 /* === Responsive === */
 @media (max-width: 768px) {
   .cloud-hero {
-    min-height: 35vh;
-    padding-top: 80px;
+    padding-top: 90px;
   }
 
-  .cloud-title {
-    font-size: 2.25rem;
+  .cloud-hero-logo {
+    height: 3.575rem;
   }
 
-  .pricing-cards {
+  .cloud-hero-product {
+    height: 2.3rem;
+  }
+
+  .cloud-tagline {
+    font-size: 1.15rem;
+  }
+
+  .cloud-features-grid {
     grid-template-columns: 1fr;
-    max-width: 400px;
+    gap: var(--spacing-lg);
+    max-width: 440px;
   }
 
-  .ethics-grid {
+  .cloud-checklist-columns {
     grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .cloud-checklist-columns::before {
+    display: none;
+  }
+
+  .sync-node svg {
+    width: 34px;
+    height: 34px;
+  }
+
+  .sync-hub svg {
+    width: 50px;
+    height: 50px;
   }
 }
 
 @media (max-width: 480px) {
-  .cloud-title {
-    font-size: 1.85rem;
+  .cloud-tagline {
+    font-size: 1.05rem;
   }
 
   .cloud-subtitle {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
+  }
+
+  .cloud-sync-diagram {
+    padding: var(--spacing-lg) var(--spacing-md);
   }
 }

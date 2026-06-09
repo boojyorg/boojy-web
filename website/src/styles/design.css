@@ -1,10 +1,12 @@
 /* ===================================
-   BOOJY NOTES - Page Styles
-   Canvas starfield + teal accent
+   BOOJY DESIGN - Page Styles
+   Mirrors /audio: wordmark hero (amber glow), app screenshot, 3 value props,
+   and a Current / Coming Soon checklist. Web-first CTA (no installers — it runs
+   in the browser at design.boojy.org).
    =================================== */
 
 /* === Hero === */
-.notes-hero {
+.design-hero {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,12 +17,12 @@
   z-index: 5;
 }
 
-.notes-hero .container {
+.design-hero .container {
   position: relative;
   z-index: 2;
 }
 
-.notes-hero-title {
+.design-hero-title {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -28,26 +30,28 @@
   margin-bottom: var(--spacing-md);
 }
 
-.notes-hero-logo {
+.design-hero-logo {
   height: 4.55rem;
   width: auto;
   position: relative;
   left: -2px;
 }
 
-.notes-hero-product {
-  height: 3.086rem;
+.design-hero-product {
+  height: 3.9rem;
   width: auto;
   position: relative;
-  top: -5px;
-  left: 8px;
+  top: -1px;
+  left: 7px;
 }
 
-.notes-hero-glow {
-  --glow-opacity: 0.75;
+/* Amber nebula glow — Audio is blue, Notes grey, Cloud white, Design amber
+   (matches the Design wordmark badge #E89940). */
+.design-hero-glow {
+  --glow-opacity: 0.9;
   --glow-width: 1400px;
   --glow-height: 994px;
-  --glow-color: 218, 240, 244;
+  --glow-color: 232, 153, 64;
 
   position: absolute;
   top: 50%;
@@ -68,7 +72,7 @@
   view-transition-name: hero-glow;
 }
 
-.notes-tagline {
+.design-tagline {
   font-size: 1.35rem;
   font-weight: 400;
   color: var(--color-text);
@@ -77,7 +81,7 @@
   line-height: 1.5;
 }
 
-.notes-cta {
+.design-cta {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -86,25 +90,25 @@
   z-index: 2;
 }
 
-/* Notes web CTA — translucent glass (matches the former download button's look) */
-.btn-web-notes {
+/* Translucent glass button (matches the Notes / Cloud web CTAs) */
+.btn-design {
   border: 1px solid rgba(255, 255, 255, 0.15);
   background: rgba(255, 255, 255, 0.1);
   color: #e8eaf0;
 }
-.btn-web-notes:hover {
+.btn-design:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-1px);
 }
 
 /* === Screenshot === */
-.notes-screenshot-section {
+.design-screenshot-section {
   padding: 10px 0 var(--spacing-lg);
   position: relative;
   z-index: 4;
 }
 
-.notes-screenshot-wrapper {
+.design-screenshot-wrapper {
   max-width: 900px;
   margin: 0 auto;
   border-radius: var(--border-radius-lg);
@@ -113,20 +117,20 @@
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
 }
 
-.notes-screenshot {
+.design-screenshot {
   width: 100%;
   height: auto;
   display: block;
 }
 
-/* === Features Grid === */
-.notes-features-section {
-  padding: var(--spacing-lg) 0 var(--spacing-xl);
+/* === Value-prop Cards === */
+.design-cards-section {
+  padding: var(--spacing-lg) 0 0;
   position: relative;
   z-index: 1;
 }
 
-.notes-features-grid {
+.design-features-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-xl);
@@ -134,8 +138,8 @@
   margin: 0 auto;
 }
 
-.notes-feature-card {
-  background: var(--notes-card-bg, #040412);
+.design-feature-card {
+  background: #040412;
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-xl);
   border: 1px solid var(--color-border);
@@ -143,44 +147,43 @@
   text-align: center;
 }
 
-.notes-feature-card:hover {
+.design-feature-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(213, 229, 170, 0.3);
+  border-color: rgba(232, 153, 64, 0.3);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.notes-feature-icon {
+.design-feature-icon {
   display: block;
   margin: 0 auto var(--spacing-sm);
   width: 28px;
   height: 28px;
-  color: var(--color-notes);
+  color: var(--color-design);
 }
 
-.notes-feature-card h3 {
+.design-feature-card h3 {
   font-size: 1.1rem;
   font-weight: 700;
   color: var(--color-text);
   margin-bottom: var(--spacing-xs);
 }
 
-.notes-feature-card p {
+.design-feature-card p {
   color: var(--color-text-light);
   font-size: 0.95rem;
   line-height: 1.6;
-  position: relative;
-  z-index: 1;
 }
 
-/* === Current / Coming Soon checklist (mirrors /audio, teal checks) === */
-.notes-checklist-section {
+/* === Features Checklist === */
+.design-features-section {
   padding: var(--spacing-lg) 0 var(--spacing-xl);
   position: relative;
   z-index: 1;
 }
 
-.notes-checklist-card {
-  background: var(--notes-card-bg, #040412);
+/* One shared card: "Features" title, then Current / Coming Soon columns inside */
+.design-features-card {
+  background: #040412;
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-xl);
   border: 1px solid var(--color-border);
@@ -188,7 +191,7 @@
   margin: 0 auto;
 }
 
-.notes-checklist-card h2 {
+.design-features-card h2 {
   font-size: 1.75rem;
   font-weight: 700;
   color: var(--color-text);
@@ -196,15 +199,15 @@
   text-align: center;
 }
 
-.notes-checklist-columns {
+.design-features-columns {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-xl);
   position: relative;
 }
 
-/* Hairline divider centred in the gap between the two columns */
-.notes-checklist-columns::before {
+/* White hairline divider, centred in the gap between the two columns */
+.design-features-columns::before {
   content: "";
   position: absolute;
   left: 50%;
@@ -214,7 +217,7 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
-.notes-checklist-col h3 {
+.design-features-col h3 {
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -224,7 +227,7 @@
   text-align: center;
 }
 
-.notes-checklist-list {
+.design-feature-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -233,7 +236,7 @@
   gap: 0.85rem;
 }
 
-.notes-checklist-list li {
+.design-feature-list li {
   display: flex;
   align-items: flex-start;
   gap: 0.65rem;
@@ -242,81 +245,81 @@
   line-height: 1.5;
 }
 
-.notes-checklist-list strong {
+.design-feature-list strong {
   color: var(--color-text);
   font-weight: 600;
 }
 
-.notes-checklist-check {
+.design-feature-check {
   flex-shrink: 0;
   width: 18px;
   height: 18px;
   margin-top: 2px;
-  color: var(--color-notes); /* teal = shipped */
+  color: #4ade80; /* green = shipped */
 }
 
-/* Coming-soon column — orange arrows instead of teal checks */
-.notes-checklist-col-soon .notes-checklist-check {
+/* Coming-soon column — same card, orange arrows instead of green checks */
+.design-features-col-soon .design-feature-check {
   color: #ffa500;
 }
 
 /* === Responsive === */
 @media (max-width: 768px) {
-  .notes-hero {
+  .design-hero {
     padding-top: 90px;
   }
 
-  .notes-hero-logo {
+  .design-hero-logo {
     height: 3.575rem;
   }
 
-  .notes-hero-product {
-    height: 2.15rem;
+  .design-hero-product {
+    height: 2.4rem;
   }
 
-  .notes-tagline {
+  .design-tagline {
     font-size: 1.15rem;
   }
 
-  .notes-features-grid {
+  .design-features-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--spacing-lg);
   }
 
-  .notes-checklist-columns {
+  .design-features-columns {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
   }
 
-  /* Divider is vertical between two columns — drop it when they stack */
-  .notes-checklist-columns::before {
+  /* Stacked columns: no vertical divider */
+  .design-features-columns::before {
     display: none;
   }
 }
 
 @media (max-width: 480px) {
-  .notes-hero-title {
+  .design-hero-title {
     flex-direction: column;
   }
 
-  .notes-hero-logo {
+  .design-hero-logo {
     height: 2.925rem;
   }
 
-  .notes-hero-product {
-    height: 1.8rem;
+  .design-hero-product {
+    height: 2rem;
   }
 
-  .notes-hero-glow {
+  .design-hero-glow {
     --glow-width: 300px;
     --glow-height: 200px;
   }
 
-  .notes-tagline {
+  .design-tagline {
     font-size: 1rem;
   }
 
-  .notes-features-grid {
+  .design-features-grid {
     grid-template-columns: 1fr;
     max-width: 400px;
     margin: 0 auto;

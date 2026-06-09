@@ -22,8 +22,8 @@ P3 narrative, P4 feedback backend + Cloud waitlist, P5 brand/product-registry, P
   is live but its backend isn't built: verify the Turnstile token → insert into a new `feedback`
   table + migration. Also needs a real Turnstile **site key** (swap the test key in `Feedback.tsx`)
   + **secret key** on the Edge Function (both via Cloudflare).
-- [ ] **(user) Drop the Design screenshot** at `website/public/images/boojy-design-screenshot.png`
-  (the Design product card is a broken image until then; CI link-check would 404 it).
+- [x] **(user) Drop the Design screenshot** — landed as
+  `website/public/images/design-screenshot-v0.4.png` with the `/design` page (PR #16).
 - [ ] **(user) Google Search Console.** Domain property added + verifying. Submit the **full-URL**
   sitemap `https://boojy.org/sitemap-index.xml` (a Domain property rejects the relative path), then
   Request Indexing for `/`, `/audio/`, `/notes/`, `/cloud/`, `/privacy/`, `/terms/`.

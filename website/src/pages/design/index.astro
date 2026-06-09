@@ -1,0 +1,213 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import '../../styles/design.css';
+
+// Feature checklist — mirrors boojy-design's FEATURE_TRACKER for v0.4.0 (the MVP).
+// Current = ✅ shipped rows; Coming Soon = the ⬜ planned rows (lasso, blend modes,
+// text formatting, etc.). 6 + 6 so the two columns match in height. Keep these honest:
+// they're a public commitment, so only list what's actually shipped / genuinely planned.
+const features = [
+  { title: 'Paint & shapes', detail: 'brush, eraser, rectangles & ellipses' },
+  { title: 'Fill & eyedropper', detail: 'flood fill with tolerance, sample any colour' },
+  { title: 'Layers', detail: 'opacity, reorder, duplicate, live thumbnails' },
+  { title: 'Live text', detail: 'place and re-edit, font size & colour' },
+  { title: 'Select & transform', detail: 'marquee, move, rotate, mirror, flip' },
+  { title: 'Files & undo', detail: '.design save/open, PNG export, image import, full undo/redo' },
+];
+
+const comingSoon = [
+  { title: 'Lasso & elliptical select', detail: 'freehand and round selections' },
+  { title: 'Blend modes', detail: 'multiply, screen, overlay' },
+  { title: 'Font family & alignment', detail: 'pick typefaces, left/center/right' },
+  { title: 'Multi-line text', detail: 'wrapping across lines' },
+  { title: 'Paint masking', detail: 'confine strokes to a selection' },
+  { title: 'Skew & shear', detail: 'slant a layer non-destructively' },
+];
+---
+
+<BaseLayout path="/design/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Boojy Design',
+      applicationCategory: 'DesignApplication',
+      operatingSystem: 'Web',
+      url: 'https://boojy.org/design/',
+      description:
+        'A free image editor that runs in your browser. Paint, shapes, layers, live text, and export — no install, no account.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    })}
+  />
+  <section class="design-hero">
+    <div class="design-hero-glow" aria-hidden="true" data-glow></div>
+    <div class="container">
+      <div class="design-hero-title reveal">
+        <img src="/images/boojy-logo.svg" alt="Boojy" class="design-hero-logo" />
+        <img src="/images/design-text-logo.png" alt="Design" class="design-hero-product" />
+      </div>
+      <p class="design-tagline reveal reveal-d1">Paint, edit, and design — right in your browser.</p>
+      <div class="design-cta reveal reveal-d2">
+        <div class="hero-buttons">
+          <a href="https://design.boojy.org" target="_blank" rel="noreferrer" class="btn btn-design">
+            <span class="btn-label">
+              <span class="web-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                  <path d="M2 12h20"></path>
+                </svg>
+              </span>
+              Open in Web
+            </span>
+          </a>
+        </div>
+        <p class="hero-meta"><span>v0.4.0</span> · Early access</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="design-screenshot-section">
+    <div class="container">
+      <div class="design-screenshot-wrapper reveal reveal-d3">
+        <img
+          src="/images/design-screenshot-v0.4.png"
+          alt="Boojy Design"
+          class="design-screenshot"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="design-cards-section">
+    <div class="container">
+      <div class="design-features-grid">
+        <div class="design-feature-card reveal">
+          <svg
+            class="design-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m9 12 2 2 4-4"></path>
+          </svg>
+          <h3>Completely Free</h3>
+          <p>No subscriptions, no paywalls. Runs in your browser.</p>
+        </div>
+        <div class="design-feature-card reveal reveal-d1">
+          <svg
+            class="design-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m12 2 9 4.9V17L12 22 3 17V6.9Z"></path>
+            <path d="m3 7 9 5 9-5"></path>
+            <path d="M12 22V12"></path>
+          </svg>
+          <h3>Layers & Live Text</h3>
+          <p>Non-destructive editing. Nothing's baked in.</p>
+        </div>
+        <div class="design-feature-card reveal reveal-d2">
+          <svg
+            class="design-feature-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <path d="M7 10l5 5 5-5"></path>
+            <path d="M12 15V3"></path>
+          </svg>
+          <h3>Own Your Files</h3>
+          <p>Save .design, export PNG, bring your own images.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="design-features-section">
+    <div class="container">
+      <div class="design-features-card reveal">
+        <h2>Features</h2>
+        <div class="design-features-columns">
+          <div class="design-features-col">
+            <h3>Current</h3>
+            <ul class="design-feature-list">
+            {
+              features.map((item) => (
+                <li>
+                  <svg
+                    class="design-feature-check"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 6 9 17l-5-5" />
+                  </svg>
+                  <span>
+                    <strong>{item.title}</strong> — {item.detail}
+                  </span>
+                </li>
+              ))
+            }
+            </ul>
+          </div>
+          <div class="design-features-col design-features-col-soon">
+            <h3>Coming Soon</h3>
+            <ul class="design-feature-list">
+            {
+              comingSoon.map((item) => (
+                <li>
+                  <svg
+                    class="design-feature-check"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                  <span>
+                    <strong>{item.title}</strong> — {item.detail}
+                  </span>
+                </li>
+              ))
+            }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

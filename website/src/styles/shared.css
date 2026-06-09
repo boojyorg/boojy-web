@@ -169,6 +169,11 @@ body {
   color: #ffffff;
 }
 
+.nav-product[data-product="design"]:hover,
+.nav-product[data-product="design"].active {
+  color: #e89940;
+}
+
 .nav-product.active {
   font-weight: 700;
 }
@@ -294,6 +299,11 @@ body {
 .nav-mobile-link[data-product="cloud"]:hover,
 .nav-mobile-link[data-product="cloud"].active {
   color: #ffffff;
+}
+
+.nav-mobile-link[data-product="design"]:hover,
+.nav-mobile-link[data-product="design"].active {
+  color: #e89940;
 }
 
 .nav-mobile-link:hover {

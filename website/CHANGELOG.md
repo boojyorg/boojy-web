@@ -2,7 +2,46 @@
 
 ## Unreleased
 
+### Features
+- **`/design` page added + Boojy Design promoted to live** — Boojy Design is now live at
+  **design.boojy.org**, so it gets a real page mirroring `/audio`: wordmark hero with an **amber**
+  nebula glow (matching the wordmark badge), the v0.4.0 screenshot, three value props (free in your
+  browser / layers & live text / own your files), an "Open in Web → design.boojy.org" CTA, and a
+  Current / Coming Soon checklist sourced from `boojy-design`'s FEATURE_TRACKER (6 shipped + 6
+  planned). The homepage hub card flips from "Coming soon" (muted, no link) to an **Early access**
+  card linking to `/design/`, with the screenshot replacing the placeholder. Design now appears in
+  the nav, mobile menu, and footer; `/design → /design/` redirect added.
+
 ### Improvements
+- **`/design` CTA polish** — the "Open in Web" button now matches the Notes hero CTA (globe icon +
+  label) with a `v0.4.0 · Early access` meta line beneath it, and the Design wordmark in the hero is
+  ~15% larger across all breakpoints. Removed the unused `CLOUD_DESCRIPTION` string from `site.ts`.
+- **`/cloud` rebuilt as a free-only service page** — dropped the paid "Orbit" tier entirely
+  (pricing cards, the "We believe in fair software" subscription-ethics section, and the paid FAQ
+  removed). Now mirrors `/audio` + `/notes`: wordmark hero with a **white** nebula glow, a
+  device-sync diagram standing in for the app screenshot, three value props (cross-device sync /
+  quick & quiet / always optional), and a Current / Coming Soon checklist. Cleaned the Orbit/
+  subscription language out of `cloud.ts`, the account page meta, and the June news post. _(Deferred:
+  legal Terms "Cloud Subscriptions" section + the account-dashboard tier UI, which touch the live
+  Stripe/Supabase billing.)_
+- **New Boojy Cloud wordmark** — recoloured the cloud glyph from blue to white (text stays black).
+- **`/notes` Features checklist + Cloud card removed** — added a Current / Coming Soon two-column
+  checklist below the three value-prop boxes (mirrors `/audio`, teal checks). Current lists the six
+  shipped pillars; Coming Soon lists Linux support, tablet/touch layout, and smoother editing. Removed
+  the Boojy Cloud card from the page, and fixed the stale "Offline first" copy — sync is live, so it
+  now reads "Works offline, no account needed. Optional cloud sync across your devices."
+- **`/notes` CTA is now web-first** — removed the primary "Download" button; "Open in Web" is the
+  single CTA, restyled to the translucent glass look. Desktop installers (macOS, Windows) move into
+  the "Other platforms" dropdown as direct download links alongside the GitHub all-releases link,
+  mirroring the `/audio` panel. OS detection now only highlights the visitor's platform row.
+- **Homepage hero copy** — tagline now "Your creative space." / "Free, open source software. Made
+  by Tyr." (was "a creative suite" / "Free creative software. Made by Tyr."). Plays on the cosmic
+  backdrop and surfaces the open-source angle.
+- **New Boojy Notes wordmark** — refreshed art, and the file renamed `Notes-text-logo.png` →
+  `notes-text-logo.png` (lowercase, matching the other wordmarks). References updated in `site.ts`
+  and the `/notes` hero; the old capitalised name would 404 on Cloudflare's case-sensitive build.
+- **New Boojy Audio wordmark** — refreshed `audio-text-logo.png` on the hub product card and the
+  `/audio` hero. Height-driven sizing unchanged, so no layout shift.
 - **`/audio` page refresh for v0.5.2** — removed the disabled "Open in Web" button (the app
   doesn't run in the browser yet) and the Boojy Cloud card; added a two-column
   Features / Coming Soon checklist (6 + 6, blue checks vs orange arrows) below the three

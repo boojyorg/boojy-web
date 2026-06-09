@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePlatformsPanel } from '../hooks/usePlatformsPanel';
-import { detectPlatform, type PlatformId, platformIconHtml } from '../lib/platform';
+import { detectPlatform, type PlatformId } from '../lib/platform';
 import { GitHubPlatformIcon, PlatformIcon } from './PlatformIcons';
 import { WebIcon } from './WebIcon';
 
@@ -30,18 +30,14 @@ interface Props {
 }
 
 /**
- * Interactive download CTA for /notes/. Server-renders a universal fallback (GitHub
- * releases) — so no-JS / unmatched-platform (e.g. Windows-on-ARM, Linux) visitors are never
- * handed the wrong-OS binary — then the client detects the OS on mount and swaps in a direct
- * download. `showFallback` is derived from the href sentinel (`'#'` = no direct download yet).
+ * Web-first CTA for /notes/. The primary action is "Open in Web" (notes.boojy.org); the
+ * desktop installers live in the "Other platforms" dropdown as direct, version-stamped
+ * download links plus a GitHub all-releases link — mirroring the /audio CTA's panel. The
+ * client detects the OS on mount only to highlight the visitor's own platform row.
  */
 export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
   const { panelRef, toggleRef, toggle, close, panelClassName } = usePlatformsPanel();
-
-  const [downloadHref, setDownloadHref] = useState('#');
-  const [selectedPlatform, setSelectedPlatform] = useState<string>('');
-  const [downloadIconHtml, setDownloadIconHtml] = useState(platformIconHtml(null));
-  const showFallback = downloadHref === '#';
+  const [detected, setDetected] = useState<string>('');
 
   // Real (version-stamped) asset URLs from the build-time release fetch; if that failed,
   // fall back to the releases page so no affordance is ever a dead link.
@@ -52,24 +48,9 @@ export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
     { id: 'linux', label: 'Linux', name: 'Linux', disabled: true, pill: 'Coming soon' },
   ];
 
-  const selectPlatform = (platform: NotesPlatform) => {
-    if (platform.disabled || !platform.href) return;
-    setDownloadHref(platform.href);
-    setSelectedPlatform(platform.id);
-    setDownloadIconHtml(platformIconHtml(platform.id as PlatformId));
-    close();
-  };
-
   useEffect(() => {
-    const detected = normalize(detectPlatform());
-    const href =
-      detected === 'mac-arm64' ? macArm64Url : detected === 'windows-x64' ? winX64Url : null;
-    if (detected && href) {
-      setDownloadHref(href);
-      setSelectedPlatform(detected);
-      setDownloadIconHtml(platformIconHtml(detected));
-    }
-  }, [macArm64Url, winX64Url]);
+    setDetected(normalize(detectPlatform()) ?? '');
+  }, []);
 
   return (
     <div className="notes-cta reveal reveal-d2">
@@ -87,26 +68,6 @@ export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
             Open in Web
           </span>
         </a>
-        {!showFallback ? (
-          <div id="download-detected">
-            <a className="btn btn-download" href={downloadHref}>
-              <span className="btn-label">
-                <span
-                  className="download-icon"
-                  // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted local SVG string
-                  dangerouslySetInnerHTML={{ __html: downloadIconHtml }}
-                />
-                <span>Download</span>
-              </span>
-            </a>
-          </div>
-        ) : (
-          <div id="download-fallback">
-            <a href={RELEASES_URL} target="_blank" rel="noreferrer" className="btn btn-download">
-              <span className="btn-label">Download</span>
-            </a>
-          </div>
-        )}
       </div>
       <p className="hero-meta">
         <span>{versionText}</span> ·{' '}
@@ -116,30 +77,29 @@ export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
       </p>
       <div className={panelClassName} ref={panelRef}>
         {platforms.map((platform) =>
-          'disabled' in platform && platform.disabled ? (
+          platform.disabled ? (
             <span
               key={platform.id}
-              className={`platform-item platform-disabled${selectedPlatform === platform.id ? ' selected' : ''}`}
+              className="platform-item platform-disabled"
               data-platform={platform.id}
             >
               <PlatformIcon platform={platform.id} />
               <span>
-                <strong>{platform.name}</strong> {platform.label}{' '}
-                {'pill' in platform && platform.pill ? (
+                <strong>{platform.name}</strong>{' '}
+                {platform.pill ? (
                   <span className="platform-pill">{platform.pill}</span>
-                ) : null}
+                ) : (
+                  platform.label
+                )}
               </span>
             </span>
           ) : (
             <a
               key={platform.id}
-              href="#"
-              className={`platform-item${selectedPlatform === platform.id ? ' selected' : ''}`}
+              href={platform.href}
+              className={`platform-item${detected === platform.id ? ' selected' : ''}`}
               data-platform={platform.id}
-              onClick={(event) => {
-                event.preventDefault();
-                selectPlatform(platform);
-              }}
+              onClick={close}
             >
               <PlatformIcon platform={platform.id} />
               <span>

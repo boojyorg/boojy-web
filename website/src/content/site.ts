@@ -72,7 +72,7 @@ export const PRODUCT_CARDS: ProductCardData[] = [
       src: '/images/notes-screenshot-v0.1.png',
       alt: 'Boojy Notes interface',
     },
-    logo: { src: '/images/Notes-text-logo.png', alt: 'Boojy Notes' },
+    logo: { src: '/images/notes-text-logo.png', alt: 'Boojy Notes' },
     name: 'Boojy Notes',
     description: 'A calm space for your thoughts. Write in markdown. Own your files.',
     stage: 'early-access',
@@ -89,16 +89,18 @@ export const PRODUCT_CARDS: ProductCardData[] = [
   },
   {
     id: 'design',
-    visual: { kind: 'placeholder' },
+    href: '/design/',
+    visual: {
+      kind: 'image',
+      src: '/images/design-screenshot-v0.4.png',
+      alt: 'Boojy Design interface',
+    },
     logo: { src: '/images/design-text-logo.png', alt: 'Boojy Design' },
     name: 'Boojy Design',
     description: 'An image editor in the browser. Draw, edit, and design.',
-    comingSoon: true,
+    stage: 'early-access',
   },
 ];
-
-export const CLOUD_DESCRIPTION =
-  'Every Boojy app works offline, no account needed. Cloud already syncs Boojy Notes across your devices — free, up to 500 MB. Paid storage and Boojy Audio support are next.';
 
 /**
  * "Why Boojy" — the homepage's about block. The personal story (left column)
