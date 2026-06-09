@@ -3,6 +3,23 @@
 ## Unreleased
 
 ### Improvements
+- **`/notes` Features checklist + Cloud card removed** — added a Current / Coming Soon two-column
+  checklist below the three value-prop boxes (mirrors `/audio`, teal checks). Current lists the six
+  shipped pillars; Coming Soon lists Linux support, tablet/touch layout, and smoother editing. Removed
+  the Boojy Cloud card from the page, and fixed the stale "Offline first" copy — sync is live, so it
+  now reads "Works offline, no account needed. Optional cloud sync across your devices."
+- **`/notes` CTA is now web-first** — removed the primary "Download" button; "Open in Web" is the
+  single CTA, restyled to the translucent glass look. Desktop installers (macOS, Windows) move into
+  the "Other platforms" dropdown as direct download links alongside the GitHub all-releases link,
+  mirroring the `/audio` panel. OS detection now only highlights the visitor's platform row.
+- **Homepage hero copy** — tagline now "Your creative space." / "Free, open source software. Made
+  by Tyr." (was "a creative suite" / "Free creative software. Made by Tyr."). Plays on the cosmic
+  backdrop and surfaces the open-source angle.
+- **New Boojy Notes wordmark** — refreshed art, and the file renamed `Notes-text-logo.png` →
+  `notes-text-logo.png` (lowercase, matching the other wordmarks). References updated in `site.ts`
+  and the `/notes` hero; the old capitalised name would 404 on Cloudflare's case-sensitive build.
+- **New Boojy Audio wordmark** — refreshed `audio-text-logo.png` on the hub product card and the
+  `/audio` hero. Height-driven sizing unchanged, so no layout shift.
 - **`/audio` page refresh for v0.5.2** — removed the disabled "Open in Web" button (the app
   doesn't run in the browser yet) and the Boojy Cloud card; added a two-column
   Features / Coming Soon checklist (6 + 6, blue checks vs orange arrows) below the three

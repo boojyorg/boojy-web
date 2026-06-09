@@ -72,7 +72,7 @@ export const PRODUCT_CARDS: ProductCardData[] = [
       src: '/images/notes-screenshot-v0.1.png',
       alt: 'Boojy Notes interface',
     },
-    logo: { src: '/images/Notes-text-logo.png', alt: 'Boojy Notes' },
+    logo: { src: '/images/notes-text-logo.png', alt: 'Boojy Notes' },
     name: 'Boojy Notes',
     description: 'A calm space for your thoughts. Write in markdown. Own your files.',
     stage: 'early-access',

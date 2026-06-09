@@ -1,7 +1,5 @@
 ---
 import { NotesDownload } from '../../components/NotesDownload';
-import ProductCloudCard from '../../components/ProductCloudCard.astro';
-import { CLOUD_DESCRIPTION } from '../../content/site';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { findAssetUrl, getLatestRelease } from '../../lib/github-release';
 import '../../styles/notes.css';
@@ -13,6 +11,26 @@ import '../../styles/notes.css';
 const release = await getLatestRelease('boojyorg/boojy-notes', { fallbackVersion: 'v0.3.0 Beta' });
 const macArm64Url = findAssetUrl(release.assets, /arm64\.dmg$/) ?? null;
 const winX64Url = findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null;
+
+// Feature checklist — "Current" mirrors boojy-notes' FEATURE_TRACKER (all shipped);
+// "Coming Soon" is near-term polish, deliberately light (Notes is feature-complete for v0.x).
+const notesFeatures = [
+  { title: 'Block editor', detail: 'slash commands, markdown shortcuts, drag & keyboard reorder' },
+  {
+    title: 'Rich blocks',
+    detail: 'headings, lists, checkboxes, tables, callouts, code, images & files',
+  },
+  { title: 'Wikilinks & backlinks', detail: 'connect notes; tags with autocomplete' },
+  { title: 'Organize & find', detail: 'nested folders, full-text search, in-note find' },
+  { title: 'Cloud sync', detail: 'across devices, offline-ready, free up to 500 MB' },
+  { title: 'Own your files', detail: 'notes are plain Markdown — import & round-trip, no lock-in' },
+];
+
+const notesComingSoon = [
+  { title: 'Linux support', detail: 'desktop builds for Linux' },
+  { title: 'Tablet & touch', detail: 'a more comfortable layout on phones and tablets' },
+  { title: 'Smoother editing', detail: 'refined block drag-and-drop and editor animations' },
+];
 ---
 
 <BaseLayout path="/notes/">
@@ -36,7 +54,7 @@ const winX64Url = findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null;
     <div class="container">
       <div class="notes-hero-title reveal">
         <img src="/images/boojy-logo.svg" alt="Boojy" class="notes-hero-logo" />
-        <img src="/images/Notes-text-logo.png" alt="Notes" class="notes-hero-product" />
+        <img src="/images/notes-text-logo.png" alt="Notes" class="notes-hero-product" />
       </div>
       <p class="notes-tagline reveal reveal-d1">Your notes. Your files. Your devices.</p>
       <NotesDownload
@@ -118,11 +136,72 @@ const winX64Url = findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null;
             <line x1="2" x2="22" y1="2" y2="22"></line>
           </svg>
           <h3>Offline first</h3>
-          <p>Works without internet. Cloud sync coming soon.</p>
+          <p>Works offline, no account needed. Optional cloud sync across your devices.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <ProductCloudCard ctaClassName="notes-cloud-cta" description={CLOUD_DESCRIPTION} />
+  <section class="notes-checklist-section">
+    <div class="container">
+      <div class="notes-checklist-card reveal">
+        <h2>Features</h2>
+        <div class="notes-checklist-columns">
+          <div class="notes-checklist-col">
+            <h3>Current</h3>
+            <ul class="notes-checklist-list">
+              {
+                notesFeatures.map((item) => (
+                  <li>
+                    <svg
+                      class="notes-checklist-check"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                    <span>
+                      <strong>{item.title}</strong> — {item.detail}
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+          <div class="notes-checklist-col notes-checklist-col-soon">
+            <h3>Coming Soon</h3>
+            <ul class="notes-checklist-list">
+              {
+                notesComingSoon.map((item) => (
+                  <li>
+                    <svg
+                      class="notes-checklist-check"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                    <span>
+                      <strong>{item.title}</strong> — {item.detail}
+                    </span>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
