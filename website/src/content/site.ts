@@ -27,11 +27,10 @@ export const STAGE_LABELS: Record<Stage, string> = {
 };
 
 /**
- * Homepage product grid — one unified 2×2 of all four products. Audio/Notes/Cloud
- * are live (a `stage` badge + a "Learn more" link); Design is off-ladder
- * (`comingSoon`: muted card, "Coming soon" badge, no link). Products without a
- * screenshot (Design) use a gradient + glyph placeholder; the `name` is the
- * logo-image fallback for any product without a text logo.
+ * Homepage product grid — one unified 2×2 of all four products, all live. Order
+ * is the canonical product order (apps by maturity, then the Cloud service):
+ * Audio, Notes / Design, Cloud — keep the nav and footer in the same order.
+ * The `name` is the logo-image fallback for any product without a text logo.
  */
 export interface ProductCardData {
   id: ProductId;
@@ -78,16 +77,6 @@ export const PRODUCT_CARDS: ProductCardData[] = [
     stage: 'early-access',
   },
   {
-    id: 'cloud',
-    href: '/cloud/',
-    visual: { kind: 'image', src: '/images/cloud-preview.jpg', alt: 'Boojy Cloud' },
-    logo: { src: '/images/cloud-text-logo.png', alt: 'Boojy Cloud' },
-    name: 'Boojy Cloud',
-    description:
-      'Optional cloud storage that syncs Boojy Notes across your devices. Coming to more Boojy apps soon.',
-    stage: 'early-access',
-  },
-  {
     id: 'design',
     href: '/design/',
     visual: {
@@ -98,6 +87,16 @@ export const PRODUCT_CARDS: ProductCardData[] = [
     logo: { src: '/images/design-text-logo.png', alt: 'Boojy Design' },
     name: 'Boojy Design',
     description: 'An image editor in the browser. Draw, edit, and design.',
+    stage: 'early-access',
+  },
+  {
+    id: 'cloud',
+    href: '/cloud/',
+    visual: { kind: 'image', src: '/images/cloud-preview.jpg', alt: 'Boojy Cloud' },
+    logo: { src: '/images/cloud-text-logo.png', alt: 'Boojy Cloud' },
+    name: 'Boojy Cloud',
+    description:
+      'Optional cloud storage that syncs Boojy Notes across your devices. Coming to more Boojy apps soon.',
     stage: 'early-access',
   },
 ];

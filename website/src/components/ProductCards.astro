@@ -7,7 +7,7 @@ import { PRODUCT_CARDS, STAGE_LABELS } from '../content/site';
     <div class="product-cards reveal reveal-d3">
       {
         PRODUCT_CARDS.map((product) => {
-          // Live products link out; Design has no page yet, so it's a plain card.
+          // Products with a page link out; one without an href renders as a plain card.
           const Wrapper = product.href ? 'a' : 'div';
           return (
             <Wrapper

@@ -35,14 +35,14 @@ const newsActive = path.startsWith('/news/');
         data-product="notes">Notes</a
       >
       <a
-        href="/cloud/"
-        class:list={['nav-product', { active: activeProduct === 'cloud' }]}
-        data-product="cloud">Cloud</a
-      >
-      <a
         href="/design/"
         class:list={['nav-product', { active: activeProduct === 'design' }]}
         data-product="design">Design</a
+      >
+      <a
+        href="/cloud/"
+        class:list={['nav-product', { active: activeProduct === 'cloud' }]}
+        data-product="cloud">Cloud</a
       >
     </div>
 
@@ -79,14 +79,14 @@ const newsActive = path.startsWith('/news/');
         data-product="notes">Notes</a
       >
       <a
-        href="/cloud/"
-        class:list={['nav-mobile-link', { active: activeProduct === 'cloud' }]}
-        data-product="cloud">Cloud</a
-      >
-      <a
         href="/design/"
         class:list={['nav-mobile-link', { active: activeProduct === 'design' }]}
         data-product="design">Design</a
+      >
+      <a
+        href="/cloud/"
+        class:list={['nav-mobile-link', { active: activeProduct === 'cloud' }]}
+        data-product="cloud">Cloud</a
       >
       <a href="/account/" class:list={['nav-mobile-link', { active: accountActive }]}>Account</a>
       <a href="/news/" class:list={['nav-mobile-link', { active: newsActive }]}>News</a>
