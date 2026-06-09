@@ -1,0 +1,326 @@
+/* ===================================
+   BOOJY DESIGN - Page Styles
+   Mirrors /audio: wordmark hero (amber glow), app screenshot, 3 value props,
+   and a Current / Coming Soon checklist. Web-first CTA (no installers — it runs
+   in the browser at design.boojy.org).
+   =================================== */
+
+/* === Hero === */
+.design-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 120px;
+  padding-bottom: calc(var(--spacing-sm) + 20px);
+  position: relative;
+  z-index: 5;
+}
+
+.design-hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+.design-hero-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.design-hero-logo {
+  height: 4.55rem;
+  width: auto;
+  position: relative;
+  left: -2px;
+}
+
+.design-hero-product {
+  height: 3.4rem;
+  width: auto;
+  position: relative;
+  top: -1px;
+  left: 7px;
+}
+
+/* Amber nebula glow — Audio is blue, Notes grey, Cloud white, Design amber
+   (matches the Design wordmark badge #E89940). */
+.design-hero-glow {
+  --glow-opacity: 0.9;
+  --glow-width: 1400px;
+  --glow-height: 994px;
+  --glow-color: 232, 153, 64;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-50% + 18px));
+  width: var(--glow-width);
+  height: var(--glow-height);
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 1;
+  opacity: var(--glow-origin-opacity, var(--glow-opacity));
+  background: radial-gradient(
+    ellipse,
+    rgba(var(--glow-origin, var(--glow-color)), 0.25) 0%,
+    rgba(var(--glow-origin, var(--glow-color)), 0.12) 40%,
+    transparent 70%
+  );
+  view-transition-name: hero-glow;
+}
+
+.design-tagline {
+  font-size: 1.35rem;
+  font-weight: 400;
+  color: var(--color-text);
+  max-width: 600px;
+  margin: 0 auto var(--spacing-md);
+  line-height: 1.5;
+}
+
+.design-cta {
+  display: flex;
+  justify-content: center;
+  margin-top: 3px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Translucent glass button (matches the Notes / Cloud web CTAs) */
+.btn-design {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
+  color: #e8eaf0;
+}
+.btn-design:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateY(-1px);
+}
+
+/* === Screenshot === */
+.design-screenshot-section {
+  padding: 10px 0 var(--spacing-lg);
+  position: relative;
+  z-index: 4;
+}
+
+.design-screenshot-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+.design-screenshot {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* === Value-prop Cards === */
+.design-cards-section {
+  padding: var(--spacing-lg) 0 0;
+  position: relative;
+  z-index: 1;
+}
+
+.design-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-xl);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.design-feature-card {
+  background: #040412;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.design-feature-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(232, 153, 64, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.design-feature-icon {
+  display: block;
+  margin: 0 auto var(--spacing-sm);
+  width: 28px;
+  height: 28px;
+  color: var(--color-design);
+}
+
+.design-feature-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
+}
+
+.design-feature-card p {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* === Features Checklist === */
+.design-features-section {
+  padding: var(--spacing-lg) 0 var(--spacing-xl);
+  position: relative;
+  z-index: 1;
+}
+
+/* One shared card: "Features" title, then Current / Coming Soon columns inside */
+.design-features-card {
+  background: #040412;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  border: 1px solid var(--color-border);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.design-features-card h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--spacing-lg);
+  text-align: center;
+}
+
+.design-features-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  position: relative;
+}
+
+/* White hairline divider, centred in the gap between the two columns */
+.design-features-columns::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.design-features-col h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+.design-feature-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.design-feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.design-feature-list strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.design-feature-check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: #4ade80; /* green = shipped */
+}
+
+/* Coming-soon column — same card, orange arrows instead of green checks */
+.design-features-col-soon .design-feature-check {
+  color: #ffa500;
+}
+
+/* === Responsive === */
+@media (max-width: 768px) {
+  .design-hero {
+    padding-top: 90px;
+  }
+
+  .design-hero-logo {
+    height: 3.575rem;
+  }
+
+  .design-hero-product {
+    height: 2.1rem;
+  }
+
+  .design-tagline {
+    font-size: 1.15rem;
+  }
+
+  .design-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-lg);
+  }
+
+  .design-features-columns {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  /* Stacked columns: no vertical divider */
+  .design-features-columns::before {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .design-hero-title {
+    flex-direction: column;
+  }
+
+  .design-hero-logo {
+    height: 2.925rem;
+  }
+
+  .design-hero-product {
+    height: 1.75rem;
+  }
+
+  .design-hero-glow {
+    --glow-width: 300px;
+    --glow-height: 200px;
+  }
+
+  .design-tagline {
+    font-size: 1rem;
+  }
+
+  .design-features-grid {
+    grid-template-columns: 1fr;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}

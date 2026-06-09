@@ -89,11 +89,16 @@ export const PRODUCT_CARDS: ProductCardData[] = [
   },
   {
     id: 'design',
-    visual: { kind: 'placeholder' },
+    href: '/design/',
+    visual: {
+      kind: 'image',
+      src: '/images/design-screenshot-v0.4.png',
+      alt: 'Boojy Design interface',
+    },
     logo: { src: '/images/design-text-logo.png', alt: 'Boojy Design' },
     name: 'Boojy Design',
     description: 'An image editor in the browser. Draw, edit, and design.',
-    comingSoon: true,
+    stage: 'early-access',
   },
 ];
 

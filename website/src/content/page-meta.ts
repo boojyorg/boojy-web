@@ -60,6 +60,14 @@ export const PAGE_META: Record<string, PageMeta> = {
     'Boojy Cloud - Sync Your Creative Work',
     'Sync your creative work across all your devices. Rolling out soon — preview pricing and FAQ.',
   ),
+  '/design/': meta(
+    'Boojy Design – Image Editor in Your Browser',
+    'Boojy Design - A free image editor that runs in your browser. Paint, shapes, layers, live text, and export. No install, no account.',
+    '/design/',
+    `${SITE}/images/design-screenshot-v0.4.png`,
+    'Boojy Design - Image Editor in Your Browser',
+    'Paint, shapes, layers, live text, and export — free, right in your browser.',
+  ),
   '/news/': meta(
     'News – Boojy',
     'Monthly notes on what is new and improved across Boojy — Audio, Notes, and Cloud.',
@@ -70,11 +78,11 @@ export const PAGE_META: Record<string, PageMeta> = {
   ),
   '/account/': meta(
     'Boojy – Account',
-    'Boojy Account - Sign in to sync your notes and manage your Boojy Cloud subscription.',
+    'Boojy Account - Sign in to sync your notes across your devices with Boojy Cloud.',
     '/account/',
     DEFAULT_OG_IMAGE,
     'Boojy Account',
-    'Sign in to sync your notes and manage your Boojy Cloud subscription.',
+    'Sign in to sync your notes across your devices with Boojy Cloud.',
   ),
   '/privacy/': meta(
     'Privacy Policy – Boojy',
