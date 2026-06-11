@@ -1,0 +1,132 @@
+---
+/**
+ * The Boojy mark as an inline SVG — sun, orbit ring, and the grey planet actually
+ * orbiting (CSS offset-path). Traced from `public/images/Boojy_Image_Logo.png`, which
+ * stays canonical for OG images, JSON-LD `logo`, and favicons (scrapers want raster).
+ *
+ * Geometry (PNG-measured): sun disc c(304,222) r165 with a soft top-left highlight;
+ * orbit ellipse c(300,215) rx295 ry108 rotated −23°; planet r50 resting at the
+ * ellipse's upper-right major-axis extreme (571.5, 99.7).
+ *
+ * The z-order trick: the planet must pass BEHIND the sun on the far (upper) side of
+ * the orbit and IN FRONT on the near (lower) side — the static PNG already draws the
+ * ring over the sun at the bottom. So the ring is split into two half-arcs with the
+ * sun sandwiched between, and the planet is rendered TWICE running the identical
+ * animation, each copy clipped to one half-plane along the orbit's major axis. The
+ * handoff happens exactly at the path's 0%/50% points (the major-axis extremes),
+ * where both copies straddle the clip line and tile seamlessly — it cannot flicker.
+ *
+ * The orbit path STARTS at the planet's resting position, so reduced-motion users,
+ * non-`offset-path` browsers, and the paused hover variant all see today's exact
+ * static logo for free.
+ *
+ * variant="always"  — planet orbits continuously (homepage hero).
+ * variant="hover"   — paused until the closest `.nav-brand` is hovered (fixed navbar:
+ *                     WCAG 2.2.2 frowns on >5s auto-motion without a pause control).
+ * variant="static"  — no animation shipped at all.
+ */
+interface Props {
+  class?: string;
+  variant?: 'always' | 'hover' | 'static';
+}
+const { class: className, variant = 'always' } = Astro.props;
+// Unique ids per instance — the homepage renders two marks (nav + hero) and
+// clip-path/gradient ids must not collide.
+const uid = Math.random().toString(36).slice(2, 8);
+---
+
+<svg
+  viewBox="0 0 595 419"
+  class:list={['boojy-mark', `boojy-mark-${variant}`, className]}
+  aria-hidden="true"
+>
+  <defs>
+    <radialGradient id={`sun-${uid}`} cx="40%" cy="32%" r="78%">
+      <stop offset="0%" stop-color="#FFC23A"></stop>
+      <stop offset="55%" stop-color="#FFB71D"></stop>
+      <stop offset="100%" stop-color="#F2A60F"></stop>
+    </radialGradient>
+    <!-- Half-planes split along the orbit's major axis (the line through (300,215)
+         at −23°): "far" is above it, "near" below. -->
+    <clipPath id={`far-${uid}`}>
+      <rect x="-1200" y="-1285" width="3000" height="1500" transform="rotate(-23 300 215)"></rect>
+    </clipPath>
+    <clipPath id={`near-${uid}`}>
+      <rect x="-1200" y="215" width="3000" height="1500" transform="rotate(-23 300 215)"></rect>
+    </clipPath>
+  </defs>
+
+  <!-- Paint order, bottom → top: full ring ellipse → far planet copy → sun → near
+       (lower) ring arc redrawn on top → near planet copy. The base ring is a full
+       seamless ellipse and the overlay arc is butt-capped, so no linecap ever pokes
+       over the far planet copy at the handoff extremes. -->
+  <path
+    class="ring"
+    d="M571.5 99.7 A295 108 -23 0 0 28.5 330.3 A295 108 -23 0 0 571.5 99.7"></path>
+  <g clip-path={`url(#far-${uid})`}>
+    <circle class="planet" r="50" fill="#666666"></circle>
+  </g>
+  <circle cx="304" cy="222" r="165" fill={`url(#sun-${uid})`}></circle>
+  <path class="ring" d="M571.5 99.7 A295 108 -23 0 1 28.5 330.3"></path>
+  <g clip-path={`url(#near-${uid})`}>
+    <circle class="planet" r="50" fill="#666666"></circle>
+  </g>
+</svg>
+
+<style is:global>
+  .boojy-mark {
+    /* Sized by the caller's class (height + width:auto, like the PNG it replaces);
+       the ratio keeps width:auto honest. Overflow stays visible because the planet's
+       disc pokes a few px past the canvas at the orbit's left/right extremes (the
+       ellipse extremes sit at x=28.5/571.5 and the planet has r=50). */
+    aspect-ratio: 595 / 419;
+    overflow: visible;
+  }
+
+  .boojy-mark .ring {
+    fill: none;
+    stroke: #dedede;
+    stroke-width: 24;
+    stroke-linecap: butt;
+  }
+
+  /* Resting position = the orbit path's start point — all fallbacks land here.
+     (528.3, 68.5) is the ellipse point nearest the PNG's planet, fully on-canvas. */
+  .boojy-mark .planet {
+    transform: translate(528.3px, 68.5px);
+  }
+
+  @supports (offset-path: path("M0 0")) {
+    .boojy-mark-always .planet,
+    .boojy-mark-hover .planet {
+      transform: none;
+      offset-path: path(
+        "M528.3 68.5 A295 108 -23 0 0 71.7 361.5 A295 108 -23 0 0 528.3 68.5"
+      );
+      offset-rotate: 0deg;
+      animation: boojy-orbit 18s linear infinite;
+    }
+
+    /* Nav variant: still until the brand link is hovered. Linear easing is
+       deliberate — easing reads as a pendulum, not an orbit; the tilted ellipse
+       already provides natural apparent speed variation. */
+    .boojy-mark-hover .planet {
+      animation-play-state: paused;
+    }
+    .nav-brand:hover .boojy-mark-hover .planet {
+      animation-play-state: running;
+    }
+  }
+
+  @keyframes boojy-orbit {
+    to {
+      offset-distance: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .boojy-mark .planet {
+      animation: none !important;
+    }
+  }
+</style>

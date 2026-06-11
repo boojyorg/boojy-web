@@ -1,5 +1,6 @@
 ---
 import { GITHUB_ICON_PATH } from '../content/site';
+import BoojyMark from './BoojyMark.astro';
 
 // Active-route highlighting is computed at build time from the page's own URL,
 // so the `active` class is baked into the static HTML (no runtime router needed).
@@ -19,8 +20,8 @@ const newsActive = path.startsWith('/news/');
 
 <nav class="navbar" id="navbar">
   <div class="nav-container">
-    <a href="/" class="nav-brand">
-      <img src="/images/Boojy_Image_Logo.png" alt="Boojy" class="logo-icon" />
+    <a href="/" class="nav-brand" aria-label="Boojy — home">
+      <BoojyMark class="logo-icon" variant="hover" />
     </a>
 
     <div class="nav-products">
