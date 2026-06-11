@@ -71,7 +71,7 @@ General branch discipline → root `CLAUDE.md`. Web specifics:
 
 ## Architecture
 
-* **`website/src/pages/`** — file-based routes: `index`, `audio/`, `notes/`, `cloud/`, `news/`
+* **`website/src/pages/`** — file-based routes: `index`, `audio/`, `notes/`, `design/`, `cloud/`, `news/`
   (`index` archive + `[...slug]` post pages from the `news` collection), `account/`, `privacy/`,
   `terms/`, `subscribed/`, `404`. Legal/subscribed pages use **clean URLs** + 301s from the old
   `.html` (see `.claude/rules/caching-and-deploy.md`).
