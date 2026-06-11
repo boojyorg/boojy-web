@@ -9,7 +9,9 @@
     "preview": "astro preview",
     "check": "astro check",
     "lint": "biome check",
-    "lint:fix": "biome check --write"
+    "lint:fix": "biome check --write",
+    "test:unit": "vitest run",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.6",
@@ -23,9 +25,11 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
     "@biomejs/biome": "2.4.16",
+    "@playwright/test": "^1.60.0",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
-    "typescript": "~5.8.3"
+    "typescript": "~5.8.3",
+    "vitest": "^4.1.8"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

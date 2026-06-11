@@ -19,7 +19,8 @@ paths:
   Logic is lifted verbatim from the old `useHeroGlowTransition.ts`; only delivery changed.
 - The glow gradient is **duplicated** in the JS morph string and the glow CSS — a stop change must
   touch both, or the morph's last frame won't match the resting state.
-- **Analytics `<script>` must be `is:inline`** so Astro leaves it untouched. Native MPA navigation
-  means pageviews are counted automatically — no manual route tracking needed. (The self-hosted
-  umami tag was removed 2026-06 — its Railway app had died and 404'd silently on every view; the
-  replacement is Cloudflare Web Analytics, beacon tag pending the dashboard token.)
+- **Analytics ships no tag at all.** Cloudflare Web Analytics runs via "Automatic setup" — the
+  beacon is injected at the CF edge (only while boojy.org stays orange-cloud proxied), and native
+  MPA navigation means pageviews count without route tracking. If a tag is ever added to the code
+  instead, it must be `is:inline` so Astro leaves it untouched. (The self-hosted umami tag was
+  removed 2026-06 — its Railway app had died and 404'd silently on every view.)

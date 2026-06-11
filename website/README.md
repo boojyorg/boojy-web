@@ -39,9 +39,11 @@ pnpm dev          # http://localhost:4321
 | `pnpm preview` | Serve the production build locally |
 | `pnpm run check` | `astro check` — type/diagnostic gate |
 | `pnpm lint` / `pnpm lint:fix` | Biome lint + format (check / apply) |
+| `pnpm test:unit` | vitest unit tests (`src/**/*.test.ts`) |
+| `pnpm test:e2e` | Playwright smoke suite — run `pnpm build` first (tests the built `dist/`) |
 
-**Gates before pushing:** `pnpm run check` + `pnpm build` + `pnpm lint`. The same three run in CI on
-every PR.
+**Gates before pushing:** `pnpm run check` + `pnpm build` + `pnpm lint` + `pnpm test:unit` +
+`pnpm test:e2e`. The same five run in CI on every PR.
 
 ## Project structure
 
@@ -49,6 +51,9 @@ every PR.
 website/
 ├── astro.config.mjs    # static output, trailingSlash, sitemap (filters /account/ + /subscribed/)
 ├── biome.json          # lint/format (.ts/.tsx/.js/.json/.css — .astro excluded; see CLAUDE.md)
+├── vitest.config.ts    # unit tests (src/**/*.test.ts)
+├── playwright.config.ts # smoke suite vs the built dist/ (astro preview :4173)
+├── tests/              # Playwright smoke specs
 ├── src/
 │   ├── pages/          # file-based routes (.astro)
 │   ├── layouts/        # BaseLayout (static <head> + SEO), LegalLayout

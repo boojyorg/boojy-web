@@ -79,10 +79,9 @@ const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
       })();
     </script>
 
-    <!-- Analytics: the self-hosted umami app (Railway) is gone — its script 404'd on every
-         page view, so the tag was removed 2026-06. Replacement is Cloudflare Web Analytics:
-         once the site is registered in the CF dashboard, its beacon `<script is:inline>` tag
-         goes here. -->
+    <!-- Analytics: Cloudflare Web Analytics via "Automatic setup" — the beacon is injected
+         at the CF edge, so no analytics tag ships in this codebase. (Edge injection only
+         works while boojy.org stays orange-cloud proxied in CF DNS.) -->
 
     <slot name="head" />
   </head>
