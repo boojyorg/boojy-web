@@ -9,6 +9,14 @@ paths:
 - **`Feedback.tsx`** is a React island (`client:visible`) in the homepage `#feedback` section. Fields:
   type (Bug/Idea/Other), optional email, message, + a **Cloudflare Turnstile** widget. On submit it
   calls `supabase.functions.invoke('feedback', { body: { type, email, message, turnstileToken } })`.
+- **Interim mailto mode (2026-06).** `FEEDBACK_BACKEND_LIVE = false` in `Feedback.tsx` routes Send
+  to a pre-filled `mailto:tyr@boojy.org` (no Turnstile loaded — the visitor's own mail client is the
+  spam gate) because the Edge Function doesn't exist yet and real submissions were silently lost.
+  **Flip it to `true` in the same release** that deploys the `feedback` Edge Function AND swaps the
+  real Turnstile keys in — not before. Backend-live mode also handles a blocked Turnstile script
+  (ad blockers) with a visible mailto escape hatch.
+- **Email field stays optional** (2026-06 decision): mandatory email kills drive-by bug reports and
+  doesn't reduce spam — Turnstile is the spam defense.
 - **Anti-spam by design.** A naive public Supabase insert is spammable, so submissions go through an
   Edge Function that **verifies the Turnstile token server-side** before inserting. Don't "simplify"
   this to a direct client insert.
