@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
+// The `feedback` Edge Function (boojy-cloud, P4) is NOT built yet — invoking it fails and
+// the visitor's message is lost. Until it ships, Send hands the message to the visitor's
+// own email app (mailto) instead. Flip this to true in the SAME release that deploys the
+// Edge Function and swaps in the real Turnstile keys (see .claude/rules/feedback.md).
+const FEEDBACK_BACKEND_LIVE: boolean = false;
+const FEEDBACK_EMAIL = 'tyr@boojy.org';
+
 // Cloudflare Turnstile TEST key — always passes and renders a visible widget, so the
 // form is reviewable in dev. Swap for the real Boojy site key once the Turnstile widget
 // is created in the Cloudflare dashboard (and set the matching secret on the Edge Function).
@@ -18,7 +25,7 @@ declare global {
   }
 }
 
-type Status = 'idle' | 'sending' | 'sent' | 'error';
+type Status = 'idle' | 'sending' | 'sent' | 'mailto' | 'error';
 
 export function Feedback() {
   const [type, setType] = useState('Bug');
@@ -27,12 +34,15 @@ export function Feedback() {
   const [token, setToken] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
+  const [turnstileBlocked, setTurnstileBlocked] = useState(false);
 
   const widgetEl = useRef<HTMLDivElement>(null);
   const widgetId = useRef<string | null>(null);
 
   // Load the Turnstile script once and explicitly render the widget into our ref.
+  // Skipped entirely on the mailto path — the visitor's own mail client is the spam gate.
   useEffect(() => {
+    if (!FEEDBACK_BACKEND_LIVE) return;
     let cancelled = false;
 
     const renderWidget = () => {
@@ -58,10 +68,17 @@ export function Feedback() {
       script.async = true;
       document.head.appendChild(script);
     }
+    // Ad blockers / privacy extensions commonly block challenges.cloudflare.com — without
+    // this, the widget area stays empty and the form is unsubmittable with no explanation.
+    const onError = () => {
+      if (!cancelled) setTurnstileBlocked(true);
+    };
     script.addEventListener('load', renderWidget);
+    script.addEventListener('error', onError);
     return () => {
       cancelled = true;
       script?.removeEventListener('load', renderWidget);
+      script?.removeEventListener('error', onError);
     };
   }, []);
 
@@ -72,8 +89,22 @@ export function Feedback() {
       setError('Add a short message first.');
       return;
     }
+
+    if (!FEEDBACK_BACKEND_LIVE) {
+      const subject = encodeURIComponent(`Boojy feedback — ${type}`);
+      const replyTo = email.trim() ? `\n\nReply to: ${email.trim()}` : '';
+      const body = encodeURIComponent(`${message.trim()}${replyTo}`);
+      window.location.href = `mailto:${FEEDBACK_EMAIL}?subject=${subject}&body=${body}`;
+      setStatus('mailto');
+      return;
+    }
+
     if (!token) {
-      setError('Please complete the anti-spam check.');
+      setError(
+        turnstileBlocked
+          ? `The anti-spam check was blocked (ad blocker?) — email ${FEEDBACK_EMAIL} instead.`
+          : 'Please complete the anti-spam check.',
+      );
       return;
     }
 
@@ -89,7 +120,7 @@ export function Feedback() {
 
     if (fnError) {
       setStatus('error');
-      setError('Something went wrong — please try again, or email tyr@boojy.org.');
+      setError(`Something went wrong — please try again, or email ${FEEDBACK_EMAIL}.`);
       if (widgetId.current && window.turnstile) window.turnstile.reset(widgetId.current);
       setToken(null);
       return;
@@ -102,6 +133,18 @@ export function Feedback() {
       <div className="feedback-success">
         <div className="feedback-success-icon">✦</div>
         <p>Thanks — your message landed. I read every one.</p>
+      </div>
+    );
+  }
+
+  if (status === 'mailto') {
+    return (
+      <div className="feedback-success">
+        <div className="feedback-success-icon">✦</div>
+        <p>
+          Your email app should have opened with your message — just hit send. Nothing opened? Email{' '}
+          <a href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a> directly.
+        </p>
       </div>
     );
   }
@@ -137,7 +180,15 @@ export function Feedback() {
         required
       />
       <div className="feedback-actions">
-        <div className="feedback-turnstile" ref={widgetEl} />
+        {FEEDBACK_BACKEND_LIVE && !turnstileBlocked && (
+          <div className="feedback-turnstile" ref={widgetEl} />
+        )}
+        {FEEDBACK_BACKEND_LIVE && turnstileBlocked && (
+          <p className="feedback-error">
+            Anti-spam check blocked? Email <a href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a>{' '}
+            instead.
+          </p>
+        )}
         <button className="feedback-submit" type="submit" disabled={status === 'sending'}>
           {status === 'sending' ? 'Sending…' : 'Send →'}
         </button>
