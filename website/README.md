@@ -54,6 +54,7 @@ website/
 │   ├── layouts/        # BaseLayout (static <head> + SEO), LegalLayout
 │   ├── components/      # .astro chrome (Nav, Footer, ProductCards) + React islands
 │   │                   #   (Starfield, FaqAccordion, Audio/NotesDownload, Account, Feedback)
+│   ├── hooks/          # useAccount (auth/billing state), usePlatformsPanel (download dropdown)
 │   ├── content.config.ts # `news` content collection (glob over content/news/*.md)
 │   ├── content/        # site.ts, cloud.ts, page-meta.ts, legal/*.html, news/*.md
 │   ├── lib/            # platform.ts, supabase.ts, github-release.ts (build-time version/URL fetch)

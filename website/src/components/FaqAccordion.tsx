@@ -1,3 +1,6 @@
+// ⚠️ Kept on purpose for when the /cloud FAQ returns (see CLAUDE.md) — but its styles
+// (faq-list / faq-item / faq-question) were deleted with the old /cloud page, so
+// remounting it as-is renders unstyled. Rebuild a faq.css alongside it first.
 import { useState } from 'react';
 
 interface FaqItem {

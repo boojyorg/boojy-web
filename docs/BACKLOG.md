@@ -12,7 +12,6 @@ is `dreams.md`. Pull from here into a milestone when it's time.
 - **Single config-driven download island** — replace the two parallel `AudioDownload` /
   `NotesDownload` components with one.
 - **404 self-canonical** without trailing slash.
-- **`.DS_Store` is tracked** — add to gitignore + untrack.
 
 ## Deferred features
 

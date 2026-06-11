@@ -805,109 +805,6 @@ section {
   font-size: 0.8rem;
 }
 
-/* === Product Cloud Card (shared) === */
-.product-cloud-section {
-  padding: 0 0 var(--spacing-2xl);
-  position: relative;
-  z-index: 1;
-}
-
-.product-cloud-card {
-  margin: 0 auto;
-  max-width: 900px;
-  background: var(--card-product-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-  padding: 2.5rem 3rem;
-  text-align: center;
-  transition: all 0.35s ease;
-}
-
-.product-cloud-card:hover {
-  border-color: rgba(255, 255, 255, 0.85);
-  box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(255, 255, 255, 0.06);
-}
-
-/* Cloud status pill — white (Cloud's accent), only rendered when a `badge` prop is passed. */
-.product-cloud-badge {
-  display: inline-block;
-  margin-bottom: var(--spacing-md);
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.product-cloud-heading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: calc(0.5rem + 11px);
-  margin: -1px 0 0;
-  padding-left: 9px;
-  position: relative;
-  top: -2px;
-}
-
-.product-cloud-heading-boojy {
-  height: 2.945rem;
-  width: auto;
-  position: relative;
-  top: 3px;
-}
-
-.product-cloud-heading-cloud {
-  height: 2.1rem;
-  width: auto;
-  position: relative;
-  top: -2px;
-}
-
-.product-cloud-devices {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 20px 0 22px;
-}
-
-.product-cloud-devices .device-icon {
-  width: 32px;
-  height: 32px;
-  color: #b0b3c1;
-}
-
-.product-cloud-devices .sync-arrow {
-  color: #8a8d9b;
-  font-size: 16px;
-}
-
-.product-cloud-description {
-  color: var(--color-text-light);
-  font-size: 1rem;
-  line-height: 1.7;
-  max-width: 480px;
-  margin: 0 auto var(--spacing-lg);
-}
-
-.product-cloud-cta {
-  display: inline-block;
-  padding: 0.6rem 2rem;
-  border: none;
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
 /* === View Transitions === */
 @view-transition {
   navigation: auto;
@@ -1050,10 +947,6 @@ section {
 
   .section-title {
     font-size: 1.75rem;
-  }
-
-  .product-cloud-card {
-    padding: 1.5rem;
   }
 
   .hero-buttons {

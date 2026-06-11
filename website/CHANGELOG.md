@@ -2,6 +2,32 @@
 
 ## Unreleased
 
+### Bug Fixes
+- **Feedback form actually delivers** — Send now opens the visitor's email app pre-filled to
+  tyr@boojy.org (the `feedback` Edge Function was never built, so every submission errored and was
+  lost; the always-pass Turnstile **test** key also no longer ships). Real backend tracked as P4.
+- **Design card CTA visible** — the homepage Design card's "Learn more" button had no accent fill
+  (near-black on dark, read as disabled); it now matches the other three products.
+- **Honest platform label on /audio** — Linux/unknown-OS/no-JS visitors no longer see "(Silicon)"
+  next to the generic fallback download button.
+- **Dead analytics tag removed** — the self-hosted umami app (Railway) was gone and its script
+  404'd silently on every page view; Cloudflare Web Analytics beacon to follow.
+
+### Improvements
+- **Stale Cloud copy aligned** — homepage + `/cloud/` meta descriptions and the account-page blurb
+  no longer say Cloud is "rolling out soon" (it's live: free Notes sync, 500 MB).
+- **SEO pass** — every hero page gets a (screen-reader-only) `<h1>`; `/account/` + `/subscribed/`
+  are `noindex`; news posts emit `og:type=article` + published time + BlogPosting JSON-LD;
+  `/cloud/` gets SoftwareApplication JSON-LD; `/news/` drops the "monthly" promise.
+- **"All versions" links** — `/audio` and `/notes` hero meta lines link to each product's GitHub
+  releases page (old builds + full release notes).
+- **Dead code removed** — `ProductCloudCard.astro` (unmounted since the 2×2 grid refactor) + its
+  icon constants and ~230 lines of orphaned `.product-cloud-*` / `.hub-signup-*` CSS;
+  `INFRASTRUCTURE_SETUP.md` archived; stale suite-dashboard script removed (lives in the
+  suite-umbrella repo now).
+
+## 2026-06-10 (deploy)
+
 ### Features
 - **`/design` page added + Boojy Design promoted to live** — Boojy Design is now live at
   **design.boojy.org**, so it gets a real page mirroring `/audio`: wordmark hero with an **amber**

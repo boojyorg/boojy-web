@@ -1,11 +1,13 @@
 # Boojy.org
 
 Source for **[boojy.org](https://boojy.org)** — the marketing website for the Boojy suite of free,
-open-source creative tools (Audio, Notes, and Cloud — rolling out soon).
+open-source creative tools: Audio, Notes, Design, and Cloud (free sync for Notes, live now).
 
 > **Looking for a product?** Boojy *Audio* (the DAW) lives at
-> [boojyorg/boojy-audio](https://github.com/boojyorg/boojy-audio), and *Notes* at
-> [boojyorg/boojy-notes](https://github.com/boojyorg/boojy-notes). **This repo is just the website.**
+> [boojyorg/boojy-audio](https://github.com/boojyorg/boojy-audio), *Notes* at
+> [boojyorg/boojy-notes](https://github.com/boojyorg/boojy-notes), and *Design* (the browser image
+> editor) at [boojyorg/boojy-design](https://github.com/boojyorg/boojy-design). **This repo is just
+> the website.**
 
 ## Stack
 
