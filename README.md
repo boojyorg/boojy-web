@@ -45,6 +45,12 @@ deploy. Build settings: root `website`, command `pnpm build`, output `dist`.
 - **[website/README.md](website/README.md)** — routes, project structure, deploy verification
 - **[CLAUDE.md](CLAUDE.md)** — full architecture, conventions, and gotchas
 
+## Contributing
+
+The Boojy suite is in **Early Access** and isn't accepting pull requests yet — contributions
+will open as the apps reach their v1.0 releases. **Bug reports and feedback are very welcome** —
+see [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## License
 
 GPLv3 — see [LICENSE](LICENSE). Copyright (c) 2025–2026 Tyr Bujac.
