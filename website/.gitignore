@@ -53,3 +53,8 @@ dist/
 
 # Astro
 .astro/
+
+# Playwright
+test-results/
+playwright-report/
+.playwright-screenshots/

@@ -40,4 +40,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm run check
+      - run: pnpm test:unit
       - run: pnpm build
+      # Smoke tests run against the dist/ the build step just produced.
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test:e2e

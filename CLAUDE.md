@@ -45,11 +45,16 @@ pnpm preview             # serve the static build locally
 pnpm exec astro check    # type + diagnostic gate
 pnpm lint                # biome check (lint + format diagnostics)
 pnpm lint:fix            # biome check --write (apply formatting + safe fixes)
+pnpm test:unit           # vitest (src/**/*.test.ts — currently github-release.ts)
+pnpm test:e2e            # Playwright smoke suite — needs a fresh `pnpm build` first
 ```
 
-No automated test suite yet. **The gates are `pnpm exec astro check` + a clean `pnpm build` +
-`pnpm lint`.** The same three run in CI (`.github/workflows/ci.yml`) on every PR and on `master` —
-so a red PR check = a gate you skipped locally.
+**The gates are `pnpm exec astro check` + a clean `pnpm build` + `pnpm lint` + `pnpm test:unit` +
+`pnpm test:e2e`.** All five run in CI (`.github/workflows/ci.yml`) on every PR and on `master` —
+so a red PR check = a gate you skipped locally. The smoke suite (`tests/smoke.spec.ts`) runs
+against the **built `dist/`** via `astro preview` on port 4173 (Playwright starts/stops the server
+itself; it serves but never builds, so re-run `pnpm build` after changes or the tests check stale
+output).
 
 **Biome scope:** it lints/formats `.ts/.tsx/.js/.mjs/.json/.css` only — `.astro` and the legal
 `.html` content files are **excluded** (Biome parses `.astro` frontmatter as standalone JS and would
@@ -64,7 +69,9 @@ General branch discipline → root `CLAUDE.md`. Web specifics:
 
 * `master` is **branch-protected** and requires the "Lint · Check · Build" CI check — every change
   needs a branch + PR.
-* **Local gates:** `pnpm exec astro check` + `pnpm build` + `pnpm lint` (the same three CI runs).
+* **Local gates:** `pnpm exec astro check` + `pnpm build` + `pnpm lint` + `pnpm test:unit` +
+  `pnpm test:e2e` (the same five CI runs; the job name stays "Lint · Check · Build" because branch
+  protection pins that exact string).
 * **Deploy is Cloudflare Pages Git integration** (preview per branch, production on `master`).
   GitHub Actions runs CI gates only, never the deploy. ⚠️ **CF build settings are shared
   prod/preview** — before any framework-level build change, read `.claude/rules/caching-and-deploy.md`.

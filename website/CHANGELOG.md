@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Features
+- **First automated test suite** — vitest unit tests for the build-time GitHub release fetch
+  (every fallback path) and a Playwright smoke suite that loads each page from the built site,
+  checks titles, the orbit logo, download CTAs, the feedback form, and the 404. Both run in CI,
+  so "the site silently broke" (the June review's headline finding) now fails a PR instead.
+
 ### Bug Fixes
 - **Feedback form actually delivers** — Send now opens the visitor's email app pre-filled to
   tyr@boojy.org (the `feedback` Edge Function was never built, so every submission errored and was
