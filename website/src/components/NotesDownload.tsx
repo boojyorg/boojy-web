@@ -73,6 +73,15 @@ export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
         <span>{versionText}</span> ·{' '}
         <a href="#" className="other-platforms-link" ref={toggleRef} onClick={toggle}>
           Other platforms
+        </a>{' '}
+        ·{' '}
+        <a
+          href="https://github.com/boojyorg/boojy-notes/releases"
+          className="other-platforms-link"
+          target="_blank"
+          rel="noreferrer"
+        >
+          All versions
         </a>
       </p>
       <div className={panelClassName} ref={panelRef}>

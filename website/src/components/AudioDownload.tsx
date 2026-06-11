@@ -65,9 +65,11 @@ interface Props {
 export function AudioDownload({ versionText }: Props) {
   const { panelRef, toggleRef, toggle, close, panelClassName } = usePlatformsPanel();
 
+  // Label/selection start empty so the SSR HTML (and Linux/unknown-OS visitors, whose
+  // detection never matches) doesn't claim "(Silicon)" next to the generic fallback button.
   const [downloadHref, setDownloadHref] = useState('#');
-  const [platformLabel, setPlatformLabel] = useState('Silicon');
-  const [selectedPlatform, setSelectedPlatform] = useState<string>('mac-arm64');
+  const [platformLabel, setPlatformLabel] = useState('');
+  const [selectedPlatform, setSelectedPlatform] = useState<string>('');
   const [downloadIconHtml, setDownloadIconHtml] = useState(platformIconHtml(null));
   const showFallback = downloadHref === '#';
 
@@ -121,9 +123,19 @@ export function AudioDownload({ versionText }: Props) {
         )}
       </div>
       <p className="hero-meta">
-        {versionText} (<span>{platformLabel}</span>) ·{' '}
+        {versionText}
+        {platformLabel ? <span> ({platformLabel})</span> : null} ·{' '}
         <a href="#" className="other-platforms-link" ref={toggleRef} onClick={toggle}>
           Other platforms
+        </a>{' '}
+        ·{' '}
+        <a
+          href="https://github.com/boojyorg/boojy-audio/releases"
+          className="other-platforms-link"
+          target="_blank"
+          rel="noreferrer"
+        >
+          All versions
         </a>
       </p>
       <div className={panelClassName} ref={panelRef}>
