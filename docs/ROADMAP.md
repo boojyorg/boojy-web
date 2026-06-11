@@ -26,8 +26,9 @@ ASCII-mockup sign-off before code.
   see Locked decisions.)
 - **P5 — Brand / product registry.** A single config-driven product model (extends the
   `STAGE_LABELS` + per-product `stage` work) feeding cards, badges, and meta.
-- **P6 — Testing floor.** Add a baseline test/measurement layer (CWV via Lighthouse, basic checks)
-  — the site currently has no automated test suite.
+- **P6 — Testing floor.** Baseline ✅ (shipped 2026-06-11, PR #26): vitest unit tests for
+  `github-release.ts` + a Playwright smoke suite against the built site, both gating CI. Remaining
+  tail: CWV measurement (Lighthouse pass / Cloudflare Web Analytics) — tracked in `dreams.md`.
 
 ## Locked decisions (reference)
 
