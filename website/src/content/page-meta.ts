@@ -8,6 +8,8 @@ export interface PageMeta {
   ogDescription: string;
   path: string;
   ogImage?: string;
+  /** Emit `<meta name="robots" content="noindex">` — for thin/behind-login pages. */
+  noindex?: boolean;
 }
 
 const meta = (
@@ -30,11 +32,11 @@ const meta = (
 export const PAGE_META: Record<string, PageMeta> = {
   '/': meta(
     'Boojy – Creative Tools',
-    'Boojy - Free creative tools. Audio, Notes, and Cloud storage rolling out soon.',
+    'Boojy - Free, open-source creative tools: a simple music studio, a calm notes app, a browser image editor, and free cloud sync for Notes.',
     '/',
     DEFAULT_OG_IMAGE,
     'Boojy - Free Creative Tools',
-    'Free creative software. Music production, note-taking, and cloud storage rolling out soon.',
+    'Free, open-source creative software. Music production, notes, design, and free cloud sync.',
   ),
   '/audio/': meta(
     'Boojy Audio – Free DAW for Beginners',
@@ -54,11 +56,11 @@ export const PAGE_META: Record<string, PageMeta> = {
   ),
   '/cloud/': meta(
     'Boojy Cloud – Sync Your Creative Work',
-    'Boojy Cloud - Sync your creative work across all your devices. Rolling out soon — preview pricing and FAQ.',
+    'Boojy Cloud - Free sync for Boojy Notes across your devices. 500 MB free, no card needed. Audio sync coming soon.',
     '/cloud/',
     `${SITE}/images/cloud-preview.jpg`,
     'Boojy Cloud - Sync Your Creative Work',
-    'Sync your creative work across all your devices. Rolling out soon — preview pricing and FAQ.',
+    'Free sync for Boojy Notes across your devices. 500 MB free, no card needed.',
   ),
   '/design/': meta(
     'Boojy Design – Image Editor in Your Browser',
@@ -70,20 +72,23 @@ export const PAGE_META: Record<string, PageMeta> = {
   ),
   '/news/': meta(
     'News – Boojy',
-    'Monthly notes on what is new and improved across Boojy — Audio, Notes, and Cloud.',
+    'Notes from Tyr on what is new and improved across Boojy — Audio, Notes, Design, and Cloud.',
     '/news/',
     DEFAULT_OG_IMAGE,
     'Boojy News',
-    'Monthly notes on what is new and improved across Boojy.',
+    'Notes from Tyr on what is new and improved across Boojy.',
   ),
-  '/account/': meta(
-    'Boojy – Account',
-    'Boojy Account - Sign in to sync your notes across your devices with Boojy Cloud.',
-    '/account/',
-    DEFAULT_OG_IMAGE,
-    'Boojy Account',
-    'Sign in to sync your notes across your devices with Boojy Cloud.',
-  ),
+  '/account/': {
+    ...meta(
+      'Boojy – Account',
+      'Boojy Account - Sign in to sync your notes across your devices with Boojy Cloud.',
+      '/account/',
+      DEFAULT_OG_IMAGE,
+      'Boojy Account',
+      'Sign in to sync your notes across your devices with Boojy Cloud.',
+    ),
+    noindex: true,
+  },
   '/privacy/': meta(
     'Privacy Policy – Boojy',
     'Boojy Privacy Policy - How we handle your data',
@@ -100,14 +105,17 @@ export const PAGE_META: Record<string, PageMeta> = {
     'Terms of Service – Boojy',
     'Simple terms in plain English. Your content is yours. 100%.',
   ),
-  '/subscribed/': meta(
-    'Subscribed – Boojy',
-    "You're subscribed to Boojy updates",
-    '/subscribed/',
-    DEFAULT_OG_IMAGE,
-    'Subscribed – Boojy',
-    "You're subscribed to Boojy updates.",
-  ),
+  '/subscribed/': {
+    ...meta(
+      'Subscribed – Boojy',
+      "You're subscribed to Boojy updates",
+      '/subscribed/',
+      DEFAULT_OG_IMAGE,
+      'Subscribed – Boojy',
+      "You're subscribed to Boojy updates.",
+    ),
+    noindex: true,
+  },
   '/404.html': meta(
     '404 - Page Not Found | Boojy',
     'Page not found - Boojy',

@@ -13,9 +13,12 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** 'article' for dated posts (news) — also emits article:published_time. */
+  ogType?: 'website' | 'article';
+  publishedTime?: Date;
 }
 
-const { path, title, description, ogImage: ogImageProp } = Astro.props;
+const { path, title, description, ogImage: ogImageProp, ogType = 'website', publishedTime } = Astro.props;
 const base = getPageMeta(path);
 // Overrides win; `path` is always authoritative for the canonical/OG URL (the base
 // can be the 404 fallback for routes absent from PAGE_META, like news posts).
@@ -41,10 +44,12 @@ const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
     <link rel="canonical" href={url} />
+    {meta.noindex && <meta name="robots" content="noindex" />}
 
     <meta property="og:title" content={meta.ogTitle} />
     <meta property="og:description" content={meta.ogDescription} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
     <meta property="og:url" content={url} />
     <meta property="og:image" content={ogImage} />
 
@@ -74,12 +79,10 @@ const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
       })();
     </script>
 
-    <!-- Analytics (left verbatim; is:inline so Astro does not bundle/transform it). -->
-    <script
-      is:inline
-      defer
-      src="https://umami-production-fc39.up.railway.app/script.js"
-      data-website-id="863178bf-14fc-4b35-b45a-5e4ff4240862"></script>
+    <!-- Analytics: the self-hosted umami app (Railway) is gone — its script 404'd on every
+         page view, so the tag was removed 2026-06. Replacement is Cloudflare Web Analytics:
+         once the site is registered in the CF dashboard, its beacon `<script is:inline>` tag
+         goes here. -->
 
     <slot name="head" />
   </head>

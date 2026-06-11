@@ -76,7 +76,7 @@ General branch discipline → root `CLAUDE.md`. Web specifics:
   `terms/`, `subscribed/`, `404`. Legal/subscribed pages use **clean URLs** + 301s from the old
   `.html` (see `.claude/rules/caching-and-deploy.md`).
 * **`website/src/layouts/`** — `BaseLayout.astro` owns the full static `<head>` (title, description,
-  canonical, OG, theme-color, favicons, umami) from `content/page-meta.ts`. `LegalLayout.astro` for
+  canonical, OG, theme-color, favicons, analytics slot) from `content/page-meta.ts`. `LegalLayout.astro` for
   privacy/terms. (View-transition + glow rules: `.claude/rules/view-transitions-and-glow.md`.)
 * **Islands (React, logic unchanged):** `Starfield` (`client:idle`), `FaqAccordion`
   (`client:visible`; **currently unmounted** — was only on `/cloud`, whose FAQ is deferred —
