@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import { Feedback } from '../components/Feedback';
+import BoojyMark from '../components/BoojyMark.astro';
 import ProductCards from '../components/ProductCards.astro';
 import { WHY_POINTS, WHY_STORY } from '../content/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -35,7 +36,7 @@ const latestNews = (await getCollection('news')).sort(
       <h1 class="sr-only">Boojy — free, open-source creative tools</h1>
       <div class="hub-hero-title reveal">
         <img src="/images/boojy-logo.svg" alt="Boojy" class="hub-hero-logo" />
-        <img src="/images/Boojy_Image_Logo.png" alt="" class="hub-hero-icon" />
+        <BoojyMark class="hub-hero-icon" />
       </div>
       <p class="hub-tagline reveal reveal-d1">Your creative space.</p>
       <p class="hub-tagline-sub reveal reveal-d2">Free, open source software. Made by Tyr.</p>
