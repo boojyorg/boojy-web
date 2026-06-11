@@ -47,8 +47,8 @@ export function Account() {
             <div className="account-signin-prompt">
               <div className="account-cloud-icon">☁</div>
               <p>
-                Create your Boojy account. Cloud storage is rolling out soon — we&rsquo;ll let you
-                know when sync is ready.
+                Create your Boojy account. Cloud sync for Boojy Notes is live — 500&nbsp;MB free, no
+                card needed.
               </p>
 
               <div className="auth-buttons">

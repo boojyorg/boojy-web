@@ -272,6 +272,10 @@ body {
   background: var(--color-notes);
 }
 
+.product-card[data-product="design"] .product-card-cta {
+  background: var(--color-design);
+}
+
 .product-card[data-product="cloud"] .product-card-cta {
   background: #ffffff;
 }

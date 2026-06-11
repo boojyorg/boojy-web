@@ -35,9 +35,25 @@ const cloudComing = [
 ---
 
 <BaseLayout path="/cloud/">
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'Boojy Cloud',
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: 'Web',
+      url: 'https://boojy.org/cloud/',
+      description: 'Free sync for Boojy Notes across your devices. 500 MB free, no card needed.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+    })}
+  />
   <section class="cloud-hero">
     <div class="cloud-hero-glow" aria-hidden="true" data-glow></div>
     <div class="container">
+      <h1 class="sr-only">Boojy Cloud — free sync for Boojy Notes across your devices</h1>
       <div class="cloud-hero-title reveal">
         <img src="/images/boojy-logo.svg" alt="Boojy" class="cloud-hero-logo" />
         <img src="/images/cloud-text-logo.png" alt="Cloud" class="cloud-hero-product" />

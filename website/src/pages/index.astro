@@ -23,7 +23,7 @@ const latestNews = (await getCollection('news')).sort(
       name: 'Boojy',
       url: 'https://boojy.org',
       logo: 'https://boojy.org/images/Boojy_Image_Logo.png',
-      description: 'Free creative software. Music production, note-taking, and cloud storage.',
+      description: 'Free, open-source creative software: music production, notes, design, and cloud sync.',
       sameAs: ['https://github.com/boojyorg', 'https://youtube.com/@boojy'],
     })}
   />
@@ -32,6 +32,7 @@ const latestNews = (await getCollection('news')).sort(
   <section class="hub-hero">
     <div class="hub-hero-glow" aria-hidden="true" data-glow></div>
     <div class="container">
+      <h1 class="sr-only">Boojy — free, open-source creative tools</h1>
       <div class="hub-hero-title reveal">
         <img src="/images/boojy-logo.svg" alt="Boojy" class="hub-hero-logo" />
         <img src="/images/Boojy_Image_Logo.png" alt="" class="hub-hero-icon" />

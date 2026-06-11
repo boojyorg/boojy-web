@@ -19,5 +19,7 @@ paths:
   Logic is lifted verbatim from the old `useHeroGlowTransition.ts`; only delivery changed.
 - The glow gradient is **duplicated** in the JS morph string and the glow CSS — a stop change must
   touch both, or the morph's last frame won't match the resting state.
-- **umami `<script>` is `is:inline`** so Astro leaves it untouched. Native MPA navigation means
-  umami counts pageviews automatically — no manual route tracking needed.
+- **Analytics `<script>` must be `is:inline`** so Astro leaves it untouched. Native MPA navigation
+  means pageviews are counted automatically — no manual route tracking needed. (The self-hosted
+  umami tag was removed 2026-06 — its Railway app had died and 404'd silently on every view; the
+  replacement is Cloudflare Web Analytics, beacon tag pending the dashboard token.)

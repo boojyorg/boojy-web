@@ -19,7 +19,23 @@ const { Content } = await render(post);
   path={`/news/${post.id}/`}
   title={`${post.data.title} – Boojy News`}
   description={post.data.summary}
+  ogType="article"
+  publishedTime={post.data.date}
 >
+  <script
+    type="application/ld+json"
+    is:inline
+    slot="head"
+    set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      description: post.data.summary,
+      datePublished: post.data.date.toISOString(),
+      url: `https://boojy.org/news/${post.id}/`,
+      publisher: { '@type': 'Organization', name: 'Boojy', url: 'https://boojy.org' },
+    })}
+  />
   <article class="news-post">
     <div class="container news-post-inner">
       <a href="/news/" class="news-back">← News</a>
