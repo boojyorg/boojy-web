@@ -7,6 +7,11 @@
 
 ## 🎯 Active Engineering Target
 
+> **⏰ Session-start reminder (w/c 2026-06-15):** verify the `/privacy/` and `/terms/` pages are
+> current — carried from last week's list; Tyr wants it completed early this week (weekend if
+> possible). Raise it at the start of the session. Also queued this week: the review-leftovers
+> batch (news rewrite · CSS consolidation · wordmark legibility).
+
 **Website audit roadmap** (approved 2026-05-31; full sequence in `docs/ROADMAP.md`).
 **P0 (download rot) and P1 (homepage rebuild) have shipped** — the premium homepage, unified 2×2
 product grid, periwinkle accent, cosmic backdrop, `/news/` content collection, and the feedback
