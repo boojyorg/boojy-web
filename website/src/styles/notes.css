@@ -86,15 +86,43 @@
   z-index: 2;
 }
 
-/* Notes web CTA — translucent glass (matches the former download button's look) */
+/* Equal-width dual CTA: an inline grid of equal columns shrinks to fit the wider button
+   ("Download for Windows") and centres, so "Open in Web" matches its width instead of
+   sizing to its own (shorter) label. Tighter inline padding keeps the pair from over-widening.
+   Collapses gracefully to a single column when only the web button is shown. */
+.notes-cta .hero-buttons {
+  display: inline-grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 12px;
+}
+.notes-cta .hero-buttons .btn {
+  width: 100%;
+  padding-inline: 1.25rem;
+}
+
+/* Notes web CTA — translucent glass (matches the former download button's look).
+   Border at 0.3 (not Audio's 0.15) so the edge reads against this page's glow,
+   same rationale as .btn-design. */
 .btn-web-notes {
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   background: rgba(255, 255, 255, 0.1);
   color: #e8eaf0;
 }
 .btn-web-notes:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-1px);
+}
+
+/* Secondary desktop-download CTA — ghost (transparent) so "Open in Web" reads as the
+   primary, web-first action. Border at 0.3 reads against this page's glow (shared
+   .btn-download is 0.15, tuned for Audio's cooler backdrop). */
+.notes-cta .btn-notes-download {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.notes-cta .btn-notes-download:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 /* === Screenshot === */
