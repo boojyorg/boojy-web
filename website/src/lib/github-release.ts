@@ -6,7 +6,7 @@ export interface ReleaseAsset {
 }
 
 export interface LatestRelease {
-  /** Full display string, e.g. `v0.3.0 Beta · 29 May 2026`. */
+  /** Full display string, e.g. `v0.3.0 Early access · 29 May 2026`. */
   versionText: string;
   /** Raw tag, e.g. `v0.3.0` — `null` when unresolved (fetch failed). */
   tag: string | null;
@@ -17,9 +17,9 @@ export interface LatestRelease {
 }
 
 interface Options {
-  /** Shown verbatim as `versionText` if the fetch fails (e.g. `v0.3.0 Beta`). */
+  /** Shown verbatim as `versionText` if the fetch fails (e.g. `v0.3.0 Early access`). */
   fallbackVersion: string;
-  /** Word placed after the tag in `versionText`. Default `Beta`. */
+  /** Word placed after the tag in `versionText`. Default `Early access`. */
   channel?: string;
 }
 
@@ -41,7 +41,7 @@ interface GitHubRelease {
  */
 export async function getLatestRelease(
   repo: string,
-  { fallbackVersion, channel = 'Beta' }: Options,
+  { fallbackVersion, channel = 'Early access' }: Options,
 ): Promise<LatestRelease> {
   const fallback: LatestRelease = {
     versionText: fallbackVersion,

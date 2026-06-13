@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { usePlatformsPanel } from '../hooks/usePlatformsPanel';
-import { detectPlatform, type PlatformId } from '../lib/platform';
+import { detectPlatform, type PlatformId, platformIconHtml } from '../lib/platform';
 import { GitHubPlatformIcon, PlatformIcon } from './PlatformIcons';
 import { WebIcon } from './WebIcon';
 
@@ -30,27 +30,56 @@ interface Props {
 }
 
 /**
- * Web-first CTA for /notes/. The primary action is "Open in Web" (notes.boojy.org); the
- * desktop installers live in the "Other platforms" dropdown as direct, version-stamped
- * download links plus a GitHub all-releases link — mirroring the /audio CTA's panel. The
- * client detects the OS on mount only to highlight the visitor's own platform row.
+ * Web-first CTA for /notes/. The primary action is "Open in Web" (notes.boojy.org), which
+ * opens immediately — it's navigation, not a file download, so there's nothing abrupt to
+ * confirm. A secondary "Download for <OS>" button appears once the visitor's platform is
+ * known (detected on mount, or chosen from "Other platforms"); the desktop installers are
+ * click-to-confirm — picking a row only swaps the button's target, it never auto-downloads.
+ * SSR / no-JS / Linux / unknown-OS visitors see just the web button (no wrong-OS claim).
  */
 export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
   const { panelRef, toggleRef, toggle, close, panelClassName } = usePlatformsPanel();
-  const [detected, setDetected] = useState<string>('');
 
   // Real (version-stamped) asset URLs from the build-time release fetch; if that failed,
-  // fall back to the releases page so no affordance is ever a dead link.
-  const platforms: NotesPlatform[] = [
-    { id: 'mac-arm64', label: 'Silicon', name: 'macOS', href: macArm64Url ?? RELEASES_URL },
-    { id: 'mac-x64', label: 'Intel', name: 'macOS', disabled: true, pill: 'Coming soon' },
-    { id: 'windows-x64', label: 'Windows', name: 'Windows', href: winX64Url ?? RELEASES_URL },
-    { id: 'linux', label: 'Linux', name: 'Linux', disabled: true, pill: 'Coming soon' },
-  ];
+  // fall back to the releases page so no affordance is ever a dead link. Memoised on the
+  // prop URLs so it's a stable dependency for the detect-on-mount effect.
+  const platforms = useMemo<NotesPlatform[]>(
+    () => [
+      { id: 'mac-arm64', label: 'Silicon', name: 'macOS', href: macArm64Url ?? RELEASES_URL },
+      { id: 'mac-x64', label: 'Intel', name: 'macOS', disabled: true, pill: 'Coming soon' },
+      { id: 'windows-x64', label: 'Windows', name: 'Windows', href: winX64Url ?? RELEASES_URL },
+      { id: 'linux', label: 'Linux', name: 'Linux', disabled: true, pill: 'Coming soon' },
+    ],
+    [macArm64Url, winX64Url],
+  );
+
+  // Empty until a platform resolves (detection on mount, or a dropdown pick); the secondary
+  // download button only renders once it's set, so SSR/unknown-OS stays web-only.
+  const [selectedPlatform, setSelectedPlatform] = useState('');
+  const [downloadHref, setDownloadHref] = useState('');
+  const [downloadName, setDownloadName] = useState('');
+  const [downloadIconHtml, setDownloadIconHtml] = useState('');
+  const showDownload = selectedPlatform !== '';
+
+  const selectPlatform = (platform: NotesPlatform) => {
+    if (platform.disabled || !platform.href) return;
+    setSelectedPlatform(platform.id);
+    setDownloadHref(platform.href);
+    setDownloadName(platform.name);
+    setDownloadIconHtml(platformIconHtml(platform.id as PlatformId));
+    close();
+  };
 
   useEffect(() => {
-    setDetected(normalize(detectPlatform()) ?? '');
-  }, []);
+    const detected = normalize(detectPlatform());
+    const match = platforms.find((item) => item.id === detected && !item.disabled && item.href);
+    if (match?.href) {
+      setSelectedPlatform(match.id);
+      setDownloadHref(match.href);
+      setDownloadName(match.name);
+      setDownloadIconHtml(platformIconHtml(detected));
+    }
+  }, [platforms]);
 
   return (
     <div className="notes-cta reveal reveal-d2">
@@ -68,6 +97,18 @@ export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
             Open in Web
           </span>
         </a>
+        {showDownload ? (
+          <a className="btn btn-download btn-notes-download" href={downloadHref}>
+            <span className="btn-label">
+              <span
+                className="download-icon"
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted local SVG string
+                dangerouslySetInnerHTML={{ __html: downloadIconHtml }}
+              />
+              <span>Download for {downloadName}</span>
+            </span>
+          </a>
+        ) : null}
       </div>
       <p className="hero-meta">
         <span>{versionText}</span> ·{' '}
@@ -105,10 +146,13 @@ export function NotesDownload({ versionText, macArm64Url, winX64Url }: Props) {
           ) : (
             <a
               key={platform.id}
-              href={platform.href}
-              className={`platform-item${detected === platform.id ? ' selected' : ''}`}
+              href="#"
+              className={`platform-item${selectedPlatform === platform.id ? ' selected' : ''}`}
               data-platform={platform.id}
-              onClick={close}
+              onClick={(event) => {
+                event.preventDefault();
+                selectPlatform(platform);
+              }}
             >
               <PlatformIcon platform={platform.id} />
               <span>

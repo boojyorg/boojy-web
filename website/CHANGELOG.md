@@ -22,6 +22,23 @@
 ### Improvements
 - **Faster logo orbit** — the Boojy mark's planet completes its orbit in 9s instead of 18s (2×
   faster), in both the nav and the hero.
+- **Download CTA borders read on every backdrop** — the Notes "Open in Web" and Design buttons used
+  the same 15%-white border as Audio, but their warmer hero glow washed it out to invisible; bumped
+  to 30% so the edge reads the same across all three pages.
+- **/audio button names the platform** — the download button now reads "Download for macOS" /
+  "Download for Windows" (following the detected or dropdown-selected OS) instead of a static
+  "Download Boojy Audio", so it's clear what you're getting before you click.
+- **/notes dual CTA, no more surprise downloads** — "Open in Web" stays the primary action; a
+  secondary "Download for <OS>" button appears for the visitor's platform. Picking a platform from
+  "Other platforms" now only relabels that button (it no longer auto-downloads on click) — the
+  download fires when you click the button. Linux/unknown-OS/no-JS visitors see just the web button.
+  Both buttons share one width (equal-column grid sized to the wider label) so the pair stays even.
+- **"Early Access" everywhere** — Audio/Notes version lines now say "Early access" instead of "Beta"
+  (matching the product-card badges, Design, and the news copy); the Terms "Beta Software" section
+  is reworded to match. The label is added by the site, so no app release was needed.
+- **Early-access expectation note** — each product page (Audio, Notes, Design) carries one subtle
+  line under the CTA: "Boojy <App> is in Early Access, so there may be bugs and unfinished features.
+  Got feedback? Let me know." (links to the homepage feedback form).
 - **Stale Cloud copy aligned** — homepage + `/cloud/` meta descriptions and the account-page blurb
   no longer say Cloud is "rolling out soon" (it's live: free Notes sync, 500 MB).
 - **SEO pass** — every hero page gets a (screen-reader-only) `<h1>`; `/account/` + `/subscribed/`

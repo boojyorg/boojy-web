@@ -69,6 +69,9 @@ export function AudioDownload({ versionText }: Props) {
   // detection never matches) doesn't claim "(Silicon)" next to the generic fallback button.
   const [downloadHref, setDownloadHref] = useState('#');
   const [platformLabel, setPlatformLabel] = useState('');
+  // OS family name (macOS / Windows) for the button label; the variant (Silicon /
+  // Intel) stays in `platformLabel` for the meta line. Empty until a platform resolves.
+  const [platformName, setPlatformName] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState<string>('');
   const [downloadIconHtml, setDownloadIconHtml] = useState(platformIconHtml(null));
   const showFallback = downloadHref === '#';
@@ -78,6 +81,7 @@ export function AudioDownload({ versionText }: Props) {
     setDownloadHref(platform.href);
     setSelectedPlatform(platform.id);
     setPlatformLabel(platform.shortLabel ?? platform.label);
+    setPlatformName(platform.name);
     setDownloadIconHtml(platformIconHtml(platform.id as PlatformId));
     close();
   };
@@ -90,6 +94,7 @@ export function AudioDownload({ versionText }: Props) {
       setDownloadHref(match.href);
       setSelectedPlatform(match.id);
       setPlatformLabel(match.shortLabel ?? match.label);
+      setPlatformName(match.name);
     }
   }, []);
 
@@ -105,7 +110,7 @@ export function AudioDownload({ versionText }: Props) {
                   // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted local SVG string
                   dangerouslySetInnerHTML={{ __html: downloadIconHtml }}
                 />
-                <span>Download Boojy Audio</span>
+                <span>Download for {platformName}</span>
               </span>
             </a>
           </div>

@@ -2,11 +2,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { findAssetUrl, getLatestRelease } from './github-release';
 
 const REPO = 'boojyorg/boojy-audio';
-const OPTS = { fallbackVersion: 'v0.5.4 Beta' };
+const OPTS = { fallbackVersion: 'v0.5.4 Early access' };
 
 /** What every failure path must collapse to — the build must never break. */
 const FALLBACK = {
-  versionText: 'v0.5.4 Beta',
+  versionText: 'v0.5.4 Early access',
   tag: null,
   dateText: '',
   assets: [],
@@ -34,7 +34,7 @@ describe('getLatestRelease', () => {
     ]);
 
     expect(await getLatestRelease(REPO, OPTS)).toEqual({
-      versionText: 'v0.5.4 Beta · 29 May 2026',
+      versionText: 'v0.5.4 Early access · 29 May 2026',
       tag: 'v0.5.4',
       dateText: '29 May 2026',
       assets: [
@@ -55,7 +55,7 @@ describe('getLatestRelease', () => {
     stubFetchJson([{ tag_name: 'v0.5.4', published_at: null, assets: [] }]);
 
     const release = await getLatestRelease(REPO, OPTS);
-    expect(release.versionText).toBe('v0.5.4 Beta');
+    expect(release.versionText).toBe('v0.5.4 Early access');
     expect(release.dateText).toBe('');
   });
 
