@@ -20,6 +20,8 @@
   404'd silently on every page view; Cloudflare Web Analytics beacon to follow.
 
 ### Improvements
+- **Faster logo orbit** — the Boojy mark's planet completes its orbit in 9s instead of 18s (2×
+  faster), in both the nav and the hero.
 - **Stale Cloud copy aligned** — homepage + `/cloud/` meta descriptions and the account-page blurb
   no longer say Cloud is "rolling out soon" (it's live: free Notes sync, 500 MB).
 - **SEO pass** — every hero page gets a (screen-reader-only) `<h1>`; `/account/` + `/subscribed/`
