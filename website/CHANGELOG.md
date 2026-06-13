@@ -20,6 +20,8 @@
   404'd silently on every page view; Cloudflare Web Analytics beacon to follow.
 
 ### Improvements
+- **Faster logo orbit** — the Boojy mark's planet completes its orbit in 9s instead of 18s (2×
+  faster), in both the nav and the hero.
 - **Download CTA borders read on every backdrop** — the Notes "Open in Web" and Design buttons used
   the same 15%-white border as Audio, but their warmer hero glow washed it out to invisible; bumped
   to 30% so the edge reads the same across all three pages.
