@@ -9,7 +9,7 @@ import '../../styles/notes.css';
 // error/timeout). Notes' asset filenames embed the version, so the download URLs have
 // to come from the live release, not a hardcoded path.
 const release = await getLatestRelease('boojyorg/boojy-notes', {
-  fallbackVersion: 'v0.3.0 Early access',
+  fallbackVersion: 'v0.7.0 Early access',
 });
 const macArm64Url = findAssetUrl(release.assets, /arm64\.dmg$/) ?? null;
 const winX64Url = findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null;
@@ -66,12 +66,6 @@ const notesComingSoon = [
         macArm64Url={macArm64Url}
         winX64Url={winX64Url}
       />
-      <p class="early-access-note reveal reveal-d3">
-        <span>
-          Boojy Notes is in Early Access, so there may be bugs and unfinished features. Got
-          feedback? <a href="/#feedback">Let me know</a>.
-        </span>
-      </p>
     </div>
   </section>
 

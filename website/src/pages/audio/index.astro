@@ -8,7 +8,7 @@ import '../../styles/audio.css';
 // deploy. getLatestRelease never throws (falls back on any error/timeout). Audio ships
 // stable, version-less asset names, so only the version string needs the live release.
 const release = await getLatestRelease('boojyorg/boojy-audio', {
-  fallbackVersion: 'v0.5.2 Early access',
+  fallbackVersion: 'v0.6.0 Early access',
 });
 
 // Feature checklist — mirrors boojy-audio's FEATURE_TRACKER for the tagged release.
@@ -60,12 +60,6 @@ const comingSoon = [
       </div>
       <p class="audio-tagline reveal reveal-d1">Music production without the barriers.</p>
       <AudioDownload client:load versionText={release.versionText} />
-      <p class="early-access-note reveal reveal-d3">
-        <span>
-          Boojy Audio is in Early Access, so there may be bugs and unfinished features. Got
-          feedback? <a href="/#feedback">Let me know</a>.
-        </span>
-      </p>
     </div>
   </section>
 

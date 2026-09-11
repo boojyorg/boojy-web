@@ -4,7 +4,7 @@ export const GITHUB_ICON_PATH =
 export const YOUTUBE_ICON_PATH =
   'M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z';
 
-export type ProductId = 'notes' | 'audio' | 'design';
+export type ProductId = 'notes' | 'audio';
 
 /**
  * Suite-wide release-stage ladder. Each app sits on one rung; the label is the
@@ -19,15 +19,16 @@ export const STAGE_LABELS: Record<Stage, string> = {
 };
 
 /**
- * Homepage product grid — one row of the three apps. Order is the canonical
- * product order (the suite's release order): Notes, Audio, Design — keep the
- * nav and footer in the same order. (Boojy Cloud was dropped from the lineup
- * 2026-08; see the suite VISION.md.)
+ * Homepage product grid — one row of the promoted apps. Order is the canonical
+ * product order: Audio, Notes — keep the nav and footer in the same order.
+ * (Boojy Cloud left the lineup 2026-08; Boojy Design was unlisted 2026-09 — the
+ * app and its /design/ page are still live, just no longer promoted. See the
+ * suite VISION.md.)
  * The `name` is the logo-image fallback for any product without a text logo.
  */
 export interface ProductCardData {
   id: ProductId;
-  /** Card destination. Omitted for products with no page yet (Design) → non-link card. */
+  /** Card destination. Omitted for a product with no page yet → non-link card. */
   href?: string;
   /** Card image: an app screenshot/preview, or the gradient + glyph placeholder. */
   visual: { kind: 'image'; src: string; alt: string } | { kind: 'placeholder' };
@@ -40,27 +41,9 @@ export interface ProductCardData {
   stage?: Stage;
   /** Off-ladder, not yet shipped: muted card, "Coming soon" badge, no CTA. */
   comingSoon?: boolean;
-  /**
-   * Off-ladder, works but paused (Design): neutral "Preview" badge, card and CTA stay
-   * live because the app is usable. Set instead of `stage`.
-   */
-  preview?: boolean;
 }
 
 export const PRODUCT_CARDS: ProductCardData[] = [
-  {
-    id: 'notes',
-    href: '/notes/',
-    visual: {
-      kind: 'image',
-      src: '/images/notes-screenshot-v0.1.png',
-      alt: 'Boojy Notes interface',
-    },
-    logo: { src: '/images/notes-text-logo.png', alt: 'Boojy Notes' },
-    name: 'Boojy Notes',
-    description: 'A calm space for your thoughts. Write in markdown. Own your files.',
-    stage: 'early-access',
-  },
   {
     id: 'audio',
     href: '/audio/',
@@ -75,17 +58,17 @@ export const PRODUCT_CARDS: ProductCardData[] = [
     stage: 'early-access',
   },
   {
-    id: 'design',
-    href: '/design/',
+    id: 'notes',
+    href: '/notes/',
     visual: {
       kind: 'image',
-      src: '/images/design-screenshot-v0.4.png',
-      alt: 'Boojy Design interface',
+      src: '/images/notes-screenshot-v0.1.png',
+      alt: 'Boojy Notes interface',
     },
-    logo: { src: '/images/design-text-logo.png', alt: 'Boojy Design' },
-    name: 'Boojy Design',
-    description: 'An image editor in the browser. Draw, edit, and design.',
-    preview: true,
+    logo: { src: '/images/notes-text-logo.png', alt: 'Boojy Notes' },
+    name: 'Boojy Notes',
+    description: 'A calm space for your thoughts. Write in markdown. Own your files.',
+    stage: 'early-access',
   },
 ];
 

@@ -10,19 +10,16 @@ File-based, under `src/pages/`. All routes are directory routes (`trailingSlash:
 
 | Route | Notes |
 |-------|-------|
-| `/` | Hub — 2×2 product grid (Audio · Notes · Design · Cloud), Why Boojy, latest-news teaser, feedback form |
+| `/` | Hub — product grid (Audio · Notes), Why Boojy, feedback line |
 | `/audio/` | OS-aware download CTA + platforms panel (island) |
 | `/notes/` | Web CTA + downloads; version baked at build time from the GitHub API |
-| `/design/` | Web image editor — link to design.boojy.org, value props, feature checklist (version hardcoded; no GH Releases) |
-| `/cloud/` | Free-only sync service (live — powers Notes sync; Audio support coming); no paid tier, no FAQ |
-| `/news/`, `/news/<post>/` | Monthly "what's new" notes — `news` content collection (one `.md` per post) |
-| `/account/` | Supabase auth; billing UI gated by `CLOUD_LAUNCHED` (`client:only` island) |
+| `/design/` | **Unlisted** (2026-09) — live and indexable, but nothing on the site links to it. Web image editor: link to design.boojy.org, value props, feature checklist (version hardcoded; no GH Releases) |
 | `/privacy/`, `/terms/` | Legal content via `LegalLayout` (clean URLs; old `.html` 301 → here) |
-| `/subscribed/` | Post-signup confirmation |
 | `*` (404) | `404.astro` → `dist/404.html`, served by Cloudflare for unmatched paths |
 
-Cloud is **free-only** (Boojy Notes syncs through it), with Boojy Audio support to follow.
-Nav: **Audio · Notes · Design · Cloud · Account**.
+Retired routes (`/cloud/`, `/account/`, `/news/`, `/pricing`, `/subscribed`) 301 to `/`; see
+`public/_redirects`.
+Nav: **Audio · Notes** plus GitHub.
 
 ## Local development
 

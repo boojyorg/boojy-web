@@ -25,10 +25,14 @@ for (const { path, title } of PAGES) {
   });
 }
 
-test('homepage shows the orbit logo twice and all three product cards', async ({ page }) => {
+test('homepage shows the orbit logo twice and both product cards, Audio first', async ({
+  page,
+}) => {
   await page.goto('/');
   await expect(page.locator('svg.boojy-mark')).toHaveCount(2); // nav + hero
-  await expect(page.locator('.product-card')).toHaveCount(3); // Notes · Audio · Design
+  await expect(page.locator('.product-card')).toHaveCount(2);
+  await expect(page.locator('.product-card').first()).toHaveAttribute('data-product', 'audio');
+  await expect(page.locator('.product-card').last()).toHaveAttribute('data-product', 'notes');
 });
 
 test('homepage runs without JavaScript errors', async ({ page }) => {
@@ -61,22 +65,25 @@ test('/notes/ primary CTA opens the web app', async ({ page }) => {
   await expect(cta).toHaveAttribute('href', 'https://notes.boojy.org');
 });
 
-test('the #feedback anchor still exists and carries the mailto link', async ({ page }) => {
+// The Feedback section went 2026-09-11; the footer email is the only contact route on the
+// homepage now, so guard that instead.
+test('the footer carries the contact email', async ({ page }) => {
   await page.goto('/');
-  // Old links (app pages, every repo's CONTRIBUTING) point at /#feedback — keep it landing.
-  const section = page.locator('#feedback');
-  await expect(section).toBeVisible();
-  await expect(section.getByRole('link', { name: 'tyr@boojy.org' })).toHaveAttribute(
-    'href',
-    'mailto:tyr@boojy.org',
-  );
+  await expect(page.locator('.footer-email')).toHaveAttribute('href', 'mailto:tyr@boojy.org');
 });
 
-test('/design/ is labelled as a preview', async ({ page }) => {
+// Design was unlisted 2026-09: the page stays live and linkable, but nothing on the
+// site points at it. These two guard both halves of that.
+test('/design/ is still reachable by direct link', async ({ page }) => {
+  const response = await page.goto('/design/');
+  expect(response?.status()).toBe(200);
+});
+
+test('nav and footer do not link to Design, and list Audio before Notes', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.product-card[data-product="design"] .product-card-badge')).toHaveText(
-    'Preview',
-  );
+  await expect(page.locator('a[href="/design/"]')).toHaveCount(0);
+  await expect(page.locator('.nav-products .nav-product')).toHaveText(['Audio', 'Notes']);
+  await expect(page.locator('.footer-row-1 a')).toHaveText(['Audio', 'Notes', 'Privacy', 'Terms']);
 });
 
 test('unknown URLs return the 404 page', async ({ page }) => {

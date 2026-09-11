@@ -112,18 +112,15 @@ body {
   z-index: 1;
 }
 
+/* Two cards, side by side. Spread across the full 1200px container they'd read as
+   oversized, so the row is capped and centred — each card keeps roughly the width
+   it had when the grid was three-up. */
 .product-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-xl);
+  max-width: 820px;
   margin: 0 auto;
-}
-
-/* Three cards at 1fr each get too narrow below ~900px; drop to 2-up (one wraps). */
-@media (max-width: 900px) {
-  .product-cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
 .product-card {
@@ -156,11 +153,6 @@ body {
 .product-card[data-product="notes"] {
   --product-color: var(--color-notes);
   --product-glow: rgba(164, 202, 206, 0.15);
-}
-
-.product-card[data-product="design"] {
-  --product-color: var(--color-design);
-  --product-glow: rgba(255, 165, 0, 0.15);
 }
 
 /* Screenshot area */
@@ -227,10 +219,6 @@ body {
   height: 1.95rem;
 }
 
-.product-card[data-product="design"] .product-card-logo {
-  height: 2.5rem;
-}
-
 /* Text-logo fallback for any product without a logo image. */
 .product-card-name {
   align-self: center;
@@ -268,10 +256,6 @@ body {
 
 .product-card[data-product="notes"] .product-card-cta {
   background: var(--color-notes);
-}
-
-.product-card[data-product="design"] .product-card-cta {
-  background: var(--color-design);
 }
 
 .product-card:hover .product-card-cta {
@@ -356,7 +340,7 @@ body {
   color: var(--color-text-light);
 }
 
-/* === Coming-soon product card (Design) === — same shell + opacity as a live card;
+/* === Coming-soon product card === — same shell + opacity as a live card;
    it reads as not-yet-available through its neutral badge and disabled CTA, not by
    dimming (a dimmed card turned translucent and let the cosmic backdrop bleed through). */
 .coming-soon-card {
@@ -373,12 +357,11 @@ body {
 }
 
 /* Neutral badge (the stage badge is accent-tinted; the off-ladder ones stay grey). */
-.coming-soon-badge,
-.preview-badge {
+.coming-soon-badge {
   color: var(--color-text-light);
 }
 
-/* No screenshot yet — a subtle gradient + glyph stands in (Design). */
+/* No screenshot yet — a subtle gradient + glyph stands in. */
 .card-placeholder {
   width: 100%;
   height: 100%;
@@ -397,7 +380,7 @@ body {
   opacity: 0.55;
 }
 
-/* Disabled CTA (Design) — same shape as the live "Learn more" button but a muted
+/* Disabled CTA — same shape as the live "Learn more" button but a muted
    fill, default cursor, and no hover lift, so it clearly reads as not-yet-clickable. */
 .product-card-cta-disabled {
   background: rgba(255, 255, 255, 0.07);
@@ -408,45 +391,6 @@ body {
 .product-card:hover .product-card-cta-disabled {
   filter: none;
   transform: none;
-}
-
-/* === Feedback === (a plain line with a mailto link; the #feedback anchor is load-bearing) */
-.feedback {
-  padding: var(--spacing-3xl) 0;
-}
-
-.feedback-inner {
-  max-width: 560px;
-  margin: 0 auto;
-  text-align: center;
-  padding: var(--spacing-xl);
-  /* Grey on purpose — stands apart from the near-black narrative cards as the
-     closing call-to-action (not part of the recede-into-space group). */
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius-lg);
-}
-
-.feedback-title {
-  margin-bottom: var(--spacing-xs);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.feedback-line {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--color-text-light);
-}
-
-.feedback-line a {
-  color: var(--color-accent);
-  text-decoration: none;
-}
-
-.feedback-line a:hover {
-  text-decoration: underline;
 }
 
 /* === Responsive === */

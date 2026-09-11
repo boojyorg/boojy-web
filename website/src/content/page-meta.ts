@@ -28,15 +28,19 @@ const meta = (
   ogImage,
 });
 
-/** Canonical meta per route — ported from former static HTML `<head>` tags. */
+/**
+ * Canonical meta per route — ported from former static HTML `<head>` tags.
+ * `/design/` keeps its entry: the page is still live and indexable, it's just
+ * no longer linked from the homepage, nav or footer (unlisted 2026-09).
+ */
 export const PAGE_META: Record<string, PageMeta> = {
   '/': meta(
     'Boojy – Creative Tools',
-    'Boojy - Free, open-source creative tools: a calm notes app, a simple music studio, and a browser image editor.',
+    'Boojy - Free, open-source creative tools: a simple music studio and a calm notes app.',
     '/',
     DEFAULT_OG_IMAGE,
     'Boojy - Free Creative Tools',
-    'Free, open-source creative software. Notes, music production, and design.',
+    'Free, open-source creative software. Music production and notes.',
   ),
   '/audio/': meta(
     'Boojy Audio – Free DAW for Beginners',
