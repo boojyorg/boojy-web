@@ -18,7 +18,7 @@
   /* Product Colors */
   --color-audio: #4a9ef5;
   --color-notes: #a4cace;
-  --color-design: #ffa500;
+  --color-design: #ffa500; /* unlisted product; still used by the live /design/ page */
 
   /* UI Colors (matched to Boojy Notes palette) */
   --color-bg: #13151c;
@@ -164,11 +164,6 @@ body {
   color: #a4cace;
 }
 
-.nav-product[data-product="design"]:hover,
-.nav-product[data-product="design"].active {
-  color: #e89940;
-}
-
 .nav-product.active {
   font-weight: 700;
 }
@@ -259,11 +254,6 @@ body {
 .nav-mobile-link[data-product="notes"]:hover,
 .nav-mobile-link[data-product="notes"].active {
   color: #a4cace;
-}
-
-.nav-mobile-link[data-product="design"]:hover,
-.nav-mobile-link[data-product="design"].active {
-  color: #e89940;
 }
 
 .nav-mobile-link:hover {
@@ -455,9 +445,10 @@ body {
   color: #9b9eb0;
 }
 
-/* Expectation-setter under each product CTA — a subtle plain line, not a banner.
-   The link routes to the homepage #feedback line. */
-.early-access-note {
+/* Quiet line under a product CTA — a plain line, not a banner. Only /design/ uses it
+   now, for its paused-development caveat; /audio/ and /notes/ dropped their notes
+   2026-09 and end at the version line. */
+.hero-note {
   max-width: 34rem;
   margin: 0.85rem auto 0;
   color: #8a8ea6;
@@ -465,12 +456,12 @@ body {
   line-height: 1.5;
   text-align: center;
 }
-.early-access-note a {
+.hero-note a {
   color: inherit;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-.early-access-note a:hover {
+.hero-note a:hover {
   color: #c2c5d6;
 }
 

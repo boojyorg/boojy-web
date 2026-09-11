@@ -89,8 +89,8 @@ General branch discipline → suite root `AGENTS.md`. Web specifics:
   privacy/terms. (View-transition + glow rules: `.claude/rules/view-transitions-and-glow.md`.)
 * **Islands (React):** `Starfield` (`client:idle`), `AudioDownload` / `NotesDownload`
   (`client:load`; OS detect runs in `useEffect` so they SSR a universal default). The homepage
-  `#feedback` section is a static line with a `mailto:` link (the form was removed 2026-09); keep
-  the anchor — app pages and every repo's `CONTRIBUTING.md` link to `/#feedback`.
+  Feedback section is gone (the form went 2026-09, the mailto line after it on 2026-09-11); the
+  footer email is the site's contact route and `/#feedback` is a dead anchor.
 * **Static `.astro` chrome:** `Nav.astro` (+ inline toggle/scroll script; active route from
   `Astro.url.pathname` at build time), `Footer.astro`, `ProductCards.astro`.
 * **`website/src/content/`** — `site.ts`, `page-meta.ts`, `legal/*.html` (rendered via

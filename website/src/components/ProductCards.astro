@@ -37,18 +37,9 @@ import { PRODUCT_CARDS, STAGE_LABELS } from '../content/site';
                   </div>
                 )}
                 <span
-                  class:list={[
-                    'product-card-badge',
-                    { 'coming-soon-badge': product.comingSoon, 'preview-badge': product.preview },
-                  ]}
+                  class:list={['product-card-badge', { 'coming-soon-badge': product.comingSoon }]}
                 >
-                  {product.comingSoon
-                    ? 'Coming soon'
-                    : product.preview
-                      ? 'Preview'
-                      : product.stage
-                        ? STAGE_LABELS[product.stage]
-                        : ''}
+                  {product.comingSoon ? 'Coming soon' : product.stage ? STAGE_LABELS[product.stage] : ''}
                 </span>
               </div>
               <div class="product-card-body">

@@ -9,25 +9,47 @@ items. Shipped work leaves here for `CHANGELOG.md`. How the site works lives in 
 - **Boojy Cloud is not on the site.** It left the lineup in 2026-08: `/cloud/` and `/account/` 301
   to `/`, the Supabase/Stripe wiring is gone, and the site has no backend. The suite position on
   Cloud (a future possibility) is in the suite root's `VISION.md` §7; the site doesn't mention it.
-- **Site map (2026-09; first locked 2026-06-01):** nav pillars Notes · Audio · Design (the suite
-  release order) and one utility link, GitHub. Dropped over time: `/roadmap`, `/about`, `/cloud/`,
-  `/account/`, the Cloud FAQ, `/news/` (its one post went stale and wrong), the old newsletter
-  confirmation page, and the homepage feedback form (now a mailto line under the kept `#feedback`
-  anchor). Design is labelled **Preview** via the off-ladder `preview` flag in `site.ts`.
+- **Site map (2026-09; first locked 2026-06-01):** nav pillars Audio · Notes and one utility link,
+  GitHub. Dropped over time: `/roadmap`, `/about`, `/cloud/`, `/account/`, the Cloud FAQ, `/news/`
+  (its one post went stale and wrong), the old newsletter confirmation page, the homepage
+  feedback form (2026-09) and the Feedback section that replaced it (2026-09-11). The footer
+  email is the site's only contact route; `/#feedback` is a dead anchor.
+- **Boojy Design is unlisted (2026-09).** Off the homepage grid, the nav and the footer, and out of
+  the marketing copy (homepage meta + JSON-LD) and the Terms "What Boojy Is" list. `/design/` itself
+  stays live, linkable and indexable — it's just no longer promoted. The `preview` badge flag went
+  with it. Re-listing is a revert: add the card back to `PRODUCT_CARDS` and a link to
+  `Nav.astro` / `Footer.astro`.
+- **The Notes wordmark is a copy from `boojy-notes` (2026-09-11).**
+  `website/public/images/notes-text-logo.png` is that repo's
+  `assets/boojy-notes-wordmark-light.png`, kept under this site's own `<app>-text-logo.png`
+  name rather than the app's filename. Mind the naming: `-light` is the variant drawn *for the
+  app's Light theme*, so its ink is near-black — chosen on purpose, to sit with
+  `audio-text-logo.png` on the dark ground. `boojy-notes` regenerates its variants whenever the
+  app's `TEXT.primary` moves and this copy does not follow, so re-copy when the wordmark
+  changes. If the set ever goes pale, `-dark` is the one to take: its ink is `#E8EAF0`, the
+  site's own `--color-text`.
+- **`/audio/` and `/notes/` end at the version line (2026-09-11).** The "in Early Access, so
+  there may be bugs" note went, and the `Got feedback?` line under it with it: the stage is
+  already on the version string and the homepage card badge. Those two pages no longer link to
+  `/#feedback` — the anchor and the footer email are the remaining routes. `/design/` keeps its
+  own note (paused development, which is not the same claim) and is now the only user of
+  `.hero-note`.
 - **Static-first, no SSR, never Vercel.** See `AGENTS.md`.
 
 ## Next: homepage polish (brainstormed 2026-09-07, not yet planned)
 
 Needs one to three reference sites and the UI intake before any plan. Items raised so far:
 
-- Wordmarks are black PNGs on a dark ground (Boojy in the hero; Notes, Audio, Design on the cards),
+- Wordmarks are black PNGs on a dark ground (Boojy in the hero; Audio and Notes on the cards),
   so the brand is the lowest-contrast thing on the page. Ship them as SVG inked with `currentColor`,
   keeping the coloured glyph. (Also the June review's "wordmark dark-on-dark legibility" item.)
-- Notes card: outdated logo and a web-build screenshot. Recapture, and use one screenshot recipe
-  for all three cards (same window size, aspect, theme, real-looking content).
+  Still open after the 2026-09-11 Notes refresh: the new artwork went in, but deliberately in the
+  black-ink variant, so the contrast problem is unchanged and is a whole-set decision.
+- Notes card: logo refreshed 2026-09-11 (the old arch-N artwork was two designs behind). Still a
+  web-build screenshot — recapture, and use one screenshot recipe for both cards (same window
+  size, aspect, theme, real-looking content).
 - Stage pills over the screenshots read as warning stickers. Move status into the card body as a
   quiet line (version can come from the existing build-time fetch); calm the three solid buttons.
-- Fold the Feedback section into Why Boojy as a closing line, keeping the `#feedback` id on it.
 - "Always free" wording must survive a possible paid hosted-storage option: say "every app and
   every editing feature", never "every feature".
 - Why Boojy: two columns on desktop (story left, promises right) as the card data already

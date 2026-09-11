@@ -5,13 +5,11 @@ import BoojyMark from './BoojyMark.astro';
 // Active-route highlighting is computed at build time from the page's own URL,
 // so the `active` class is baked into the static HTML (no runtime router needed).
 const path = Astro.url.pathname;
-const activeProduct = path.startsWith('/notes/')
-  ? 'notes'
-  : path.startsWith('/audio/')
-    ? 'audio'
-    : path.startsWith('/design/')
-      ? 'design'
-      : undefined;
+const activeProduct = path.startsWith('/audio/')
+  ? 'audio'
+  : path.startsWith('/notes/')
+    ? 'notes'
+    : undefined;
 ---
 
 <nav class="navbar" id="navbar">
@@ -22,19 +20,14 @@ const activeProduct = path.startsWith('/notes/')
 
     <div class="nav-products">
       <a
-        href="/notes/"
-        class:list={['nav-product', { active: activeProduct === 'notes' }]}
-        data-product="notes">Notes</a
-      >
-      <a
         href="/audio/"
         class:list={['nav-product', { active: activeProduct === 'audio' }]}
         data-product="audio">Audio</a
       >
       <a
-        href="/design/"
-        class:list={['nav-product', { active: activeProduct === 'design' }]}
-        data-product="design">Design</a
+        href="/notes/"
+        class:list={['nav-product', { active: activeProduct === 'notes' }]}
+        data-product="notes">Notes</a
       >
     </div>
 
@@ -59,19 +52,14 @@ const activeProduct = path.startsWith('/notes/')
 
     <div class="nav-mobile-menu" id="nav-mobile-menu">
       <a
-        href="/notes/"
-        class:list={['nav-mobile-link', { active: activeProduct === 'notes' }]}
-        data-product="notes">Notes</a
-      >
-      <a
         href="/audio/"
         class:list={['nav-mobile-link', { active: activeProduct === 'audio' }]}
         data-product="audio">Audio</a
       >
       <a
-        href="/design/"
-        class:list={['nav-mobile-link', { active: activeProduct === 'design' }]}
-        data-product="design">Design</a
+        href="/notes/"
+        class:list={['nav-mobile-link', { active: activeProduct === 'notes' }]}
+        data-product="notes">Notes</a
       >
       <a href="https://github.com/boojyorg" target="_blank" class="nav-mobile-link" rel="noreferrer">GitHub</a>
     </div>
