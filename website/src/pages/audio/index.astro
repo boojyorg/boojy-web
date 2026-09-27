@@ -11,26 +11,25 @@ const release = await getLatestRelease('boojyorg/boojy-audio', {
   fallbackVersion: 'v0.6.0 Early access',
 });
 
-// Feature checklist — mirrors boojy-audio's FEATURE_TRACKER for the tagged release.
-// "Coming Soon" sticks to the next release (v0.6 "Sound") — it's a public commitment,
-// so keep it to what's actually scheduled. 6 + 6 so the two cards match in height
-// (free / VST3 / beginner-friendly live in the value-prop cards above, not repeated here).
+// Feature checklist — what boojy-audio has shipped in a tagged release (check its CHANGELOG).
+// "What's next" follows the site policy: only the next scheduled release. v0.7 is a
+// reliability release with no new feature theme (boojy-audio docs/BACKLOG.md), so it says
+// that rather than listing features. Punch in/out is left out on purpose: the Unreleased
+// changelog removes it, so naming it here would go stale at v0.7.
 const features = [
   { title: 'Multi-track timeline', detail: 'audio and MIDI side by side' },
-  { title: 'Recording', detail: 'mic or interface, MIDI keyboard, count-in, punch in/out' },
+  { title: 'Recording', detail: 'mic or interface, MIDI keyboard, count-in, input monitoring' },
   { title: 'Piano roll', detail: 'velocity, quantize, scale highlighting' },
-  { title: 'Mixer', detail: 'faders, pan, mute/solo, send and return buses' },
-  { title: 'Built-in effects', detail: 'EQ, compressor, reverb, delay, chorus' },
+  { title: 'Drum kit', detail: 'pads with starter sounds and a step grid for beats' },
+  { title: 'Automation', detail: 'draw volume and pan changes over time' },
+  { title: 'Clip tools', detail: 'join, reverse, pitch and warp' },
+  { title: 'Mixer & effects', detail: 'sends and returns; EQ, compressor, reverb, delay, chorus' },
   { title: 'Export', detail: 'WAV, MP3, per-track stems, MIDI in and out' },
 ];
 
 const comingSoon = [
-  { title: 'Drum kit', detail: 'pad grid with starter sounds' },
-  { title: 'Step sequencer', detail: 'program beats on a grid' },
-  { title: 'Automation', detail: 'draw volume and pan changes over time' },
-  { title: 'Input monitoring', detail: 'hear yourself while you record' },
-  { title: 'Improved effects', detail: 'better reverb, EQ, compressor' },
-  { title: 'More clip tools', detail: 'join, reverse, normalize' },
+  { title: 'v0.7', detail: 'steadier recording, saving and playback' },
+  { title: 'Simpler workflows', detail: 'smoother everyday editing and mixing' },
 ];
 ---
 
@@ -163,7 +162,7 @@ const comingSoon = [
             </ul>
           </div>
           <div class="audio-features-col audio-features-col-soon">
-            <h3>Coming Soon</h3>
+            <h3>What's next</h3>
             <ul class="audio-feature-list">
             {
               comingSoon.map((item) => (

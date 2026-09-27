@@ -165,7 +165,12 @@ export function Starfield() {
     `;
     document.head.appendChild(styleEl);
 
+    // Background tabs keep firing timers (throttled) but pause CSS animations, so a star
+    // spawned while hidden never reaches `animationend` — they used to pile up and all fly
+    // at once on return, more the longer the tab was away. Only spawn while visible, and
+    // restart the countdown when the tab comes back (onVisibilityChange below).
     function spawnShootingStar() {
+      if (document.hidden) return;
       const star = document.createElement('div');
       star.className = 'shooting-star';
       star.style.left = `${Math.random() * window.innerWidth * 0.7}px`;
@@ -177,7 +182,13 @@ export function Starfield() {
 
     let shootingTimer = 0;
     function scheduleNext() {
+      window.clearTimeout(shootingTimer);
       shootingTimer = window.setTimeout(spawnShootingStar, 15000 + Math.random() * 5000);
+    }
+
+    function onVisibilityChange() {
+      window.clearTimeout(shootingTimer);
+      if (!document.hidden) scheduleNext();
     }
 
     let resizeTimer = 0;
@@ -201,12 +212,14 @@ export function Starfield() {
     } else {
       animId = requestAnimationFrame(draw);
       scheduleNext();
+      document.addEventListener('visibilitychange', onVisibilityChange);
     }
 
     return () => {
       cancelAnimationFrame(animId);
       window.clearTimeout(resizeTimer);
       window.clearTimeout(shootingTimer);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onResize);
       resizeObserver.disconnect();

@@ -52,11 +52,11 @@ export const PAGE_META: Record<string, PageMeta> = {
   ),
   '/notes/': meta(
     'Boojy Notes – A Calm Space for Your Thoughts',
-    'Boojy Notes - A calm space for your thoughts. Write in markdown, organize with folders. Free and runs in your browser.',
+    'Boojy Notes - A calm space for your thoughts. Write in markdown, organize with folders. Free for macOS, Windows and Linux.',
     '/notes/',
     `${SITE}/images/notes-screenshot-v0.1.png`,
     'Boojy Notes - A Calm Space for Your Thoughts',
-    'Write in markdown, organize with folders. Free and runs in your browser.',
+    'Write in markdown, organize with folders. Free for macOS, Windows and Linux.',
   ),
   '/design/': meta(
     'Boojy Design – Image Editor in Your Browser',

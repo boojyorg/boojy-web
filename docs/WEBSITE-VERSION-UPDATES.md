@@ -27,18 +27,21 @@ components fall back to the releases page if an asset URL is unresolved, so no l
 
 1. Bump the version, update `CHANGELOG.md`, commit.
 2. Tag (`git tag v0.x.x`) and push the tag; publish the GitHub Release with the built assets.
-3. **Redeploy the website** so the build re-fetches the new version. Until the deploy-hook below is
-   wired, that means a push/redeploy of the `boojy` repo (or a manual CF "Retry deployment").
+3. **The website rebuilds itself** when the release is published (see below). If boojy.org still
+   shows the old version a few minutes later, check that app's "Rebuild boojy.org" workflow run,
+   or use "Retry deployment" in Cloudflare Pages.
 4. Keep the `fallbackVersion` in the page frontmatter roughly current so a rate-limited build doesn't
    look stale.
 
 ---
 
-## Planned: auto-rebuild on release (Phase 2)
+## Auto-rebuild on release
 
 Because versions are baked at build time, a new app release only appears after the website rebuilds.
-The planned fix is a **Cloudflare Pages Deploy Hook** POSTed from each app repo's release workflow, so
-publishing a release triggers a website rebuild automatically — no manual redeploy. See `docs/BACKLOG.md`.
+Each app repo has `.github/workflows/site-rebuild.yml`, which POSTs the Cloudflare Pages Deploy Hook
+(secret `CF_PAGES_DEPLOY_HOOK_URL`) on `release: published`, so publishing a release rebuilds the
+site with no manual redeploy. It fires on *published*, not on the tag push, because the tag only
+builds a draft. Working since 2026-06; confirmed with Notes v0.10.0 on 2026-09-27.
 
 ---
 

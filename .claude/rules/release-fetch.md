@@ -24,10 +24,15 @@ paths:
   `/releases/latest/download/<name>` URL would 404 on the next release (this is the bug that shipped a
   dead macOS link). **Audio asset names are stable/version-less** (`Boojy-Audio-mac.dmg`), so Audio
   keeps its `/releases/latest/download/` URLs and only consumes `versionText`.
+- **Notes' Linux assets name x64 two ways** (electron-builder's choice): `…-x86_64.AppImage` but
+  `…-amd64.deb`; ARM is `arm64` for both. Match each with its own regex.
+- **Phones are not desktops.** iOS user agents say "like Mac OS X", Android's say "Linux", and
+  iPadOS Safari claims to be a Mac. `detectPlatform()` returns `null` for them (`isMobileDevice()`),
+  so no island ever offers a phone a desktop installer.
 - The download components fall back to the **releases page** when an asset URL is unresolved, so no
   affordance is ever a dead link.
 - Repo owner is **`boojyorg`** for both apps (`boojyorg/boojy-audio`, `boojyorg/boojy-notes`). The old
   `tyrbujac/boojy-audio` only survives as a 301 — never reintroduce it.
 - No GitHub token needed: the unauthenticated API is 60 req/hr per IP on shared CF build IPs, and the
-  fallback string covers the occasional rate-limit. (Future: a CF Deploy Hook from each app's release
-  workflow auto-rebuilds the site so a new tag goes live without a manual deploy — see `docs/BACKLOG.md`.)
+  fallback string covers the occasional rate-limit. Each app's `site-rebuild.yml` POSTs a CF Deploy Hook
+  when a release is published, so a new version goes live without a manual deploy.

@@ -16,7 +16,7 @@ export function PlatformIcon({ platform }: { platform: string }) {
     );
   }
 
-  if (platform === 'linux') {
+  if (platform.startsWith('linux')) {
     return (
       <svg
         className="platform-icon platform-icon-linux"

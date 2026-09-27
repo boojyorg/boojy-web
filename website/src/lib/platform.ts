@@ -7,13 +7,34 @@ export const PLATFORM_ICONS = {
     '<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139z"/></svg>',
 } as const;
 
-export type PlatformId = 'mac-arm64' | 'mac-x64' | 'windows-x64' | 'windows-arm64' | 'linux' | null;
+export type PlatformId =
+  | 'mac-arm64'
+  | 'mac-x64'
+  | 'windows-x64'
+  | 'windows-arm64'
+  | 'linux'
+  | 'linux-arm64'
+  | null;
+
+/**
+ * Phones and tablets. Checked before the desktop branches because their user agents
+ * impersonate desktops: iOS says "like Mac OS X", Android says "Linux", and iPadOS
+ * Safari reports itself as a Mac outright (only its touch points give it away). None
+ * of the apps ship a mobile build, so a desktop installer must never be offered here.
+ */
+export function isMobileDevice(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const userAgent = navigator.userAgent;
+  if (/Android|iPhone|iPad|iPod|Mobile/i.test(userAgent)) return true;
+  return /Mac/.test(userAgent) && navigator.maxTouchPoints > 1;
+}
 
 export function detectPlatform(): PlatformId {
   // SSR-safe: the island is server-rendered at build time, where `navigator`/`document`
   // do not exist. Return null so the build renders a universal default; the client
   // re-detects on mount (see the download islands' useEffect).
   if (typeof navigator === 'undefined' || typeof document === 'undefined') return null;
+  if (isMobileDevice()) return null;
 
   const userAgent = navigator.userAgent;
   const platform =
@@ -56,7 +77,9 @@ export function detectPlatform(): PlatformId {
   }
 
   if (platform.includes('Linux') || userAgent.includes('Linux')) {
-    return 'linux';
+    return /aarch64|arm/i.test(platform) || /aarch64|arm64/i.test(userAgent)
+      ? 'linux-arm64'
+      : 'linux';
   }
 
   return null;
@@ -66,6 +89,6 @@ export function platformIconHtml(platform: PlatformId): string {
   if (!platform) return PLATFORM_ICONS.apple;
   if (platform.startsWith('mac')) return PLATFORM_ICONS.apple;
   if (platform.startsWith('win')) return PLATFORM_ICONS.windows;
-  if (platform === 'linux') return PLATFORM_ICONS.linux;
+  if (platform.startsWith('linux')) return PLATFORM_ICONS.linux;
   return PLATFORM_ICONS.apple;
 }
