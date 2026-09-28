@@ -247,7 +247,8 @@ html.dragging * {
   left: -38%;
   right: -38%;
   top: 176px;
-  height: 1500px;
+  /* Never taller than wide: on a phone a 1500px-tall oval became a steep dome */
+  height: min(1500px, 176vw);
   border-radius: 50%;
   background: linear-gradient(to bottom, var(--hz-hi) 0, var(--hz) 34px, var(--hz-lo) 170px);
   box-shadow:
@@ -363,51 +364,29 @@ html.dragging * {
     transform: translateY(26px) scale(0.95);
   }
 }
-@supports (animation-timeline: view()) {
-  .sr {
-    animation: space-sr linear both;
-    animation-timeline: view();
-    animation-range: entry 5% cover 42%;
-  }
-  .tile.sr:nth-child(1) {
-    animation-range: entry 8% cover 40%;
-  }
-  .tile.sr:nth-child(2) {
-    animation-range: entry 14% cover 46%;
-  }
-  .tile.sr:nth-child(3) {
-    animation-range: entry 20% cover 52%;
-  }
-  .tile.sr:nth-child(4) {
-    animation-range: entry 26% cover 58%;
-  }
-}
-@keyframes space-sr {
-  from {
-    opacity: 0;
-    transform: translateY(34px);
-  }
-}
-/* Fallback (scripts/reveal.ts) for browsers without scroll-driven animations */
+/* Scroll-in: each `.sr` fades up once it scrolls into view (scripts/reveal.ts adds `.in`).
+   Time-based, not tied to scroll distance: a scroll-linked fade never finished for tiles
+   near the page end, because the page couldn't scroll far enough. `sr-io` is set pre-paint
+   in BaseLayout so below-the-fold content never flashes before hiding. */
 .sr-io .sr {
   opacity: 0;
-  transform: translateY(34px);
+  transform: translateY(20px);
   transition:
-    opacity 0.9s var(--ease),
-    transform 0.9s var(--ease);
+    opacity 0.5s var(--ease),
+    transform 0.5s var(--ease);
 }
 .sr-io .sr.in {
   opacity: 1;
   transform: none;
 }
 .sr-io .tile.sr:nth-child(2) {
-  transition-delay: 0.12s;
+  transition-delay: 0.07s;
 }
 .sr-io .tile.sr:nth-child(3) {
-  transition-delay: 0.24s;
+  transition-delay: 0.14s;
 }
 .sr-io .tile.sr:nth-child(4) {
-  transition-delay: 0.36s;
+  transition-delay: 0.21s;
 }
 
 /* ---------- Logo interactions: things that glow react with light, things that orbit can be dragged ---------- */
@@ -451,7 +430,6 @@ html.dragging * {
 
 @media (prefers-reduced-motion: reduce) {
   .rise,
-  .sr,
   .sky-nebula i,
   .shoot {
     animation: none;

@@ -1,9 +1,9 @@
 /**
- * Scroll-in reveals: browsers with scroll-driven animations handle `.sr` in CSS
- * (styles/space.css). Others get this fallback: each `.sr` fades up once it scrolls into view.
+ * Scroll-in reveals: each `.sr` fades up once it scrolls into view (styles/space.css).
+ * BaseLayout adds `sr-io` to <html> pre-paint when IntersectionObserver exists; without it
+ * nothing is hidden.
  */
-if (!CSS.supports('animation-timeline: view()') && 'IntersectionObserver' in window) {
-  document.documentElement.classList.add('sr-io');
+if (document.documentElement.classList.contains('sr-io')) {
   const io = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
@@ -12,7 +12,7 @@ if (!CSS.supports('animation-timeline: view()') && 'IntersectionObserver' in win
         io.unobserve(entry.target);
       }
     },
-    { threshold: 0.15 },
+    { threshold: 0.1 },
   );
   for (const el of document.querySelectorAll('.sr')) io.observe(el);
 }
