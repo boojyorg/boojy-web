@@ -19,60 +19,44 @@ items. Shipped work leaves here for `CHANGELOG.md`. How the site works lives in 
   stays live, linkable and indexable — it's just no longer promoted. The `preview` badge flag went
   with it. Re-listing is a revert: add the card back to `PRODUCT_CARDS` and a link to
   `Nav.astro` / `Footer.astro`.
-- **The Notes wordmark is a copy from `boojy-notes` (2026-09-11).**
-  `website/public/images/notes-text-logo.png` is that repo's
-  `assets/boojy-notes-wordmark-light.png`, kept under this site's own `<app>-text-logo.png`
-  name rather than the app's filename. Mind the naming: `-light` is the variant drawn *for the
-  app's Light theme*, so its ink is near-black — chosen on purpose, to sit with
-  `audio-text-logo.png` on the dark ground. `boojy-notes` regenerates its variants whenever the
-  app's `TEXT.primary` moves and this copy does not follow, so re-copy when the wordmark
-  changes. If the set ever goes pale, `-dark` is the one to take: its ink is `#E8EAF0`, the
-  site's own `--color-text`.
-- **`/audio/` and `/notes/` end at the version line (2026-09-11).** The "in Early Access, so
-  there may be bugs" note went, and the `Got feedback?` line under it with it: the stage is
-  already on the version string and the homepage card badge. Those two pages no longer link to
-  `/#feedback` — the anchor and the footer email are the remaining routes. `/design/` keeps its
-  own note (paused development, which is not the same claim) and is now the only user of
-  `.hero-note`.
+- **Logos are drawn, not images (2026-09-28).** The Boojy logo and the Notes/Audio wordmarks are
+  built from Poppins outlines (`website/src/content/glyphs.json`), so they're light on the dark
+  ground and never depend on a font loading. If an app's glyph (the teal N, the blue A) changes,
+  update `lib/wordmark.ts`.
+- **App pages end at Features (2026-09-28).** Hero, screenshot, four Features tiles, a GitHub
+  line, then the footer on the app's planet horizon. No Current/Coming-soon lists (they kept going
+  stale) and no feedback invite until the apps reach Beta. `/design/` keeps its own paused-
+  development note and is the only user of `.hero-note`.
 - **Notes is desktop-only on the site (2026-09-27).** No "Open in Web" button: the browser build
   at notes.boojy.org is a development target whose notes live in browser storage (boojy-notes
   README). Bring a web option back when Notes on the web saves notes properly. Phones and tablets
   get a "desktop app" line instead of an installer, on every download island.
 - **Static-first, no SSR, never Vercel.** See `AGENTS.md`.
 
-## Next: homepage polish (brainstormed 2026-09-07, not yet planned)
+## Next: redesign follow-ups
 
-Needs one to three reference sites and the UI intake before any plan. Items raised so far:
+The space redesign shipped from the Sky Lab (spec: https://claude.ai/artifact/17QQiaUjrCMM8iyGBNV6y8;
+decisions in `CHANGELOG.md`). Left over:
 
-- Wordmarks are black PNGs on a dark ground (Boojy in the hero; Audio and Notes on the cards),
-  so the brand is the lowest-contrast thing on the page. Ship them as SVG inked with `currentColor`,
-  keeping the coloured glyph. (Also the June review's "wordmark dark-on-dark legibility" item.)
-  Still open after the 2026-09-11 Notes refresh: the new artwork went in, but deliberately in the
-  black-ink variant, so the contrast problem is unchanged and is a whole-set decision.
-- Notes card: logo refreshed 2026-09-11 (the old arch-N artwork was two designs behind). Still a
-  web-build screenshot — recapture, and use one screenshot recipe for both cards (same window
-  size, aspect, theme, real-looking content).
-- Stage pills over the screenshots read as warning stickers. Move status into the card body as a
-  quiet line (version can come from the existing build-time fetch); calm the three solid buttons.
-- "Always free" wording must survive a possible paid hosted-storage option: say "every app and
-  every editing feature", never "every feature".
-- Why Boojy: two columns on desktop (story left, promises right) as the card data already
-  describes; tighten the story line.
-- Hero: the one expressive motion moment (parallax on the starfield, the orbit mark's moon
-  becoming the three app glyphs on hover, glow following the hovered card). Keep everything else
-  quiet.
-- Tighten the vertical rhythm between hero, cards and Why Boojy.
+- **Tyr's photo** for the About card: set `ABOUT_PHOTO` in `content/site.ts` (square, 400px+).
+- **Real screenshots.** The Notes pair was captured from the browser build in a wide window, so it's
+  mostly empty at card size; recapture at about 1100×700 with a fuller note, light and dark. Audio's
+  is from v0.5.2. Use one recipe for both apps.
+- **Audio's "macOS Intel" download** points at the same `.dmg` as Apple Silicon, which is probably
+  arm64-only (the release build runs on arm64 runners). Verify, then drop the row or ship a
+  universal build.
+- **Phone check on real devices.** Dragging the homepage planets is mouse/pen only (touch keeps
+  scrolling the page); the j's dot and the 404 moon do drag on touch.
+- **`/design/`** still uses the old black wordmark image (unlisted, deliberately untouched).
 
 ## Unscheduled
 
 - **Core Web Vitals not measured.** Run a Lighthouse pass for real LCP / CLS / INP and add the
   Cloudflare Web Analytics beacon (free CWV data).
-- **Drop React from the homepage.** The feedback form island is gone, so `Starfield` is the last
-  React island on `/`; making it `is:inline` vanilla JS removes React from the homepage entirely.
 - **Privacy and terms freshness check.** Carried from June. The one known inaccuracy (a newsletter
   "Unsubscribe" line) was fixed 2026-09-07; a full read-through against what the apps actually do
   is still owed.
-- **CSS consolidation** 4 → 1 product stylesheets (June site review, rec #9).
+- **CSS consolidation:** Notes and Audio now share `product.css`; `design.css` and `legal.css` remain.
 - **Google Search Console (reassess).** A domain property was being verified in June; check whether
   it completed and whether `https://boojy.org/sitemap-index.xml` was submitted. The June list of
   URLs to index included `/cloud/`, which no longer exists.

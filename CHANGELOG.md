@@ -6,6 +6,17 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Features
+- **The space redesign** (from the Sky Lab). The homepage is a solar system around the Boojy
+  logo: soft spectrum orbit rings fading with distance, an asteroid belt, and eight planets you can
+  drag (let go and they glide back onto the nearest point of their orbit with a small settle).
+  The logo is drawn from its parts: click the sun for a flare, drag the dot on the j. Two app
+  cards (Audio, Notes) with real screenshots, an About card, and a one-row footer. The Notes and
+  Audio pages get a "Boojy Notes" / "Boojy Audio" lockup, a key-point line, a solid download
+  button in the app's colour with "Apple Silicon · v0.10 · Early access · Other platforms"
+  under it, the screenshot (Notes with a Dark/Light toggle), four Features tiles, a link to the
+  source on GitHub, and the footer on a planet horizon in the app's colour. New 404: "4 (moon) 4"
+  in a shifting nebula, with a draggable moon. The nav sits at the top and scrolls away. The
+  homepage ships no React; the sky is plain canvas code that caches its rings and caps at 60fps.
 - **Boojy Notes downloads for Linux.** The Notes page offers the AppImage and the .deb, for Intel
   and ARM, straight from the latest release (v0.10.0 is the first with Linux). Linux visitors get
   "Download for Linux" (the AppImage); "Linux support" is out of Coming soon, and the page

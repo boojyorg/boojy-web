@@ -1,0 +1,25 @@
+---
+/**
+ * The space backdrop on every page: drifting nebula (CSS), stars, and on the homepage
+ * the solar system around the logo's sun (scripts/sky.ts). Fixed behind the page; the
+ * `lift` canvas sits above the page so a dragged planet can pass in front of text.
+ * `page` tints the nebula (Notes teal, Audio blue) and switches the solar system on.
+ */
+interface Props {
+  page: 'home' | 'notes' | 'audio' | 'lost' | 'other';
+}
+const { page } = Astro.props;
+---
+
+<div class="sky" data-page={page} aria-hidden="true">
+  <div class="sky-nebula"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+  <canvas id="sky-stars"></canvas>
+  <canvas id="sky-rings"></canvas>
+  <canvas id="sky-system"></canvas>
+  <div class="sky-fx" id="sky-fx"></div>
+</div>
+<canvas class="sky-lift" id="sky-lift" aria-hidden="true"></canvas>
+
+<script>
+  import '../scripts/sky';
+</script>

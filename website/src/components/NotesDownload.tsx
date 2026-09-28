@@ -20,6 +20,8 @@ interface NotesPlatform {
   detects?: PlatformId;
   name: string;
   label: string;
+  /** Shown first in the line under the button, e.g. "Apple Silicon". */
+  meta: string;
   href: string;
 }
 
@@ -31,8 +33,8 @@ function normalize(platform: PlatformId): PlatformId {
 }
 
 interface Props {
-  /** Version string, fetched at build time and passed in so it lands in static HTML. */
-  versionText: string;
+  /** Display version from the build-time release fetch, e.g. `v0.10` (lands in static HTML). */
+  version: string;
   urls: NotesDownloadUrls;
 }
 
@@ -49,7 +51,7 @@ interface Props {
  *   that opens the platform list (or goes to GitHub releases without JS).
  * Linux defaults to the AppImage, which runs on any distro; the .deb is in the list.
  */
-export function NotesDownload({ versionText, urls }: Props) {
+export function NotesDownload({ version, urls }: Props) {
   const { panelRef, toggleRef, toggle, close, panelClassName } = usePlatformsPanel();
 
   // Real (version-stamped) asset URLs; if the fetch failed, fall back to the releases page
@@ -61,6 +63,7 @@ export function NotesDownload({ versionText, urls }: Props) {
         detects: 'mac-arm64',
         name: 'macOS',
         label: 'Apple Silicon',
+        meta: 'Apple Silicon',
         href: urls.macArm64 ?? RELEASES_URL,
       },
       {
@@ -68,6 +71,7 @@ export function NotesDownload({ versionText, urls }: Props) {
         detects: 'windows-x64',
         name: 'Windows',
         label: '10 and later',
+        meta: 'Windows 10 and later',
         href: urls.winX64 ?? RELEASES_URL,
       },
       {
@@ -75,6 +79,7 @@ export function NotesDownload({ versionText, urls }: Props) {
         detects: 'linux',
         name: 'Linux',
         label: 'AppImage · x64',
+        meta: 'AppImage',
         href: urls.linuxAppImageX64 ?? RELEASES_URL,
       },
       {
@@ -82,18 +87,21 @@ export function NotesDownload({ versionText, urls }: Props) {
         detects: 'linux-arm64',
         name: 'Linux',
         label: 'AppImage · ARM',
+        meta: 'AppImage · ARM',
         href: urls.linuxAppImageArm64 ?? RELEASES_URL,
       },
       {
         id: 'linux-deb-x64',
         name: 'Linux',
         label: '.deb · x64',
+        meta: '.deb',
         href: urls.linuxDebX64 ?? RELEASES_URL,
       },
       {
         id: 'linux-deb-arm64',
         name: 'Linux',
         label: '.deb · ARM',
+        meta: '.deb · ARM',
         href: urls.linuxDebArm64 ?? RELEASES_URL,
       },
     ],
@@ -120,13 +128,13 @@ export function NotesDownload({ versionText, urls }: Props) {
   }, [platforms]);
 
   return (
-    <div className="notes-cta reveal reveal-d2">
+    <div className="dl">
       {mobile && !selected ? (
         <p className="notes-desktop-note">A desktop app for macOS, Windows and Linux.</p>
       ) : (
         <div className="hero-buttons">
           {selected ? (
-            <a className="btn btn-download btn-notes-download" href={selected.href}>
+            <a className="btn-solid btn-notes btn-notes-download" href={selected.href}>
               <span className="btn-label">
                 <span
                   className="download-icon"
@@ -137,7 +145,11 @@ export function NotesDownload({ versionText, urls }: Props) {
               </span>
             </a>
           ) : (
-            <a className="btn btn-download btn-notes-download" href={RELEASES_URL} onClick={toggle}>
+            <a
+              className="btn-solid btn-notes btn-notes-download"
+              href={RELEASES_URL}
+              onClick={toggle}
+            >
               <span className="btn-label">
                 <span>Download</span>
               </span>
@@ -145,19 +157,11 @@ export function NotesDownload({ versionText, urls }: Props) {
           )}
         </div>
       )}
-      <p className="hero-meta">
-        <span>{versionText}</span> ·{' '}
+      <p className="dl-meta">
+        {selected ? `${selected.meta} · ` : ''}
+        {version} · Early access ·{' '}
         <a href="#" className="other-platforms-link" ref={toggleRef} onClick={toggle}>
           Other platforms
-        </a>{' '}
-        ·{' '}
-        <a
-          href="https://github.com/boojyorg/boojy-notes/releases"
-          className="other-platforms-link"
-          target="_blank"
-          rel="noreferrer"
-        >
-          All versions
         </a>
       </p>
       <div className={panelClassName} ref={panelRef}>

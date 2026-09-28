@@ -54,13 +54,13 @@ website/
 ├── src/
 │   ├── pages/          # file-based routes (.astro)
 │   ├── layouts/        # BaseLayout (static <head> + SEO), LegalLayout
-│   ├── components/      # .astro chrome (Nav, Footer, ProductCards) + React islands
-│   │                   #   (Starfield, FaqAccordion, Audio/NotesDownload, Account, Feedback)
-│   ├── hooks/          # useAccount (auth/billing state), usePlatformsPanel (download dropdown)
-│   ├── content.config.ts # `news` content collection (glob over content/news/*.md)
-│   ├── content/        # site.ts, cloud.ts, page-meta.ts, legal/*.html, news/*.md
-│   ├── lib/            # platform.ts, supabase.ts, github-release.ts (build-time version/URL fetch)
-│   └── styles/         # inter.css (latin subset), shared.css (global) + per-page CSS, hashed by Astro
+│   ├── components/     # .astro chrome (Nav, Footer, Sky, logos, ProductCards, Features)
+│   │                   #   + the two React islands (Audio/NotesDownload)
+│   ├── scripts/        # sky.ts (stars + solar system), logo.ts (flares, drags), reveal.ts
+│   ├── hooks/          # usePlatformsPanel (download dropdown)
+│   ├── content/        # site.ts, page-meta.ts, glyphs.json (logo outlines), legal/*.html
+│   ├── lib/            # platform.ts, github-release.ts, wordmark.ts (logo geometry)
+│   └── styles/         # inter.css, shared.css + space.css (global), per-page CSS, hashed by Astro
 └── public/
     ├── _headers        # security headers + immutable caching for /_astro/*
     ├── _redirects      # legacy .html → clean-URL 301s, /pricing → /cloud/, /github
@@ -70,10 +70,9 @@ website/
 
 ## Tech stack
 
-- **Astro** (static) + **React 19** islands (`@astrojs/react`), `@astrojs/sitemap`
-- Plain CSS (no Tailwind), **TypeScript** strict + `noUncheckedIndexedAccess`
+- **Astro** (static) + two **React 19** islands (the download buttons), `@astrojs/sitemap`
+- Plain CSS (no Tailwind), plain canvas JS for the sky, **TypeScript** strict + `noUncheckedIndexedAccess`
 - **pnpm**, **Biome** for lint/format
-- **Supabase** JS on `/account/` (auth; billing gated until Cloud launch)
 - Native browser View Transitions (no Astro `<ClientRouter />`)
 
 ## Deployment
@@ -94,7 +93,7 @@ Pushes to `master` deploy production; other branches get preview deploys. The re
 - `curl -s https://boojy.org/ | grep '<title>'` → real per-route title in the raw HTML (not an empty
   `<div id="root">`)
 - `curl -sI https://boojy.org/privacy.html` → `301` to `/privacy/`
-- Browser smoke: hub starfield, `/audio/` download detection, `/account/` sign-in, fake URL → 404
+- Browser smoke: homepage solar system, `/notes/` + `/audio/` download detection, fake URL → 404
 
 ## Links
 

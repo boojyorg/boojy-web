@@ -1,30 +1,24 @@
 ---
-import { GITHUB_ICON_PATH, YOUTUBE_ICON_PATH } from '../content/site';
+/**
+ * One-row footer. On the app pages it sits on the curved edge of that app's planet
+ * (`horizon`), in the app's colour.
+ */
+interface Props {
+  horizon?: 'notes' | 'audio';
+}
+const { horizon } = Astro.props;
 ---
 
-<footer class="footer">
-  <div class="container">
-    <nav class="footer-row-1">
+<div class:list={[{ horizon: !!horizon }, horizon && `horizon-${horizon}`]}>
+  <footer class="site-foot">
+    <nav aria-label="Footer">
       <a href="/audio/">Audio</a>
       <a href="/notes/">Notes</a>
       <a href="/privacy/">Privacy</a>
       <a href="/terms/">Terms</a>
-    </nav>
-    <div class="footer-row-2">
-      <a href="https://github.com/boojyorg" target="_blank" aria-label="GitHub" class="footer-icon" rel="noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d={GITHUB_ICON_PATH} />
-        </svg>
-      </a>
-      <a href="https://youtube.com/@boojy" target="_blank" aria-label="YouTube" class="footer-icon" rel="noreferrer">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d={YOUTUBE_ICON_PATH} />
-        </svg>
-      </a>
-      <span class="footer-sep">&middot;</span>
+      <a href="https://github.com/boojyorg" target="_blank" rel="noreferrer">GitHub</a>
       <a href="mailto:tyr@boojy.org" class="footer-email">tyr@boojy.org</a>
-      <span class="footer-sep">&middot;</span>
-      <span class="footer-copy">&copy; 2026 Boojy</span>
-    </div>
-  </div>
-</footer>
+      <span class="copy">© 2026 Boojy</span>
+    </nav>
+  </footer>
+</div>

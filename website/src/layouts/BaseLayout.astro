@@ -1,10 +1,12 @@
 ---
-import { Starfield } from '../components/Starfield';
 import Footer from '../components/Footer.astro';
 import Nav from '../components/Nav.astro';
+import Sky from '../components/Sky.astro';
 import { DEFAULT_OG_IMAGE, getPageMeta, pageMetaUrl } from '../content/page-meta';
+import { LOGO_DEFS } from '../lib/wordmark';
 import '../styles/inter.css';
 import '../styles/shared.css';
+import '../styles/space.css';
 
 interface Props {
   /** Route path used to resolve per-page SEO metadata + canonical/OG URL. */
@@ -13,9 +15,13 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** Tints the sky's nebula and switches the homepage solar system on. */
+  page?: 'home' | 'notes' | 'audio' | 'lost' | 'other';
+  /** `notes` / `audio` put the footer on that app's planet horizon; `none` drops it (404). */
+  footer?: 'plain' | 'notes' | 'audio' | 'none';
 }
 
-const { path, title, description, ogImage: ogImageProp } = Astro.props;
+const { path, title, description, ogImage: ogImageProp, page = 'other', footer = 'plain' } = Astro.props;
 const base = getPageMeta(path);
 // Overrides win; `path` is always authoritative for the canonical/OG URL (the base
 // can be the 404 fallback for routes absent from PAGE_META).
@@ -36,7 +42,7 @@ const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#13151C" />
+    <meta name="theme-color" content="#0D1222" />
 
     <title>{meta.title}</title>
     <meta name="description" content={meta.description} />
@@ -82,10 +88,17 @@ const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
     <slot name="head" />
   </head>
   <body>
-    <Starfield client:idle />
+    <Fragment set:html={LOGO_DEFS} />
+    <Sky page={page} />
     <Nav />
-    <slot />
-    <Footer />
+    <main>
+      <slot />
+    </main>
+    {footer !== 'none' && <Footer horizon={footer === 'notes' || footer === 'audio' ? footer : undefined} />}
+    <script>
+      import '../scripts/logo';
+      import '../scripts/reveal';
+    </script>
 
     <!-- Glow morph + write-side capture. Runs after the DOM is parsed (the glow element
          exists here). Reads the origin color from sessionStorage, animates the glow from

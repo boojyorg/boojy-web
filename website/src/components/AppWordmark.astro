@@ -1,0 +1,20 @@
+---
+import { type AppId, appWordMarkup } from '../lib/wordmark';
+
+/** The app's name as it appears on its home card: glyph (N / A) + "otes" / "udio". */
+interface Props {
+  app: AppId;
+  class?: string;
+}
+const { app, class: className } = Astro.props;
+const word = appWordMarkup(app, 0, false, '');
+const width = Math.round((word.end + 6) * 100) / 100;
+---
+
+<svg
+  class:list={['bj-wordmark', className]}
+  viewBox={`-3 -80 ${width} 104`}
+  role="img"
+  aria-label={app === 'notes' ? 'Notes' : 'Audio'}
+  set:html={word.svg}
+/>

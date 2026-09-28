@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { findAssetUrl, getLatestRelease } from './github-release';
+import { findAssetUrl, getLatestRelease, shortVersion } from './github-release';
 
 const REPO = 'boojyorg/boojy-audio';
 const OPTS = { fallbackVersion: 'v0.5.4 Early access' };
@@ -8,6 +8,7 @@ const OPTS = { fallbackVersion: 'v0.5.4 Early access' };
 const FALLBACK = {
   versionText: 'v0.5.4 Early access',
   tag: null,
+  version: 'v0.5.4',
   dateText: '',
   assets: [],
 };
@@ -36,6 +37,7 @@ describe('getLatestRelease', () => {
     expect(await getLatestRelease(REPO, OPTS)).toEqual({
       versionText: 'v0.5.4 Early access · 29 May 2026',
       tag: 'v0.5.4',
+      version: 'v0.5.4',
       dateText: '29 May 2026',
       assets: [
         { name: 'Boojy-Audio-mac.dmg', url: 'https://example.com/mac.dmg' },
@@ -96,5 +98,15 @@ describe('findAssetUrl', () => {
 
   it('returns undefined when nothing matches', () => {
     expect(findAssetUrl(assets, /linux/)).toBeUndefined();
+  });
+});
+
+describe('shortVersion', () => {
+  it('drops a trailing .0 and keeps any other patch', () => {
+    expect(shortVersion('v0.10.0')).toBe('v0.10');
+    expect(shortVersion('v0.6.0')).toBe('v0.6');
+    expect(shortVersion('v0.6.1')).toBe('v0.6.1');
+    expect(shortVersion('v1.0.0')).toBe('v1.0');
+    expect(shortVersion('0.4.2')).toBe('v0.4.2');
   });
 });

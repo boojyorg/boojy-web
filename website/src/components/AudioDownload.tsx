@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePlatformsPanel } from '../hooks/usePlatformsPanel';
-import { detectPlatform, type PlatformId, platformIconHtml } from '../lib/platform';
+import { detectPlatform, isMobileDevice, type PlatformId, platformIconHtml } from '../lib/platform';
 import { GitHubPlatformIcon, PlatformIcon } from './PlatformIcons';
 
 interface AudioPlatform {
@@ -21,7 +21,7 @@ const AUDIO_PLATFORMS: AudioPlatform[] = [
     label: 'Apple Silicon',
     name: 'macOS',
     href: `${AUDIO_BASE_URL}Boojy-Audio-mac.dmg`,
-    shortLabel: 'Silicon',
+    shortLabel: 'Apple Silicon',
   },
   {
     id: 'mac-x64',
@@ -35,7 +35,7 @@ const AUDIO_PLATFORMS: AudioPlatform[] = [
     label: 'Windows 10+',
     name: 'Windows',
     href: `${AUDIO_BASE_URL}Boojy-Audio-win.exe`,
-    shortLabel: 'Windows',
+    shortLabel: 'Windows 10 and later',
   },
   {
     id: 'linux',
@@ -58,11 +58,11 @@ function normalize(platform: PlatformId): PlatformId {
  * href sentinel (`'#'` = no direct download yet) so there's a single source of truth.
  */
 interface Props {
-  /** Version string, fetched at build time and passed in so it lands in static HTML. */
-  versionText: string;
+  /** Display version from the build-time release fetch, e.g. `v0.6` (lands in static HTML). */
+  version: string;
 }
 
-export function AudioDownload({ versionText }: Props) {
+export function AudioDownload({ version }: Props) {
   const { panelRef, toggleRef, toggle, close, panelClassName } = usePlatformsPanel();
 
   // Label/selection start empty so the SSR HTML (and Linux/unknown-OS visitors, whose
@@ -75,6 +75,7 @@ export function AudioDownload({ versionText }: Props) {
   const [selectedPlatform, setSelectedPlatform] = useState<string>('');
   const [downloadIconHtml, setDownloadIconHtml] = useState(platformIconHtml(null));
   const showFallback = downloadHref === '#';
+  const [mobile, setMobile] = useState(false);
 
   const selectPlatform = (platform: AudioPlatform) => {
     if (platform.disabled || !platform.href) return;
@@ -87,6 +88,10 @@ export function AudioDownload({ versionText }: Props) {
   };
 
   useEffect(() => {
+    if (isMobileDevice()) {
+      setMobile(true);
+      return;
+    }
     const detected = normalize(detectPlatform());
     setDownloadIconHtml(platformIconHtml(detected));
     const match = AUDIO_PLATFORMS.find((item) => item.id === detected && !item.disabled);
@@ -99,48 +104,43 @@ export function AudioDownload({ versionText }: Props) {
   }, []);
 
   return (
-    <div className="audio-cta reveal reveal-d2">
-      <div className="hero-buttons">
-        {!showFallback ? (
-          <div id="download-detected">
-            <a className="btn btn-download" href={downloadHref}>
-              <span className="btn-label">
-                <span
-                  className="download-icon"
-                  // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted local SVG string
-                  dangerouslySetInnerHTML={{ __html: downloadIconHtml }}
-                />
-                <span>Download for {platformName}</span>
-              </span>
-            </a>
-          </div>
-        ) : (
-          <div id="download-fallback">
-            <a
-              href="https://github.com/boojyorg/boojy-audio/releases/latest"
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-download"
-            >
-              <span className="btn-label">Download Boojy Audio</span>
-            </a>
-          </div>
-        )}
-      </div>
-      <p className="hero-meta">
-        {versionText}
-        {platformLabel ? <span> ({platformLabel})</span> : null} ·{' '}
+    <div className="dl">
+      {mobile ? (
+        <p className="notes-desktop-note">A desktop app for macOS and Windows.</p>
+      ) : (
+        <div className="hero-buttons">
+          {!showFallback ? (
+            <div id="download-detected">
+              <a className="btn-solid btn-audio audio-download" href={downloadHref}>
+                <span className="btn-label">
+                  <span
+                    className="download-icon"
+                    // biome-ignore lint/security/noDangerouslySetInnerHtml: trusted local SVG string
+                    dangerouslySetInnerHTML={{ __html: downloadIconHtml }}
+                  />
+                  <span>Download for {platformName}</span>
+                </span>
+              </a>
+            </div>
+          ) : (
+            <div id="download-fallback">
+              <a
+                href="https://github.com/boojyorg/boojy-audio/releases/latest"
+                target="_blank"
+                rel="noreferrer"
+                className="btn-solid btn-audio audio-download"
+              >
+                <span className="btn-label">Download Boojy Audio</span>
+              </a>
+            </div>
+          )}
+        </div>
+      )}
+      <p className="dl-meta">
+        {platformLabel ? `${platformLabel} · ` : ''}
+        {version} · Early access ·{' '}
         <a href="#" className="other-platforms-link" ref={toggleRef} onClick={toggle}>
           Other platforms
-        </a>{' '}
-        ·{' '}
-        <a
-          href="https://github.com/boojyorg/boojy-audio/releases"
-          className="other-platforms-link"
-          target="_blank"
-          rel="noreferrer"
-        >
-          All versions
         </a>
       </p>
       <div className={panelClassName} ref={panelRef}>

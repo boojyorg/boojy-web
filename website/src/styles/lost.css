@@ -1,0 +1,103 @@
+/* ===================================
+   BOOJY - 404
+   "4 (moon) 4" in a slowly shifting nebula cloud; no footer.
+   =================================== */
+
+.lost {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 150px 20px 60px;
+}
+.lost-cloud {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: min(640px, 110%);
+  height: 340px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: lost-shift 36s ease-in-out infinite alternate;
+}
+.lost-cloud i {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(46px);
+  will-change: transform;
+}
+.lost-cloud i:nth-child(1) {
+  left: 12%;
+  top: 18%;
+  width: 46%;
+  height: 64%;
+  background: rgba(120, 110, 230, 0.3);
+  animation: sky-drift1 40s ease-in-out infinite alternate;
+}
+.lost-cloud i:nth-child(2) {
+  right: 10%;
+  top: 10%;
+  width: 44%;
+  height: 70%;
+  background: rgba(90, 170, 190, 0.24);
+  animation: sky-drift2 52s ease-in-out infinite alternate;
+}
+.lost-cloud i:nth-child(3) {
+  left: 32%;
+  top: 38%;
+  width: 38%;
+  height: 52%;
+  background: rgba(220, 130, 170, 0.18);
+  animation: sky-drift1 60s ease-in-out infinite alternate-reverse;
+}
+@keyframes lost-shift {
+  50% {
+    filter: hue-rotate(35deg) saturate(1.15);
+  }
+  100% {
+    filter: hue-rotate(-25deg) saturate(1.05);
+  }
+}
+.lost-inner {
+  position: relative;
+  display: grid;
+  justify-items: center;
+}
+.lost-four {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1em;
+  font-size: clamp(60px, 9vw, 96px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+/* The moon rides above the text while it's dragged */
+.lost-four svg {
+  position: relative;
+  z-index: 3;
+  width: 0.62em;
+  height: 0.62em;
+  overflow: visible;
+}
+.lost-title {
+  margin: 26px 0 8px;
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: rgba(232, 234, 240, 0.92);
+}
+.lost-text {
+  margin: 0 0 22px;
+  color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lost-cloud,
+  .lost-cloud i {
+    animation: none;
+  }
+}
