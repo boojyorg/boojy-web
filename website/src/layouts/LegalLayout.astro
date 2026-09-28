@@ -1,32 +1,30 @@
 ---
+/**
+ * Privacy and Terms: a plain title, then the text on a solid card at reading width so
+ * the stars never sit behind the words. The card opens with a lead sentence (`intro`) and
+ * the page "in short" (`short`), then a hairline, then the detail (the slot).
+ */
 import '../styles/legal.css';
 
 interface Props {
   title: string;
   updated: string;
-  contentClassName?: string;
-  bodyClassName?: string;
+  intro: string;
+  short: string[];
 }
 
-const {
-  title,
-  updated,
-  contentClassName = 'legal-content',
-  bodyClassName = 'legal-body',
-} = Astro.props;
+const { title, updated, intro, short } = Astro.props;
 ---
 
 <section class="legal-hero">
-  <div class="legal-hero-glow" aria-hidden="true" data-glow></div>
-  <div class="container">
-    <h1>{title}</h1>
-    <p>{updated}</p>
-  </div>
+  <h1 class="rise" style="--i:0">{title}</h1>
+  <p class="rise" style="--i:1">Last updated: {updated}</p>
 </section>
-<section class={contentClassName}>
-  <div class="container">
-    <div class={bodyClassName}>
-      <slot />
-    </div>
+<div class="legal-card rise" style="--i:2">
+  <p class="legal-lead">{intro}</p>
+  <h2 class="legal-short-title">In short</h2>
+  <ul class="legal-short">{short.map((line) => <li>{line}</li>)}</ul>
+  <div class="legal-body">
+    <slot />
   </div>
-</section>
+</div>

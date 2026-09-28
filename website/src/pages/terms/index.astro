@@ -5,7 +5,16 @@ import LegalLayout from '../../layouts/LegalLayout.astro';
 ---
 
 <BaseLayout path="/terms/">
-  <LegalLayout title="Terms of Service" updated="Last updated: January 8, 2026">
+  <LegalLayout
+    title="Terms of Service"
+    updated="28 September 2026"
+    intro="By using Boojy (the website and apps), you agree to these terms. If you don't agree, please don't use them."
+    short={[
+      'Boojy is free to use for anything legal, including commercial work',
+      'Everything you make is yours',
+      'The apps are early access, so keep backups',
+    ]}
+  >
     <Fragment set:html={termsBody} />
   </LegalLayout>
 </BaseLayout>

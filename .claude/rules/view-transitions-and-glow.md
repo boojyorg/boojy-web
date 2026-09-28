@@ -13,8 +13,7 @@ paths:
   *Native cross-document VTs are Chromium-mostly — Safari/Firefox just do a plain navigation
   (graceful, not a bug). Check the glow morph in Chromium.*
 - **The glow morph only runs where a `[data-glow]` element exists** (since the 2026-09 redesign:
-  `/design/` and the legal pages; the homepage, Notes, Audio and 404 use the sky's per-page nebula
-  tint instead).
+  only `/design/`; every other page uses the sky's per-page nebula tint instead).
 - **The glow morph is a pre-paint `is:inline` script, not a React island.** Hydrating it flashes the
   destination color before React mounts. The `is:inline` script in `<head>` must set the origin
   color via a **root-level CSS variable on `documentElement`** (read synchronously from
