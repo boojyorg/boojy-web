@@ -13,8 +13,8 @@ const active = path.startsWith('/audio/') ? 'audio' : path.startsWith('/notes/')
     <BoojyMark class="site-nav-mark" variant="hover" />
   </a>
   <div class="site-nav-links">
-    <a href="/audio/" class:list={['nav-product', { active: active === 'audio' }]}>Audio</a>
-    <a href="/notes/" class:list={['nav-product', { active: active === 'notes' }]}>Notes</a>
+    <a href="/audio/" class:list={['nav-product', 'nav-audio', { active: active === 'audio' }]}>Audio</a>
+    <a href="/notes/" class:list={['nav-product', 'nav-notes', { active: active === 'notes' }]}>Notes</a>
   </div>
   <a href="https://github.com/boojyorg" class="site-nav-gh" aria-label="GitHub" target="_blank" rel="noreferrer">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={GITHUB_ICON_PATH}></path></svg>
