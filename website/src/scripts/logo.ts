@@ -155,8 +155,8 @@ document.addEventListener('pointerdown', (e) => {
     const b = bodyOf(planet);
     b.moving = false;
     const pt = svgPoint(svg, e);
-    // A finger would hide the planet it's dragging, so on touch it rides ~40px above it.
-    const lift = e.pointerType === 'touch' ? 40 / (svg.getScreenCTM()?.a || 1) : 0;
+    // A finger would hide the planet it's dragging, so on touch it rides ~25px above it.
+    const lift = e.pointerType === 'touch' ? 25 / (svg.getScreenCTM()?.a || 1) : 0;
     drag = {
       b,
       svg,
