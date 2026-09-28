@@ -36,11 +36,13 @@ function flare(group: SVGGElement, pt: { x: number; y: number }) {
   const lim = c.r * 0.6;
   hot.setAttribute('cx', String(r2(d > lim ? c.x + (dx / d) * lim : pt.x)));
   hot.setAttribute('cy', String(r2(d > lim ? c.y + (dy / d) * lim : pt.y)));
+  // Grows by scale, not by animating `r`: Safari doesn't animate SVG geometry attributes.
+  hot.setAttribute('r', String(r2(c.r * 0.7)));
   hot.animate(
     [
-      { r: '0.5px', opacity: 1 },
-      { r: `${r2(c.r * 0.55)}px`, opacity: 0.9, offset: 0.35 },
-      { r: `${r2(c.r * 0.7)}px`, opacity: 0 },
+      { transform: 'scale(0.01)', opacity: 1 },
+      { transform: 'scale(0.79)', opacity: 0.9, offset: 0.35 },
+      { transform: 'scale(1)', opacity: 0 },
     ],
     { duration: 1100, easing: 'ease-out' },
   );
@@ -87,6 +89,7 @@ let drag: {
   vy: number;
   id: number;
   moved: boolean;
+  lift: number;
 } | null = null;
 let raf = 0;
 
@@ -152,6 +155,8 @@ document.addEventListener('pointerdown', (e) => {
     const b = bodyOf(planet);
     b.moving = false;
     const pt = svgPoint(svg, e);
+    // A finger would hide the planet it's dragging, so on touch it rides ~40px above it.
+    const lift = e.pointerType === 'touch' ? 40 / (svg.getScreenCTM()?.a || 1) : 0;
     drag = {
       b,
       svg,
@@ -163,7 +168,12 @@ document.addEventListener('pointerdown', (e) => {
       vy: 0,
       id: e.pointerId,
       moved: false,
+      lift,
     };
+    if (lift) {
+      b.y = drag.from.y - lift;
+      place(b);
+    }
     planet.setPointerCapture(e.pointerId);
     raise(svg);
     planet.classList.add('dragging');
@@ -187,7 +197,7 @@ document.addEventListener('pointermove', (e) => {
   drag.last = pt;
   drag.lastT = now;
   drag.b.x = drag.from.x + dx;
-  drag.b.y = drag.from.y + dy;
+  drag.b.y = drag.from.y + dy - drag.lift;
   place(drag.b);
 });
 function endDrag(e: PointerEvent) {

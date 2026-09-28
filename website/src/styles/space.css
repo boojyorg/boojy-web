@@ -405,11 +405,26 @@ html.dragging * {
 .bj-lockup {
   overflow: visible;
 }
+/* Phones: no grey tap box, long-press menu or text selection on the logo's toys */
+.sun,
+.glyphbtn,
+.jplanet {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
 .bj-logo .sun,
 .bj-lockup .sun,
 .glyphbtn {
   cursor: pointer;
   outline: none;
+  touch-action: manipulation;
+}
+/* The flare's hot spot grows from its own centre (scripts/logo.ts scales it) */
+.hot {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 .sun .core,
 .glyphbtn .glyph {
