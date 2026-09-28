@@ -10,7 +10,7 @@ const active = path.startsWith('/audio/') ? 'audio' : path.startsWith('/notes/')
 
 <nav class="site-nav" aria-label="Main">
   <a href="/" class="site-nav-brand" aria-label="Boojy home">
-    <BoojyMark class="site-nav-mark" variant="hover" />
+    <BoojyMark class="site-nav-mark" variant="lap" />
   </a>
   <div class="site-nav-links">
     <a href="/audio/" class:list={['nav-product', 'nav-audio', { active: active === 'audio' }]}>Audio</a>
@@ -21,12 +21,54 @@ const active = path.startsWith('/audio/') ? 'audio' : path.startsWith('/notes/')
   </a>
 </nav>
 
+<!-- Pre-paint: if a lap started on the previous page (a link was clicked mid-orbit),
+     carry on from the same point in it, so the planet never snaps back on arrival. -->
+<script is:inline>
+  (function () {
+    try {
+      var t = Number(sessionStorage.getItem('boojy-lap'));
+      sessionStorage.removeItem('boojy-lap');
+      var elapsed = Date.now() - t;
+      if (!t || elapsed < 0 || elapsed >= 680) return;
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      var mark = document.querySelector('.site-nav .boojy-mark');
+      if (!mark) return;
+      mark.style.setProperty('--lap-offset', -elapsed + 'ms');
+      mark.dataset.lapStart = String(t);
+      mark.classList.add('spin');
+    } catch (e) {}
+  })();
+</script>
+
 <script>
-  // One lap of the mark's planet per hover; a lap in progress is never restarted.
-  document.querySelectorAll<HTMLElement>('.site-nav-brand').forEach((brand) => {
-    const mark = brand.querySelector('.boojy-mark');
-    if (!mark || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    brand.addEventListener('mouseenter', () => mark.classList.add('spin'));
-    mark.addEventListener('animationend', () => mark.classList.remove('spin'));
-  });
+  // One lap of the mark's planet whenever a link to another page on the site is clicked (a
+  // lap in progress is never restarted). The lap's start time goes to sessionStorage so the
+  // next page picks it up mid-orbit (the inline script above).
+  const LAP_MS = 680;
+  const mark = document.querySelector<HTMLElement>('.site-nav .boojy-mark');
+  if (mark && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const startLap = () => {
+      if (mark.classList.contains('spin')) return;
+      mark.style.removeProperty('--lap-offset');
+      mark.dataset.lapStart = String(Date.now());
+      mark.classList.add('spin');
+    };
+    mark.addEventListener('animationend', () => {
+      mark.classList.remove('spin');
+      mark.style.removeProperty('--lap-offset');
+    });
+    document.addEventListener('click', (e) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href]');
+      if (!a || a.target === '_blank' || a.hasAttribute('download') || a.origin !== location.origin) return;
+      if (a.pathname === location.pathname && a.hash) return;
+      startLap();
+      const t = Number(mark.dataset.lapStart);
+      if (Date.now() - t < LAP_MS) {
+        try {
+          sessionStorage.setItem('boojy-lap', String(t));
+        } catch {}
+      }
+    });
+  }
 </script>
