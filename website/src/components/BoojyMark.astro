@@ -120,9 +120,10 @@ const uid = Math.random().toString(36).slice(2, 8);
       animation: none;
     }
     /* 680ms is LAP_MS in Nav.astro. --lap-offset (negative) resumes a lap that started on
-       the previous page, so the orbit carries on across the page change. */
+       the previous page, so the orbit carries on across the page change. `reverse` makes
+       the lap clockwise (the path itself runs anticlockwise). */
     .boojy-mark-lap.spin .planet {
-      animation: boojy-orbit 0.68s ease-in-out var(--lap-offset, 0ms) 1 both;
+      animation: boojy-orbit 0.68s ease-in-out var(--lap-offset, 0ms) 1 reverse both;
     }
   }
 

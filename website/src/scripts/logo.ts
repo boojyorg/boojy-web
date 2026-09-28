@@ -90,6 +90,26 @@ let drag: {
 } | null = null;
 let raf = 0;
 
+// While a planet is dragged (and until it springs home) its logo is raised above the whole
+// page, so it passes in front of text, buttons, cards, the nav and the footer instead of
+// behind whatever comes later in the page. Each ancestor up to <body> gets a high z-index.
+let raised: { el: HTMLElement; z: string; pos: string }[] = [];
+function raise(svg: SVGSVGElement) {
+  if (raised.length) return;
+  for (let el = svg.parentElement; el && el !== document.body; el = el.parentElement) {
+    raised.push({ el, z: el.style.zIndex, pos: el.style.position });
+    if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
+    el.style.zIndex = '100';
+  }
+}
+function lower() {
+  for (const { el, z, pos } of raised) {
+    el.style.zIndex = z;
+    el.style.position = pos;
+  }
+  raised = [];
+}
+
 function place(b: Body) {
   b.g.setAttribute('transform', `translate(${r2(b.rest.x + b.x)} ${r2(b.rest.y + b.y)})`);
 }
@@ -111,11 +131,13 @@ function step(now: number, last: number) {
     place(b);
   }
   raf = active ? requestAnimationFrame((t) => step(t, now)) : 0;
+  if (!active && !drag) lower();
 }
 function spring(b: Body) {
   if (reduceMotion) {
     b.x = b.y = 0;
     place(b);
+    lower();
     return;
   }
   b.moving = true;
@@ -143,6 +165,7 @@ document.addEventListener('pointerdown', (e) => {
       moved: false,
     };
     planet.setPointerCapture(e.pointerId);
+    raise(svg);
     planet.classList.add('dragging');
     document.documentElement.classList.add('dragging');
     e.preventDefault();
@@ -176,6 +199,7 @@ function endDrag(e: PointerEvent) {
   b.vy = drag.moved ? drag.vy * 0.2 : 0;
   drag = null;
   if (b.x || b.y) spring(b);
+  else lower();
 }
 document.addEventListener('pointerup', endDrag);
 document.addEventListener('pointercancel', endDrag);

@@ -25,6 +25,15 @@ Spec: the Sky Lab (https://claude.ai/artifact/17QQiaUjrCMM8iyGBNV6y8). Tyr signe
 **Interaction rule:** things that glow react with light (the sun, the N, the A: click for a
 flare); things that orbit can be dragged (the planets, the j's dot, the 404 moon). Homepage planets
 drag with mouse/pen only, so touch keeps scrolling the page.
+A dragged body always passes in front of everything: homepage planets move to the `sky-lift`
+canvas; the j's dot / 404 moon raise their logo's ancestors (`logo.ts` `raise()`) until they settle.
+
+**Scroll feel (Tyr's A/B pick, 2026-09-28):** stars scroll at 6–36% of page speed (not true-depth
+slow) and the solar system fades to half past the hero, so the rings, which move with the page,
+don't feel like glass sliding over a still sky. Planets grow up to 1.4× on big screens.
+
+**Nav logo lap:** a click on any same-tab link to another page spins the nav planet once
+(clockwise, 680ms); the next page resumes it mid-lap pre-paint (`Nav.astro`). No hover spin.
 
 **Logo:** letters are Poppins Medium outlines in `content/glyphs.json`, never live text (a font
 that fails to load turned the old logo into Times). The sun is the second "o"; the grey planet is
