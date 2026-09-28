@@ -211,6 +211,13 @@ function endDrag(e: PointerEvent) {
   if (b.x || b.y) spring(b);
   else lower();
 }
+// iPhone Safari ignores `touch-action: none` on SVG shapes, so a finger on a planet would
+// start scrolling the page, which cancels the drag and springs the planet home. Blocking the
+// touch's default on the planet itself keeps the drag (pointer events still fire).
+for (const planet of document.querySelectorAll('.jplanet')) {
+  planet.addEventListener('touchstart', (e) => e.preventDefault(), { passive: false });
+  planet.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+}
 document.addEventListener('pointerup', endDrag);
 document.addEventListener('pointercancel', endDrag);
 document.addEventListener('keydown', (e) => {

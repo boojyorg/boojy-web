@@ -37,8 +37,8 @@ convention is in the suite root's `AGENTS.md`.
 - **The planet horizon is round on phones.** It was a tall oval that read as a steep hill on
   narrow screens.
 - **The logo's flares play in Safari, and the logo behaves on touch.** No grey tap box or
-  long-press menu on the sun, N, A and planets, and a dragged dot rides above your finger instead
-  of under it.
+  long-press menu on the sun, N, A and planets. On iPhone the j's dot and the 404 moon can now be
+  dragged at all (Safari scrolled the page instead), and they ride above your finger.
 - **The footer rests at the bottom of short pages** on tall screens, instead of floating
   mid-screen.
 - **The Boojy logo always renders in its own font.** The logo's "Boojy" was live text in Poppins,
