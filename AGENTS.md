@@ -29,7 +29,7 @@ Two architectural anchors for any change:
 | Repo | Path | Purpose |
 |------|------|---------|
 | `boojy-web` (this) | `boojy-web/` | Marketing website — boojy.org |
-| `boojy-notes` | `../boojy-notes/` | Notes app — notes.boojy.org |
+| `boojy-notes` | `../boojy-notes/` | Notes desktop app (macOS, Windows, Linux) |
 | `boojy-cloud` | `../boojy-cloud/` | Supabase Edge Functions + migrations |
 | `boojy-design` | `../boojy-design/` | Web image editor (the `.claude` system here came from it) |
 | `Boojy Audio` | `../boojy-audio/` | DAW |

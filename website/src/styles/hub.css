@@ -30,6 +30,8 @@ body {
 
 /* === Hero === */
 .hub-hero {
+  /* The glow is wider than the viewport on purpose; clip it here so it can't widen the page. */
+  overflow-x: clip;
   display: flex;
   align-items: center;
   justify-content: center;

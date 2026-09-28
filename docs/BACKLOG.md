@@ -34,6 +34,10 @@ items. Shipped work leaves here for `CHANGELOG.md`. How the site works lives in 
   `/#feedback` — the anchor and the footer email are the remaining routes. `/design/` keeps its
   own note (paused development, which is not the same claim) and is now the only user of
   `.hero-note`.
+- **Notes is desktop-only on the site (2026-09-27).** No "Open in Web" button: the browser build
+  at notes.boojy.org is a development target whose notes live in browser storage (boojy-notes
+  README). Bring a web option back when Notes on the web saves notes properly. Phones and tablets
+  get a "desktop app" line instead of an installer, on every download island.
 - **Static-first, no SSR, never Vercel.** See `AGENTS.md`.
 
 ## Next: homepage polish (brainstormed 2026-09-07, not yet planned)
@@ -61,9 +65,6 @@ Needs one to three reference sites and the UI intake before any plan. Items rais
 
 ## Unscheduled
 
-- **Auto-rebuild on app release.** A Cloudflare Pages Deploy Hook POSTed from each app's release
-  workflow so a new tag rebuilds the site; today baked versions refresh on the next deploy.
-  Deliberately deferred while releases are rare.
 - **Core Web Vitals not measured.** Run a Lighthouse pass for real LCP / CLS / INP and add the
   Cloudflare Web Analytics beacon (free CWV data).
 - **Drop React from the homepage.** The feedback form island is gone, so `Starfield` is the last

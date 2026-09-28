@@ -58,11 +58,72 @@ test('/audio/ download CTA hydrates and the panel lists a GitHub fallback', asyn
   );
 });
 
-test('/notes/ primary CTA opens the web app', async ({ page }) => {
+// Notes is desktop-only on the site (the browser build is a dev target): no web CTA, a
+// download button for the detected OS, and every desktop build in "Other platforms".
+test('/notes/ offers desktop downloads, Linux included, and no web app link', async ({ page }) => {
   await page.goto('/notes/');
-  const cta = page.getByRole('link', { name: /open in web/i });
-  await expect(cta).toBeVisible();
-  await expect(cta).toHaveAttribute('href', 'https://notes.boojy.org');
+  await expect(page.locator('a[href="https://notes.boojy.org"]')).toHaveCount(0);
+  await expect(page.locator('.btn-notes-download')).toBeVisible();
+  await expect(page.locator('.btn-notes-download')).toContainText('Download');
+  await expect(async () => {
+    await page.getByRole('link', { name: 'Other platforms' }).click();
+    await expect(page.locator('.platform-github')).toBeVisible({ timeout: 1000 });
+  }).toPass();
+  for (const id of [
+    'mac-arm64',
+    'windows-x64',
+    'linux-appimage-x64',
+    'linux-appimage-arm64',
+    'linux-deb-x64',
+    'linux-deb-arm64',
+  ]) {
+    await expect(page.locator(`.platform-item[data-platform="${id}"]`)).toHaveAttribute(
+      'href',
+      /^https:\/\/github\.com\/boojyorg\/boojy-notes\/releases\//,
+    );
+  }
+});
+
+test.describe('on a phone', () => {
+  test.use({
+    userAgent:
+      'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
+    viewport: { width: 390, height: 844 },
+  });
+
+  test('/notes/ says it is a desktop app instead of offering an installer', async ({ page }) => {
+    await page.goto('/notes/');
+    await expect(page.locator('.notes-desktop-note')).toBeVisible();
+    await expect(page.locator('.btn-notes-download')).toHaveCount(0);
+  });
+
+  test('pages do not scroll sideways', async ({ page }) => {
+    for (const path of ['/', '/notes/', '/audio/']) {
+      await page.goto(path);
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      );
+      expect(overflow, path).toBeLessThanOrEqual(0);
+    }
+  });
+});
+
+test('desktop pages do not scroll sideways', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  for (const path of ['/', '/notes/', '/audio/', '/design/']) {
+    await page.goto(path);
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow, path).toBeLessThanOrEqual(0);
+  }
+});
+
+// The logo is drawn as outlines: a <text> element would render in whatever font the
+// visitor happens to have (Times, on most machines), since SVG-as-<img> can't load fonts.
+test('the Boojy logo SVG has no live text', async ({ request }) => {
+  const svg = await (await request.get('/images/boojy-logo.svg')).text();
+  expect(svg).not.toContain('<text');
 });
 
 // The Feedback section went 2026-09-11; the footer email is the only contact route on the

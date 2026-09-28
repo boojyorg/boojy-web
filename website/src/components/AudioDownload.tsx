@@ -42,7 +42,7 @@ const AUDIO_PLATFORMS: AudioPlatform[] = [
     label: 'Linux',
     name: 'Linux',
     disabled: true,
-    pill: 'Coming soon',
+    pill: 'Planned',
   },
 ];
 

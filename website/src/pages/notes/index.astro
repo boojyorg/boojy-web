@@ -1,5 +1,5 @@
 ---
-import { NotesDownload } from '../../components/NotesDownload';
+import { NotesDownload, type NotesDownloadUrls } from '../../components/NotesDownload';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { findAssetUrl, getLatestRelease } from '../../lib/github-release';
 import '../../styles/notes.css';
@@ -9,29 +9,42 @@ import '../../styles/notes.css';
 // error/timeout). Notes' asset filenames embed the version, so the download URLs have
 // to come from the live release, not a hardcoded path.
 const release = await getLatestRelease('boojyorg/boojy-notes', {
-  fallbackVersion: 'v0.7.0 Early access',
+  fallbackVersion: 'v0.10.0 Early access',
 });
-const macArm64Url = findAssetUrl(release.assets, /arm64\.dmg$/) ?? null;
-const winX64Url = findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null;
+// electron-builder names: x64 is `x86_64` for the AppImage but `amd64` for the .deb.
+const downloadUrls: NotesDownloadUrls = {
+  macArm64: findAssetUrl(release.assets, /arm64\.dmg$/) ?? null,
+  winX64: findAssetUrl(release.assets, /Setup-.*\.exe$/) ?? null,
+  linuxAppImageX64: findAssetUrl(release.assets, /x86_64\.AppImage$/) ?? null,
+  linuxAppImageArm64: findAssetUrl(release.assets, /arm64\.AppImage$/) ?? null,
+  linuxDebX64: findAssetUrl(release.assets, /amd64\.deb$/) ?? null,
+  linuxDebArm64: findAssetUrl(release.assets, /arm64\.deb$/) ?? null,
+};
 
-// Feature checklist — "Current" mirrors boojy-notes' FEATURE_TRACKER (all shipped);
-// "Coming Soon" is near-term polish, deliberately light (Notes is feature-complete for v0.x).
+// Feature checklist — "Current" is what boojy-notes has shipped (check its CHANGELOG).
+// "What's next" follows the site policy: only the next scheduled release (Beta, which is
+// reliability and polish, not features), plus platforms clearly marked as later.
 const notesFeatures = [
-  { title: 'Block editor', detail: 'slash commands, markdown shortcuts, drag & keyboard reorder' },
+  { title: 'Block editor', detail: '/ commands, markdown shortcuts, drag & keyboard reorder' },
   {
     title: 'Rich blocks',
     detail: 'headings, lists, checkboxes, tables, callouts, code, images & files',
   },
-  { title: 'Wikilinks & backlinks', detail: 'connect notes; tags with autocomplete' },
+  { title: 'Markdown view', detail: 'see and edit any note as the file it is saved as' },
+  { title: 'Wikilinks & tags', detail: 'connect notes with [[links]]; tags with autocomplete' },
   { title: 'Organize & find', detail: 'nested folders, full-text search, in-note find' },
-  { title: 'Local first', detail: 'your notes live on your device, no account needed' },
-  { title: 'Own your files', detail: 'notes are plain Markdown — import & round-trip, no lock-in' },
+  { title: 'Version history', detail: 'earlier versions kept for you; Save makes a save point' },
+  { title: 'Recently Deleted', detail: 'deleted notes wait 30 days before they go' },
+  {
+    title: 'Your folder, your files',
+    detail: 'plain Markdown in folders you choose; keep them in iCloud Drive or Dropbox to sync',
+  },
 ];
 
-const notesComingSoon = [
-  { title: 'Linux support', detail: 'desktop builds for Linux' },
-  { title: 'Tablet & touch', detail: 'a more comfortable layout on phones and tablets' },
-  { title: 'Smoother editing', detail: 'refined block drag-and-drop and editor animations' },
+const notesNext = [
+  { title: 'Beta', detail: 'everyday reliability and visual polish' },
+  { title: 'Web', detail: 'a browser version that saves your notes, later' },
+  { title: 'Phone & tablet', detail: 'further down the line' },
 ];
 ---
 
@@ -45,9 +58,9 @@ const notesComingSoon = [
       '@type': 'SoftwareApplication',
       name: 'Boojy Notes',
       applicationCategory: 'ProductivityApplication',
-      operatingSystem: 'macOS, Windows, Web',
+      operatingSystem: 'macOS, Windows, Linux',
       url: 'https://boojy.org/notes/',
-      description: 'A calm space for your thoughts. Write in markdown, organize with folders. Free and runs in your browser.',
+      description: 'A calm space for your thoughts. Write in markdown, organize with folders. Free for macOS, Windows and Linux.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     })}
   />
@@ -63,8 +76,7 @@ const notesComingSoon = [
       <NotesDownload
         client:load
         versionText={release.versionText}
-        macArm64Url={macArm64Url}
-        winX64Url={winX64Url}
+        urls={downloadUrls}
       />
     </div>
   </section>
@@ -117,8 +129,8 @@ const notesComingSoon = [
             <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
             <path d="M2 12h20"></path>
           </svg>
-          <h3>Cross-platform</h3>
-          <p>Web and desktop. Pick up where you left off.</p>
+          <h3>Every desktop</h3>
+          <p>macOS, Windows and now Linux. The same app on each.</p>
         </div>
         <div class="notes-feature-card">
           <svg
@@ -177,10 +189,10 @@ const notesComingSoon = [
             </ul>
           </div>
           <div class="notes-checklist-col notes-checklist-col-soon">
-            <h3>Coming Soon</h3>
+            <h3>What's next</h3>
             <ul class="notes-checklist-list">
               {
-                notesComingSoon.map((item) => (
+                notesNext.map((item) => (
                   <li>
                     <svg
                       class="notes-checklist-check"

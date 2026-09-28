@@ -5,7 +5,33 @@ convention is in the suite root's `AGENTS.md`.
 
 ## Unreleased
 
+### Features
+- **Boojy Notes downloads for Linux.** The Notes page offers the AppImage and the .deb, for Intel
+  and ARM, straight from the latest release (v0.10.0 is the first with Linux). Linux visitors get
+  "Download for Linux" (the AppImage); "Linux support" is out of Coming soon, and the page
+  description and search data now say macOS, Windows and Linux.
+
 ### Bug Fixes
+- **The Boojy logo always renders in its own font.** The logo's "Boojy" was live text in Poppins,
+  which an SVG shown as an image can't load, so any visitor without Poppins installed saw it in
+  Times. The letters are now outlines, identical to the design.
+- **Shooting stars no longer pile up.** Coming back to a tab that had been in the background
+  launched every star it had queued at once, more the longer it had been away. Stars now only
+  launch while the page is visible.
+- **Phones aren't offered desktop installers.** An iPhone was offered the macOS download (its
+  browser says "like Mac OS X"); Android would have been offered Linux. Phones and tablets now see
+  "A desktop app for macOS, Windows and Linux" on the Notes page, with the full list still one
+  tap away.
+- **No sideways scrolling.** Every page was about 60px wider than the window on desktop (the hero
+  glow), and the Notes page overflowed on phones.
+- **Notes and Audio pages say what the apps do today.** Notes: the "Open in Web" button is gone
+  (the browser version doesn't save notes to disk); the features list drops backlinks and import
+  (both removed in v0.6.0) and adds `/` commands, the Markdown view, version history, Recently
+  Deleted, and your own folders synced through iCloud Drive or Dropbox; "Coming soon" becomes
+  "What's next" (Beta, then web and phone later); macOS Intel "Coming soon" is gone (no Intel build
+  is planned). Audio: drum kit, step grid, automation, input monitoring and join/reverse move from
+  "Coming soon" to the features list (all shipped by v0.6.0); "What's next" is the v0.7
+  reliability release; Linux reads "Planned".
 - **Privacy page no longer mentions unsubscribing from emails.** The line came from the retired
   Mailchimp newsletter; the site sends no emails. "Last updated" bumped to 2026-09-07.
 
