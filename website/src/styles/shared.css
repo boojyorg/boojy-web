@@ -449,6 +449,11 @@ section {
   animation: none;
   mix-blend-mode: normal;
 }
+/* Only the new nav shows: the nav is see-through, so the old snapshot's frozen logo planet
+   would show beside the new one while it finishes its lap (Nav.astro) */
+::view-transition-old(navbar) {
+  display: none;
+}
 
 /* Keep starfield stable during transition */
 ::view-transition-old(starfield),

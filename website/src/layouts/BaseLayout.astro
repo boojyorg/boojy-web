@@ -67,6 +67,13 @@ const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
          page (stored in sessionStorage) BEFORE the glow element is parsed, so the glow
          paints at the origin color first and the morph has nothing to flash from. The
          glow CSS reads var(--glow-origin, var(--glow-color)). -->
+    <!-- Scroll-in reveals hide below-the-fold content until scripts/reveal.ts fades it in.
+         Set here, before paint, so nothing flashes visible and then hides. Reduced motion
+         never hides anything. -->
+    <script is:inline>
+      if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches)
+        document.documentElement.classList.add('sr-io');
+    </script>
     <script is:inline>
       (function () {
         try {

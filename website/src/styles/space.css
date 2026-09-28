@@ -23,8 +23,13 @@
   --gutter: clamp(16px, 5vw, 64px);
 }
 
+/* The page fills at least the screen, with main taking the spare room, so on a tall
+   screen the footer (and an app page's planet) rests at the bottom instead of mid-screen */
 body {
   background: var(--ground);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---------- Sky: nebula + canvases (scripts/sky.ts), fixed behind everything ---------- */
@@ -156,6 +161,7 @@ main,
 }
 /* Soft hazes behind the hero and cards are wider than a phone screen; never let them scroll the page sideways */
 main {
+  flex: 1 0 auto;
   overflow-x: clip;
 }
 /* While a planet is being dragged, nothing on the page can be text-selected */
@@ -188,17 +194,26 @@ html.dragging * {
 }
 .site-nav-links {
   display: flex;
-  gap: clamp(18px, 3vw, 28px);
-  font-size: 15px;
+  gap: clamp(20px, 3vw, 32px);
+  font-size: 17px;
 }
 .site-nav-links a {
   color: rgba(232, 234, 240, 0.88);
   text-decoration: none;
   transition: color 0.2s var(--ease);
 }
+/* Each link takes its app's colour when hovered or on its page (Audio's brand blue is too
+   dark for text on the sky, so the link uses the lighter tile-icon blue) */
+.site-nav-links .nav-audio {
+  --app: #6aa8ff;
+}
+.site-nav-links .nav-notes {
+  --app: var(--notes);
+}
 .site-nav-links a:hover,
+.site-nav-links a:focus-visible,
 .site-nav-links a.active {
-  color: #fff;
+  color: var(--app);
 }
 .site-nav-links a.active {
   font-weight: 600;
@@ -226,19 +241,17 @@ html.dragging * {
   gap: 8px 24px;
   font-size: 15px;
 }
-.site-foot a {
+.site-foot a,
+.site-foot .copy {
   color: rgba(232, 234, 240, 0.86);
   text-decoration: none;
 }
 .site-foot a:hover {
   color: #fff;
 }
-.site-foot .copy {
-  color: rgba(232, 234, 240, 0.56);
-}
 .horizon {
   height: 330px;
-  margin-top: -117px;
+  margin-top: -130px;
   overflow: hidden;
 }
 .horizon::before {
@@ -247,7 +260,8 @@ html.dragging * {
   left: -38%;
   right: -38%;
   top: 176px;
-  height: 1500px;
+  /* Never taller than wide: on a phone a 1500px-tall oval became a steep dome */
+  height: min(1500px, 176vw);
   border-radius: 50%;
   background: linear-gradient(to bottom, var(--hz-hi) 0, var(--hz) 34px, var(--hz-lo) 170px);
   box-shadow:
@@ -262,11 +276,9 @@ html.dragging * {
   padding-bottom: 26px;
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
 }
-.horizon .site-foot a {
-  color: rgba(245, 247, 252, 0.94);
-}
+.horizon .site-foot a,
 .horizon .site-foot .copy {
-  color: rgba(245, 247, 252, 0.7);
+  color: rgba(245, 247, 252, 0.94);
 }
 .horizon-notes {
   --hz-hi: #a6d0d4;
@@ -363,51 +375,29 @@ html.dragging * {
     transform: translateY(26px) scale(0.95);
   }
 }
-@supports (animation-timeline: view()) {
-  .sr {
-    animation: space-sr linear both;
-    animation-timeline: view();
-    animation-range: entry 5% cover 42%;
-  }
-  .tile.sr:nth-child(1) {
-    animation-range: entry 8% cover 40%;
-  }
-  .tile.sr:nth-child(2) {
-    animation-range: entry 14% cover 46%;
-  }
-  .tile.sr:nth-child(3) {
-    animation-range: entry 20% cover 52%;
-  }
-  .tile.sr:nth-child(4) {
-    animation-range: entry 26% cover 58%;
-  }
-}
-@keyframes space-sr {
-  from {
-    opacity: 0;
-    transform: translateY(34px);
-  }
-}
-/* Fallback (scripts/reveal.ts) for browsers without scroll-driven animations */
+/* Scroll-in: each `.sr` fades up once it scrolls into view (scripts/reveal.ts adds `.in`).
+   Time-based, not tied to scroll distance: a scroll-linked fade never finished for tiles
+   near the page end, because the page couldn't scroll far enough. `sr-io` is set pre-paint
+   in BaseLayout so below-the-fold content never flashes before hiding. */
 .sr-io .sr {
   opacity: 0;
-  transform: translateY(34px);
+  transform: translateY(20px);
   transition:
-    opacity 0.9s var(--ease),
-    transform 0.9s var(--ease);
+    opacity 0.5s var(--ease),
+    transform 0.5s var(--ease);
 }
 .sr-io .sr.in {
   opacity: 1;
   transform: none;
 }
 .sr-io .tile.sr:nth-child(2) {
-  transition-delay: 0.12s;
+  transition-delay: 0.07s;
 }
 .sr-io .tile.sr:nth-child(3) {
-  transition-delay: 0.24s;
+  transition-delay: 0.14s;
 }
 .sr-io .tile.sr:nth-child(4) {
-  transition-delay: 0.36s;
+  transition-delay: 0.21s;
 }
 
 /* ---------- Logo interactions: things that glow react with light, things that orbit can be dragged ---------- */
@@ -415,11 +405,26 @@ html.dragging * {
 .bj-lockup {
   overflow: visible;
 }
+/* Phones: no grey tap box, long-press menu or text selection on the logo's toys */
+.sun,
+.glyphbtn,
+.jplanet {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
 .bj-logo .sun,
 .bj-lockup .sun,
 .glyphbtn {
   cursor: pointer;
   outline: none;
+  touch-action: manipulation;
+}
+/* The flare's hot spot grows from its own centre (scripts/logo.ts scales it) */
+.hot {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 .sun .core,
 .glyphbtn .glyph {
@@ -451,7 +456,6 @@ html.dragging * {
 
 @media (prefers-reduced-motion: reduce) {
   .rise,
-  .sr,
   .sky-nebula i,
   .shoot {
     animation: none;

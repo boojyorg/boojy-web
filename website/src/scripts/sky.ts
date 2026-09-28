@@ -141,7 +141,10 @@ function start(
         y,
         r,
         a: 0.25 + Math.min(0.75, m * 1.4 + rand() * 0.35),
-        speed: r < 0.6 ? 0.03 : r < 1.2 ? 0.09 : 0.18,
+        // Scroll speed as a share of the page's: small stars far away, big ones nearer. Kept
+        // closer to the page's own speed than true depth would be, so the rings (which move
+        // with the page) don't feel like they slide over a still sky.
+        speed: r < 0.6 ? 0.06 : r < 1.2 ? 0.18 : 0.36,
         cyc: 5000 + rand() * 24000,
         ph: rand() * 6.28,
         c: TEMPS[Math.floor(rand() * TEMPS.length)] ?? '#ffffff',
@@ -172,7 +175,7 @@ function start(
   function drawStars(ctx: CanvasRenderingContext2D, time: number, scroll: number) {
     ctx.clearRect(0, 0, W, H);
     const field = H * 3;
-    if (haze) ctx.drawImage(haze, 0, -H * 0.3 - scroll * 0.02, W, H * 1.6);
+    if (haze) ctx.drawImage(haze, 0, -H * 0.3 - scroll * 0.04, W, H * 1.6);
     for (const s of stars) {
       let y = (s.y - scroll * s.speed) % field;
       if (y < 0) y += field;
@@ -310,12 +313,16 @@ function start(
     '#9ed2ff',
     '#98e6ec',
   ];
-  const RING_ALPHA = 0.3;
   const BELT_F = 4.3;
   const SQUASH = 0.4;
   const TILT = -0.14;
   const RING_TINT = '#f3e7c9';
+  const RING_ALPHA = 0.36;
+  const RING_WIDTH = 1.8;
   const PLANET_SIZE = 1.1;
+  /** Planets grow with the logo up to this much on big screens. */
+  const PLANET_MAX = 1.4;
+  const SYSTEM_FADE = 0.5;
   const GLOW = 1.8;
 
   interface Body {
@@ -461,7 +468,7 @@ function start(
         const r = inner * p.f;
         rx.strokeStyle = RING_COLOURS[i] ?? '#ffffff';
         rx.globalAlpha = RING_ALPHA * (1 - 0.55 * (i / (PLANETS.length - 1)));
-        rx.lineWidth = 1.3;
+        rx.lineWidth = RING_WIDTH;
         rx.beginPath();
         rx.ellipse(0, 0, r, r * SQUASH, 0, 0, Math.PI * 2);
         rx.stroke();
@@ -579,6 +586,13 @@ function start(
     if (page !== 'home' || !sun) return;
     const s = sun;
     const cy = s.y0 - scroll;
+    // The rings, belt and planets fade back to half as you scroll past the hero.
+    const past = Math.min(1, Math.max(0, (scroll - H * 0.15) / (H * 0.7)));
+    const op = String(Math.round((1 - SYSTEM_FADE * past) * 100) / 100);
+    if (ringsEl.style.opacity !== op) {
+      ringsEl.style.opacity = op;
+      systemEl.style.opacity = op;
+    }
     const inner = Math.max(s.logoW * 0.7, 120);
     geom = { cx: s.x, cy, inner, cosT: Math.cos(TILT), sinT: Math.sin(TILT) };
     const key = [
@@ -638,7 +652,7 @@ function start(
     // Planets: in front of their rings (a small gap is cut in the ring line), pulled back by
     // gentle gravity with a small settle; a dragged or gliding planet rides above the page.
     const now = performance.now();
-    const scaleR = Math.min(1, inner / 300);
+    const scaleR = Math.min(PLANET_MAX, inner / 300);
     PLANETS.forEach((p, i) => {
       const b = bodies[i];
       if (!b) return;
@@ -847,5 +861,3 @@ function start(
   }
   requestAnimationFrame(frame);
 }
-
-export {};

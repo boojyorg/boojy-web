@@ -51,5 +51,8 @@ export const ABOUT_PARAGRAPHS = [
   "It's all early. Notes is nearly steady and Audio still has plenty of bugs, so for now I'm mostly fixing, then polishing, then adding features and platforms. Boojy is free and open source, and isn't accepting advertisements.",
 ];
 
-/** Tyr's photo for the About card. Add one (square, ~400px+, face centred) and it appears. */
-export const ABOUT_PHOTO: { src: string; alt: string } | null = null;
+/** Tyr's photo for the About card (square, face centred; shown as a circle). */
+export const ABOUT_PHOTO: { src: string; alt: string } | null = {
+  src: '/images/tyr.jpg',
+  alt: 'Tyr, smiling in a woolly hat on a misty hillside above a lake',
+};

@@ -95,7 +95,7 @@ export function appWordMarkup(
     const cy = -CAP * 0.45;
     glyph = `<defs><clipPath id="${clipId}"><path d="${d}"/></clipPath></defs>
 <circle class="halo" cx="${r2(cx)}" cy="${r2(cy)}" r="${r2(CAP * 1.5)}" fill="url(#bj-${app}-halo)" opacity="0.55"/>
-<g class="glyphbtn" role="button" tabindex="0" aria-label="${notes ? 'N' : 'A'}: click it for a flare" data-cx="${r2(cx)}" data-cy="${r2(cy)}" data-r="${r2(CAP * 0.5)}">${glyph}<circle class="hot" cx="${r2(cx)}" cy="${r2(cy)}" r="0" fill="url(#bj-${app}-hot)" opacity="0" clip-path="url(#${clipId})"/></g>`;
+<g class="glyphbtn" role="button" tabindex="0" aria-label="${notes ? 'N' : 'A'}: click it for a flare" data-cx="${r2(cx)}" data-cy="${r2(cy)}" data-r="${r2(CAP * 0.5)}">${glyph}<g clip-path="url(#${clipId})"><circle class="hot" cx="${r2(cx)}" cy="${r2(cy)}" r="0" fill="url(#bj-${app}-hot)" opacity="0"/></g></g>`;
   }
   const word = notes ? 'otes' : 'udio';
   const shift = x0 + gw + (notes ? 3 : -1);

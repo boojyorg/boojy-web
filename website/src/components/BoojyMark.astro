@@ -17,17 +17,17 @@
  * where both copies straddle the clip line and tile seamlessly — it cannot flicker.
  *
  * The orbit path STARTS at the planet's resting position, so reduced-motion users,
- * non-`offset-path` browsers, and the paused hover variant all see today's exact
+ * non-`offset-path` browsers, and the paused lap variant all see today's exact
  * static logo for free.
  *
  * variant="always"  — planet orbits continuously (homepage hero).
- * variant="hover"   — still until hovered; each hover plays one quick lap (slow start, quick
- *                     middle, slow finish), and a lap never restarts mid-way (Nav adds `.spin`).
+ * variant="lap"     — still at rest; plays one quick lap (slow start, quick middle, slow finish)
+ *                     when Nav adds `.spin` on a page-change click. A lap never restarts mid-way.
  * variant="static"  — no animation shipped at all.
  */
 interface Props {
   class?: string;
-  variant?: 'always' | 'hover' | 'static';
+  variant?: 'always' | 'lap' | 'static';
 }
 const { class: className, variant = 'always' } = Astro.props;
 // Unique ids per instance — the homepage renders two marks (nav + hero) and
@@ -105,7 +105,7 @@ const uid = Math.random().toString(36).slice(2, 8);
 
   @supports (offset-path: path("M0 0")) {
     .boojy-mark-always .planet,
-    .boojy-mark-hover .planet {
+    .boojy-mark-lap .planet {
       transform: none;
       offset-distance: 0%;
       offset-path: path(
@@ -115,12 +115,15 @@ const uid = Math.random().toString(36).slice(2, 8);
       animation: boojy-orbit 9s linear infinite;
     }
 
-    /* Nav variant: no motion at rest; one lap per hover. */
-    .boojy-mark-hover .planet {
+    /* Nav variant: no motion at rest; one lap per page change. */
+    .boojy-mark-lap .planet {
       animation: none;
     }
-    .boojy-mark-hover.spin .planet {
-      animation: boojy-orbit 0.85s ease-in-out 1 both;
+    /* 680ms is LAP_MS in Nav.astro. --lap-offset (negative) resumes a lap that started on
+       the previous page, so the orbit carries on across the page change. `reverse` makes
+       the lap clockwise (the path itself runs anticlockwise). */
+    .boojy-mark-lap.spin .planet {
+      animation: boojy-orbit 0.68s ease-in-out var(--lap-offset, 0ms) 1 reverse both;
     }
   }
 
