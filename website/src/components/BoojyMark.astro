@@ -21,8 +21,8 @@
  * static logo for free.
  *
  * variant="always"  — planet orbits continuously (homepage hero).
- * variant="hover"   — paused until the closest `.nav-brand` is hovered (fixed navbar:
- *                     WCAG 2.2.2 frowns on >5s auto-motion without a pause control).
+ * variant="hover"   — still until hovered; each hover plays one quick lap (slow start, quick
+ *                     middle, slow finish), and a lap never restarts mid-way (Nav adds `.spin`).
  * variant="static"  — no animation shipped at all.
  */
 interface Props {
@@ -66,7 +66,7 @@ const uid = Math.random().toString(36).slice(2, 8);
   <g clip-path={`url(#far-${uid})`}>
     <circle class="planet" r="50" fill="#666666"></circle>
   </g>
-  <circle cx="304" cy="222" r="165" fill={`url(#sun-${uid})`}></circle>
+  <circle class="sun-disc" cx="304" cy="222" r="165" fill={`url(#sun-${uid})`}></circle>
   <path class="ring" d="M571.5 99.7 A295 108 -23 0 1 28.5 330.3"></path>
   <g clip-path={`url(#near-${uid})`}>
     <circle class="planet" r="50" fill="#666666"></circle>
@@ -96,10 +96,18 @@ const uid = Math.random().toString(36).slice(2, 8);
     transform: translate(528.3px, 68.5px);
   }
 
+  .boojy-mark .sun-disc {
+    transition: filter 0.3s ease;
+  }
+  a:hover > .boojy-mark .sun-disc {
+    filter: brightness(1.08);
+  }
+
   @supports (offset-path: path("M0 0")) {
     .boojy-mark-always .planet,
     .boojy-mark-hover .planet {
       transform: none;
+      offset-distance: 0%;
       offset-path: path(
         "M528.3 68.5 A295 108 -23 0 0 71.7 361.5 A295 108 -23 0 0 528.3 68.5"
       );
@@ -107,14 +115,12 @@ const uid = Math.random().toString(36).slice(2, 8);
       animation: boojy-orbit 9s linear infinite;
     }
 
-    /* Nav variant: still until the brand link is hovered. Linear easing is
-       deliberate — easing reads as a pendulum, not an orbit; the tilted ellipse
-       already provides natural apparent speed variation. */
+    /* Nav variant: no motion at rest; one lap per hover. */
     .boojy-mark-hover .planet {
-      animation-play-state: paused;
+      animation: none;
     }
-    .nav-brand:hover .boojy-mark-hover .planet {
-      animation-play-state: running;
+    .boojy-mark-hover.spin .planet {
+      animation: boojy-orbit 0.85s ease-in-out 1 both;
     }
   }
 

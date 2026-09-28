@@ -2,100 +2,31 @@
 import { GITHUB_ICON_PATH } from '../content/site';
 import BoojyMark from './BoojyMark.astro';
 
-// Active-route highlighting is computed at build time from the page's own URL,
-// so the `active` class is baked into the static HTML (no runtime router needed).
+// Active route baked in at build time. The nav sits at the top of the page and scrolls
+// away with it (pages are kept short, so there's no sticky or reappearing bar).
 const path = Astro.url.pathname;
-const activeProduct = path.startsWith('/audio/')
-  ? 'audio'
-  : path.startsWith('/notes/')
-    ? 'notes'
-    : undefined;
+const active = path.startsWith('/audio/') ? 'audio' : path.startsWith('/notes/') ? 'notes' : undefined;
 ---
 
-<nav class="navbar" id="navbar">
-  <div class="nav-container">
-    <a href="/" class="nav-brand" aria-label="Boojy — home">
-      <BoojyMark class="logo-icon" variant="hover" />
-    </a>
-
-    <div class="nav-products">
-      <a
-        href="/audio/"
-        class:list={['nav-product', { active: activeProduct === 'audio' }]}
-        data-product="audio">Audio</a
-      >
-      <a
-        href="/notes/"
-        class:list={['nav-product', { active: activeProduct === 'notes' }]}
-        data-product="notes">Notes</a
-      >
-    </div>
-
-    <div class="nav-right">
-      <a
-        href="https://github.com/boojyorg"
-        target="_blank"
-        class="nav-github"
-        aria-label="GitHub"
-        rel="noreferrer"
-      >
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d={GITHUB_ICON_PATH} />
-        </svg>
-      </a>
-      <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" type="button" id="nav-toggle">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-    </div>
-
-    <div class="nav-mobile-menu" id="nav-mobile-menu">
-      <a
-        href="/audio/"
-        class:list={['nav-mobile-link', { active: activeProduct === 'audio' }]}
-        data-product="audio">Audio</a
-      >
-      <a
-        href="/notes/"
-        class:list={['nav-mobile-link', { active: activeProduct === 'notes' }]}
-        data-product="notes">Notes</a
-      >
-      <a href="https://github.com/boojyorg" target="_blank" class="nav-mobile-link" rel="noreferrer">GitHub</a>
-    </div>
+<nav class="site-nav" aria-label="Main">
+  <a href="/" class="site-nav-brand" aria-label="Boojy home">
+    <BoojyMark class="site-nav-mark" variant="hover" />
+  </a>
+  <div class="site-nav-links">
+    <a href="/audio/" class:list={['nav-product', { active: active === 'audio' }]}>Audio</a>
+    <a href="/notes/" class:list={['nav-product', { active: active === 'notes' }]}>Notes</a>
   </div>
+  <a href="https://github.com/boojyorg" class="site-nav-gh" aria-label="GitHub" target="_blank" rel="noreferrer">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d={GITHUB_ICON_PATH}></path></svg>
+  </a>
 </nav>
 
-<script is:inline>
-  (function () {
-    var navbar = document.getElementById('navbar');
-    var toggle = document.getElementById('nav-toggle');
-    var menu = document.getElementById('nav-mobile-menu');
-
-    if (toggle && menu) {
-      var close = function () {
-        menu.classList.remove('active');
-        toggle.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
-      };
-      toggle.addEventListener('click', function () {
-        var open = menu.classList.toggle('active');
-        toggle.classList.toggle('open', open);
-        toggle.setAttribute('aria-expanded', String(open));
-      });
-      var links = menu.querySelectorAll('a');
-      for (var i = 0; i < links.length; i++) {
-        links[i].addEventListener('click', close);
-      }
-    }
-
-    if (navbar) {
-      var onScroll = function () {
-        navbar.style.boxShadow =
-          window.pageYOffset > 50 ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none';
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-    }
-  })();
+<script>
+  // One lap of the mark's planet per hover; a lap in progress is never restarted.
+  document.querySelectorAll<HTMLElement>('.site-nav-brand').forEach((brand) => {
+    const mark = brand.querySelector('.boojy-mark');
+    if (!mark || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    brand.addEventListener('mouseenter', () => mark.classList.add('spin'));
+    mark.addEventListener('animationend', () => mark.classList.remove('spin'));
+  });
 </script>

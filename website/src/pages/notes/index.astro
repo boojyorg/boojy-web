@@ -1,8 +1,10 @@
 ---
 import { NotesDownload, type NotesDownloadUrls } from '../../components/NotesDownload';
+import AppLockup from '../../components/AppLockup.astro';
+import Features from '../../components/Features.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { findAssetUrl, getLatestRelease } from '../../lib/github-release';
-import '../../styles/notes.css';
+import '../../styles/product.css';
 
 // Build-time fetch — version + real asset URLs are baked into the static HTML and
 // re-fetched on each deploy. getLatestRelease never throws (falls back on any
@@ -21,34 +23,15 @@ const downloadUrls: NotesDownloadUrls = {
   linuxDebArm64: findAssetUrl(release.assets, /arm64\.deb$/) ?? null,
 };
 
-// Feature checklist — "Current" is what boojy-notes has shipped (check its CHANGELOG).
-// "What's next" follows the site policy: only the next scheduled release (Beta, which is
-// reliability and polish, not features), plus platforms clearly marked as later.
-const notesFeatures = [
-  { title: 'Block editor', detail: '/ commands, markdown shortcuts, drag & keyboard reorder' },
-  {
-    title: 'Rich blocks',
-    detail: 'headings, lists, checkboxes, tables, callouts, code, images & files',
-  },
-  { title: 'Markdown view', detail: 'see and edit any note as the file it is saved as' },
-  { title: 'Wikilinks & tags', detail: 'connect notes with [[links]]; tags with autocomplete' },
-  { title: 'Organize & find', detail: 'nested folders, full-text search, in-note find' },
-  { title: 'Version history', detail: 'earlier versions kept for you; Save makes a save point' },
-  { title: 'Recently Deleted', detail: 'deleted notes wait 30 days before they go' },
-  {
-    title: 'Your folder, your files',
-    detail: 'plain Markdown in folders you choose; keep them in iCloud Drive or Dropbox to sync',
-  },
-];
-
-const notesNext = [
-  { title: 'Beta', detail: 'everyday reliability and visual polish' },
-  { title: 'Web', detail: 'a browser version that saves your notes, later' },
-  { title: 'Phone & tablet', detail: 'further down the line' },
-];
+const features = [
+  { icon: 'folder', title: 'Your files', text: 'Plain .md files in a folder you choose, even an existing Obsidian vault.' },
+  { icon: 'slash', title: 'Slash commands', text: 'Type / for any block: headings, lists, tables and code.' },
+  { icon: 'file', title: 'Markdown view', text: 'Flip to the raw Markdown of any note, any time.' },
+  { icon: 'cloud', title: 'Your cloud', text: 'Works with the cloud storage you already use.' },
+] as const;
 ---
 
-<BaseLayout path="/notes/">
+<BaseLayout path="/notes/" page="notes" footer="notes">
   <script
     type="application/ld+json"
     is:inline
@@ -64,159 +47,36 @@ const notesNext = [
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     })}
   />
-  <section class="notes-hero">
-    <div class="notes-hero-glow" aria-hidden="true" data-glow></div>
-    <div class="container">
-      <h1 class="sr-only">Boojy Notes — a calm markdown notes app, free on your devices</h1>
-      <div class="notes-hero-title reveal">
-        <img src="/images/boojy-logo.svg" alt="Boojy" class="notes-hero-logo" />
-        <img src="/images/notes-text-logo.png" alt="Notes" class="notes-hero-product" />
-      </div>
-      <p class="notes-tagline reveal reveal-d1">Your notes. Your files. Your devices.</p>
-      <NotesDownload
-        client:load
-        versionText={release.versionText}
-        urls={downloadUrls}
-      />
-    </div>
+    <section class="product-hero">
+    <h1 class="sr-only">Boojy Notes — a calm place for the notes you own, free for macOS, Windows and Linux</h1>
+    <div class="rise" style="--i:0"><AppLockup app="notes" class="product-lockup" /></div>
+    <p class="product-tag rise" style="--i:1">A calm place for the notes you own</p>
+    <p class="product-key rise" style="--i:2">Plain Markdown files on your computer, no account, no lock-in</p>
+    <div class="rise" style="--i:3"><NotesDownload client:load version={release.version} urls={downloadUrls} /></div>
   </section>
 
-  <section class="notes-screenshot-section">
-    <div class="container">
-      <div class="notes-screenshot-wrapper reveal reveal-d3">
-        <img
-          src="/images/notes-screenshot-v0.1.png"
-          alt="Boojy Notes"
-          class="notes-screenshot"
-          loading="lazy"
-        />
+  <div class="reading">
+    <div class="shotwrap rise pop" style="--i:4" data-theme="dark" id="notes-shot">
+      <div class="frame">
+        <img class="shot-dark" src="/images/notes-v0.10-dark.jpg" alt="Boojy Notes in dark mode" width="1800" height="1125" decoding="async" />
+        <img class="shot-light" src="/images/notes-v0.10-light.jpg" alt="Boojy Notes in light mode" width="1800" height="1125" decoding="async" loading="lazy" />
+      </div>
+      <div class="themepill" role="group" aria-label="Screenshot theme">
+        <button type="button" aria-pressed="true" data-set="dark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></svg>Dark</button>
+        <button type="button" aria-pressed="false" data-set="light"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>Light</button>
       </div>
     </div>
-  </section>
-
-  <section class="notes-features-section">
-    <div class="container">
-      <div class="notes-features-grid">
-        <div class="notes-feature-card">
-          <svg
-            class="notes-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path
-              d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"
-            ></path>
-            <path d="m15 5 4 4"></path>
-          </svg>
-          <h3>Markdown files</h3>
-          <p>Write in markdown, rendered live. Your notes are plain files — always yours.</p>
-        </div>
-        <div class="notes-feature-card">
-          <svg
-            class="notes-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
-            <path d="M2 12h20"></path>
-          </svg>
-          <h3>Every desktop</h3>
-          <p>macOS, Windows and now Linux. The same app on each.</p>
-        </div>
-        <div class="notes-feature-card">
-          <svg
-            class="notes-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 20h.01"></path>
-            <path d="M8.5 16.429a5 5 0 0 1 7 0"></path>
-            <path d="M5 12.859a10 10 0 0 1 5.17-2.69"></path>
-            <path d="M13.83 10.17A10 10 0 0 1 19 12.859"></path>
-            <path d="M1.42 9a16 16 0 0 1 6.81-4.15"></path>
-            <path d="M15.77 4.85A16 16 0 0 1 22.58 9"></path>
-            <line x1="2" x2="22" y1="2" y2="22"></line>
-          </svg>
-          <h3>Offline first</h3>
-          <p>Works offline, no account needed. Your notes are plain files on your device.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="notes-checklist-section">
-    <div class="container">
-      <div class="notes-checklist-card reveal">
-        <h2>Features</h2>
-        <div class="notes-checklist-columns">
-          <div class="notes-checklist-col">
-            <h3>Current</h3>
-            <ul class="notes-checklist-list">
-              {
-                notesFeatures.map((item) => (
-                  <li>
-                    <svg
-                      class="notes-checklist-check"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M20 6 9 17l-5-5" />
-                    </svg>
-                    <span>
-                      <strong>{item.title}</strong> — {item.detail}
-                    </span>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-          <div class="notes-checklist-col notes-checklist-col-soon">
-            <h3>What's next</h3>
-            <ul class="notes-checklist-list">
-              {
-                notesNext.map((item) => (
-                  <li>
-                    <svg
-                      class="notes-checklist-check"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <path d="M5 12h14" />
-                      <path d="m12 5 7 7-7 7" />
-                    </svg>
-                    <span>
-                      <strong>{item.title}</strong> — {item.detail}
-                    </span>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <Features items={[...features]} repo="https://github.com/boojyorg/boojy-notes" />
+  </div>
 </BaseLayout>
+
+<script>
+  // Dark by default; the pill crossfades to the light screenshot.
+  const shot = document.getElementById('notes-shot');
+  shot?.querySelectorAll<HTMLButtonElement>('.themepill button').forEach((button) => {
+    button.addEventListener('click', () => {
+      shot.dataset.theme = button.dataset.set ?? 'dark';
+      shot.querySelectorAll('.themepill button').forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+    });
+  });
+</script>

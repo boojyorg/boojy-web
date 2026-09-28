@@ -1,12 +1,12 @@
 ---
-import BoojyMark from '../components/BoojyMark.astro';
+import BoojyWordmark from '../components/BoojyWordmark.astro';
 import ProductCards from '../components/ProductCards.astro';
-import { WHY_POINTS, WHY_STORY } from '../content/site';
+import { ABOUT_PARAGRAPHS, ABOUT_PHOTO } from '../content/site';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import '../styles/hub.css';
+import '../styles/home.css';
 ---
 
-<BaseLayout path="/">
+<BaseLayout path="/" page="home">
   <script
     type="application/ld+json"
     is:inline
@@ -22,43 +22,23 @@ import '../styles/hub.css';
     })}
   />
 
-  <!-- Hero -->
-  <section class="hub-hero">
-    <div class="hub-hero-glow" aria-hidden="true" data-glow></div>
-    <div class="container">
-      <h1 class="sr-only">Boojy — free, open-source creative tools</h1>
-      <div class="hub-hero-title reveal">
-        <img src="/images/boojy-logo.svg" alt="Boojy" class="hub-hero-logo" />
-        <BoojyMark class="hub-hero-icon" />
-      </div>
-      <p class="hub-tagline reveal reveal-d1">Your creative space.</p>
-      <p class="hub-tagline-sub reveal reveal-d2">Free, open source software. Made by Tyr.</p>
-    </div>
+  <!-- Hero: the logo sits at the centre of the solar system drawn by the sky (scripts/sky.ts). -->
+  <section class="home-hero">
+    <h1 class="sr-only">Boojy — free, open-source creative tools</h1>
+    <div class="rise" style="--i:0"><BoojyWordmark class="home-logo" /></div>
+    <p class="home-title rise" style="--i:1">Your creative space.</p>
+    <p class="home-sub rise" style="--i:2">Free, open-source apps. Made by Tyr.</p>
   </section>
 
-  <!-- Product grid — Audio · Notes (one row of two). -->
-  <ProductCards />
+  <div class="home-wide">
+    <ProductCards />
 
-  <!-- Why Boojy — personal story + the promises. The "about". A centered card. -->
-  <section class="why-boojy">
-    <div class="container">
-      <div class="why-boojy-card">
-        <h2 class="why-boojy-title">Why Boojy</h2>
-        <p class="why-boojy-lead">{WHY_STORY}</p>
-        <ul class="why-boojy-points">
-          {
-            WHY_POINTS.map((point) => (
-              <li class="why-point">
-                <span class="why-point-check" aria-hidden="true">✓</span>
-                <span class="why-point-text">
-                  <strong class="why-point-label">{point.label}</strong>
-                  <span class="why-point-detail">{point.detail}</span>
-                </span>
-              </li>
-            ))
-          }
-        </ul>
+    <section class="about sr" aria-labelledby="about-title">
+      {ABOUT_PHOTO && <img class="about-photo" src={ABOUT_PHOTO.src} alt={ABOUT_PHOTO.alt} width="112" height="112" />}
+      <div>
+        <h2 id="about-title">Hi, I'm Tyr.</h2>
+        {ABOUT_PARAGRAPHS.map((paragraph) => <p>{paragraph}</p>)}
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </BaseLayout>

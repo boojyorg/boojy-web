@@ -1,0 +1,23 @@
+---
+import { boojyPartsMarkup, planetMarkup } from '../lib/wordmark';
+
+/**
+ * The homepage's big "Boojy": letters as Poppins outlines, the sun as the second "o"
+ * (click for a flare) and the grey planet as the j's dot (drag it; it springs back).
+ * `data-system` tells the sky script to centre the solar system on this sun.
+ * Interactions live in scripts/logo.ts; gradients come from LOGO_DEFS in the layout.
+ */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg
+  class:list={['bj-logo', className]}
+  viewBox="-8 -106 296 142"
+  role="img"
+  aria-label="Boojy"
+  data-system
+  set:html={boojyPartsMarkup() + planetMarkup()}
+/>

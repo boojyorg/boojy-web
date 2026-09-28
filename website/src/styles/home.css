@@ -1,0 +1,210 @@
+/* ===================================
+   BOOJY - HOMEPAGE
+   Hero at the centre of the solar system, two app cards, the About card.
+   =================================== */
+
+.home-hero {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+  padding: 118px 20px 38px;
+}
+/* Calm zone: a soft dark haze behind the words, so the sky steps back where there's reading */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  width: min(900px, 110%);
+  height: 70%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(9, 12, 24, calc(var(--calm) * 0.7)), transparent);
+}
+.home-logo {
+  width: min(440px, 76vw);
+  height: auto;
+  display: block;
+  margin-top: -10px;
+  touch-action: manipulation;
+}
+.home-title {
+  margin: 8px 0 0;
+  font-size: clamp(32px, 5vw, 56px);
+  line-height: 1.08;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.home-sub {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(15px, 1.7vw, 18px);
+}
+
+.home-wide {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* The two apps */
+.apps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.apps::before {
+  content: "";
+  position: absolute;
+  inset: -60px -80px;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(9, 12, 24, calc(var(--calm) * 0.75)), transparent);
+}
+@media (max-width: 720px) {
+  .apps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+  }
+}
+.app {
+  position: relative;
+  overflow: hidden;
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: 20px;
+  padding: 12px 12px 26px;
+  transition: transform 0.18s var(--ease);
+}
+.app::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.18s var(--ease);
+  background: radial-gradient(120% 60% at 50% -8%, var(--tint), transparent 62%);
+}
+.app > * {
+  position: relative;
+}
+.app .btn-solid {
+  margin-top: 8px;
+}
+.app:hover {
+  transform: translateY(-3px);
+}
+.app:hover::before {
+  opacity: 1;
+}
+.app:hover .btn-solid {
+  background: var(--btn-hi);
+  transform: translateY(-1px);
+  box-shadow:
+    0 10px 30px var(--btn-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+.app:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+}
+.app[data-product="audio"] {
+  --tint: rgba(74, 144, 255, 0.1);
+  --gl: rgba(74, 144, 255, 0.8);
+}
+.app[data-product="notes"] {
+  --tint: rgba(143, 193, 198, 0.1);
+  --gl: rgba(143, 193, 198, 0.8);
+}
+.app .shot {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.app .shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+}
+.app .name {
+  margin-top: 10px;
+}
+.bj-wordmark {
+  height: 36px;
+  width: auto;
+  display: block;
+  overflow: visible;
+}
+.app .bj-wordmark .glyph {
+  transition: filter 0.3s var(--ease);
+}
+.app:hover .bj-wordmark .glyph {
+  filter: drop-shadow(0 0 6px var(--gl)) brightness(1.08);
+}
+.app .line {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* About */
+.about {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 26px;
+  align-items: start;
+  padding: 30px;
+  margin-bottom: 26px;
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: 20px;
+}
+.about:not(:has(.about-photo)) {
+  grid-template-columns: 1fr;
+}
+.about-photo {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.about h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+  color: var(--ink);
+}
+.about p {
+  margin: 0 0 12px;
+  color: var(--muted);
+  max-width: 64ch;
+  line-height: 1.65;
+}
+.about p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 640px) {
+  .home-hero {
+    padding-top: 96px;
+  }
+  .about {
+    grid-template-columns: 1fr;
+    padding: 22px;
+  }
+}

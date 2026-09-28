@@ -1,20 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import '../styles/legal.css';
+import '../styles/lost.css';
 ---
 
-<BaseLayout path="/404.html">
-  <section class="not-found-page">
-    <div class="container not-found-inner">
-      <h1 class="not-found-code">404</h1>
-      <h2 class="not-found-title">Page Not Found</h2>
-      <p class="not-found-text">
-        The page you're looking for doesn't exist or has been moved.
-      </p>
-      <a href="/" class="btn btn-primary">Go to Home</a>
-      <p class="not-found-meta">
-        If you think this is an error, please <a href="mailto:tyr@boojy.org">let us know</a>.
-      </p>
+<BaseLayout path="/404.html" page="lost" footer="none">
+  <section class="lost">
+    <div class="lost-cloud" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="lost-inner">
+      <h1 class="lost-four rise" style="--i:0" aria-label="404">
+        <span>4</span>
+        <!-- The zero is a small moon: drag it and it springs back (scripts/logo.ts). -->
+        <svg viewBox="-12 -12 24 24" aria-hidden="true">
+          <circle r="24" fill="url(#bj-moon-halo)"></circle>
+          <g class="jplanet" data-rx="0" data-ry="0" transform="translate(0 0)">
+            <circle r="16" fill="transparent"></circle>
+            <circle class="pbody" r="11" fill="url(#bj-planet)"></circle>
+          </g>
+        </svg>
+        <span>4</span>
+      </h1>
+      <p class="lost-title rise" style="--i:1">This page drifted out of orbit.</p>
+      <p class="lost-text rise" style="--i:2">Error 404 – The link might be old, or the page doesn't exist.</p>
+      <a href="/" class="btn-solid btn-light rise" style="--i:3">Back to Boojy →</a>
     </div>
   </section>
 </BaseLayout>

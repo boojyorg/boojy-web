@@ -87,12 +87,18 @@ General branch discipline → suite root `AGENTS.md`. Web specifics:
 * **`website/src/layouts/`** — `BaseLayout.astro` owns the full static `<head>` (title, description,
   canonical, OG, theme-color, favicons, analytics slot) from `content/page-meta.ts`. `LegalLayout.astro` for
   privacy/terms. (View-transition + glow rules: `.claude/rules/view-transitions-and-glow.md`.)
-* **Islands (React):** `Starfield` (`client:idle`), `AudioDownload` / `NotesDownload`
-  (`client:load`; OS detect runs in `useEffect` so they SSR a universal default). The homepage
-  Feedback section is gone (the form went 2026-09, the mailto line after it on 2026-09-11); the
-  footer email is the site's contact route and `/#feedback` is a dead anchor.
-* **Static `.astro` chrome:** `Nav.astro` (+ inline toggle/scroll script; active route from
-  `Astro.url.pathname` at build time), `Footer.astro`, `ProductCards.astro`.
+* **The space design (2026-09 redesign, spec = the Sky Lab):** `Sky.astro` + `scripts/sky.ts`
+  (plain JS, no React) draw the stars on every page and, on the homepage, the solar system around
+  the logo's sun (rings, belt, draggable planets). `BoojyWordmark` / `AppLockup` / `AppWordmark`
+  draw the logos from Poppins outlines (`lib/wordmark.ts` + `content/glyphs.json`), so no web font
+  is involved; `scripts/logo.ts` handles the sun/N/A flares and dragging the j's dot and the 404
+  moon. Speed + interaction rules: `.claude/rules/sky-and-motion.md`.
+* **Islands (React):** only `AudioDownload` / `NotesDownload` (`client:load`; OS detect runs in
+  `useEffect` so they SSR a universal default). The homepage ships no React. The footer email is
+  the site's contact route.
+* **Static `.astro` chrome:** `Nav.astro` (sits at the top and scrolls away; active route from
+  `Astro.url.pathname` at build time), `Footer.astro` (one row; on app pages it sits on the
+  planet horizon), `ProductCards.astro`, `Features.astro`.
 * **`website/src/content/`** — `site.ts`, `page-meta.ts`, `legal/*.html` (rendered via
   `set:html` with `?raw`). Copy + meta come from here; don't hardcode. No content collections.
 * **`website/src/lib/`** — `platform.ts` (OS detect), `github-release.ts` (build-time
@@ -106,7 +112,9 @@ General branch discipline → suite root `AGENTS.md`. Web specifics:
 * **TypeScript is strict** (`strict` + `noUncheckedIndexedAccess`) — `arr[i]` is possibly-undefined
   across existing `lib/` code, not just new files. Handle it; use `import type` for type-only imports.
 * **CSS lives in `src/styles/`** (not `public/css/`) so Astro bundles + content-hashes it.
-  `shared.css` is global in `BaseLayout`; per-page CSS is imported in each page's frontmatter.
+  `shared.css` + `space.css` (tokens, sky, nav, footer, buttons, motion) are global in
+  `BaseLayout`; per-page CSS (`home.css`, `product.css` for Notes + Audio, `lost.css`, `design.css`,
+  `legal.css`) is imported in each page's frontmatter.
   Inter loads via `src/styles/inter.css` (a hand-rolled latin + latin-ext `@font-face`, **not** the
   full `@fontsource-variable/inter` import — the other 5 subsets are latin-only dead weight in `dist`).
 

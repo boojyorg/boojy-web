@@ -1,0 +1,24 @@
+---
+import { type AppId, appWordMarkup, BOOJY_WIDTH, boojyPartsMarkup, planetMarkup } from '../lib/wordmark';
+
+/**
+ * "Boojy Notes" / "Boojy Audio" as one drawing on one baseline (so the two words line
+ * up). The sun, the j's planet and the app glyph are all interactive, like the homepage logo.
+ */
+interface Props {
+  app: AppId;
+  class?: string;
+}
+const { app, class: className } = Astro.props;
+const word = appWordMarkup(app, BOOJY_WIDTH + 30, true, `bj-clip-${app}`);
+const width = Math.round((word.end + 16) * 100) / 100;
+const name = app === 'notes' ? 'Notes' : 'Audio';
+---
+
+<svg
+  class:list={['bj-lockup', className]}
+  viewBox={`-8 -106 ${width} 142`}
+  role="img"
+  aria-label={`Boojy ${name}`}
+  set:html={boojyPartsMarkup() + word.svg + planetMarkup()}
+/>

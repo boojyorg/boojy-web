@@ -7,86 +7,49 @@ export const YOUTUBE_ICON_PATH =
 export type ProductId = 'notes' | 'audio';
 
 /**
- * Suite-wide release-stage ladder. Each app sits on one rung; the label is the
- * single source of truth for the stage badge shown on its card/band. As an app
- * matures, bump its `stage` here and every surface updates.
- */
-export type Stage = 'early-access' | 'beta' | 'full-release';
-export const STAGE_LABELS: Record<Stage, string> = {
-  'early-access': 'Early access',
-  beta: 'Beta',
-  'full-release': 'Full release',
-};
-
-/**
- * Homepage product grid — one row of the promoted apps. Order is the canonical
- * product order: Audio, Notes — keep the nav and footer in the same order.
- * (Boojy Cloud left the lineup 2026-08; Boojy Design was unlisted 2026-09 — the
- * app and its /design/ page are still live, just no longer promoted. See the
- * suite VISION.md.)
- * The `name` is the logo-image fallback for any product without a text logo.
+ * Homepage app cards, in the canonical order (Audio, Notes — keep the nav and footer the
+ * same). Each card is a link to the app's page: screenshot, name, one line, and a button.
+ * (Boojy Cloud left the lineup 2026-08; Boojy Design was unlisted 2026-09 — its /design/
+ * page is still live, just not promoted. See the suite VISION.md.)
  */
 export interface ProductCardData {
   id: ProductId;
-  /** Card destination. Omitted for a product with no page yet → non-link card. */
-  href?: string;
-  /** Card image: an app screenshot/preview, or the gradient + glyph placeholder. */
-  visual: { kind: 'image'; src: string; alt: string } | { kind: 'placeholder' };
-  /** Text-logo image; omit to render the plain product `name` instead. */
-  logo?: { src: string; alt: string };
-  /** Product name — logo-image fallback + a11y label. */
+  href: string;
   name: string;
-  description: string;
-  /** Ladder badge. Omit + set `comingSoon` for off-ladder items. */
-  stage?: Stage;
-  /** Off-ladder, not yet shipped: muted card, "Coming soon" badge, no CTA. */
-  comingSoon?: boolean;
+  /** The card's screenshot (dark theme). */
+  screenshot: { src: string; alt: string };
+  /** One line under the name. */
+  line: string;
 }
 
 export const PRODUCT_CARDS: ProductCardData[] = [
   {
     id: 'audio',
     href: '/audio/',
-    visual: {
-      kind: 'image',
-      src: '/images/audio-screenshot-v0.5.2.png',
-      alt: 'Boojy Audio interface',
-    },
-    logo: { src: '/images/audio-text-logo.png', alt: 'Boojy Audio' },
     name: 'Boojy Audio',
-    description: 'A free, simple music studio. For macOS and Windows.',
-    stage: 'early-access',
+    screenshot: {
+      src: '/images/audio-v0.5.jpg',
+      alt: 'Boojy Audio with a song open: tracks, clips and the piano roll',
+    },
+    line: 'A free, simple music studio',
   },
   {
     id: 'notes',
     href: '/notes/',
-    visual: {
-      kind: 'image',
-      src: '/images/notes-screenshot-v0.1.png',
-      alt: 'Boojy Notes interface',
-    },
-    logo: { src: '/images/notes-text-logo.png', alt: 'Boojy Notes' },
     name: 'Boojy Notes',
-    description: 'A calm space for your thoughts. Write in markdown. Own your files.',
-    stage: 'early-access',
+    screenshot: {
+      src: '/images/notes-v0.10-dark.jpg',
+      alt: 'Boojy Notes in dark mode with a trip-planning note open',
+    },
+    line: 'A calm place for the notes you own',
   },
 ];
 
-/**
- * "Why Boojy" — the homepage's about block. The personal story (left column)
- * + the brand promises as a scannable checklist (right column). The promises
- * are the differentiators that used to be buried in the prose.
- */
-export const WHY_STORY =
-  "Hi, I'm Tyr, a computer science student. I started making music as a teenager, but a lot of the tools I wanted sat behind paywalls. So I'm building the calm, free creative suite I wish I'd had.";
-
-export interface WhyPoint {
-  label: string;
-  detail: string;
-}
-
-export const WHY_POINTS: WhyPoint[] = [
-  { label: 'Always free', detail: 'Every app and feature, free to download and use.' },
-  { label: 'Open source', detail: "Every app's code is public on GitHub, under GPLv3." },
-  { label: 'Yours to keep', detail: 'Local-first and offline. Your files stay yours.' },
+/** The homepage "Hi, I'm Tyr." card: two paragraphs in Tyr's voice (it can grow later). */
+export const ABOUT_PARAGRAPHS = [
+  "I'm a computer science student, and I started making music as a teenager. A lot of the apps and tools I wanted sat behind paywalls, so eventually I started building my own. Boojy is the calm, free creative suite I wish I'd had back then.",
+  "It's all early. Notes is nearly steady and Audio still has plenty of bugs, so for now I'm mostly fixing, then polishing, then adding features and platforms. Boojy is free and open source, and isn't accepting advertisements.",
 ];
+
+/** Tyr's photo for the About card. Add one (square, ~400px+, face centred) and it appears. */
+export const ABOUT_PHOTO: { src: string; alt: string } | null = null;

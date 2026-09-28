@@ -10,6 +10,8 @@ export interface LatestRelease {
   versionText: string;
   /** Raw tag, e.g. `v0.3.0` — `null` when unresolved (fetch failed). */
   tag: string | null;
+  /** Display version: the tag without a trailing `.0` (`v0.10.0` → `v0.10`, `v0.6.1` stays). */
+  version: string;
   /** Localised publish date, e.g. `29 May 2026` — empty string when unresolved. */
   dateText: string;
   /** Resolved release assets (real download URLs). Empty on any failure. */
@@ -46,6 +48,7 @@ export async function getLatestRelease(
   const fallback: LatestRelease = {
     versionText: fallbackVersion,
     tag: null,
+    version: shortVersion(fallbackVersion.split(' ')[0] ?? fallbackVersion),
     dateText: '',
     assets: [],
   };
@@ -78,6 +81,7 @@ export async function getLatestRelease(
     return {
       versionText: `${release.tag_name} ${channel}${dateText ? ` · ${dateText}` : ''}`,
       tag: release.tag_name,
+      version: shortVersion(release.tag_name),
       dateText,
       assets,
     };
@@ -91,4 +95,13 @@ export async function getLatestRelease(
 /** URL of the first asset whose filename matches `pattern`, or `undefined`. */
 export function findAssetUrl(assets: ReleaseAsset[], pattern: RegExp): string | undefined {
   return assets.find((asset) => pattern.test(asset.name))?.url;
+}
+
+/**
+ * The version as the site shows it: drop a trailing `.0` patch, keep any other patch.
+ * `v0.10.0` → `v0.10`, `v0.6.0` → `v0.6`, `v0.6.1` → `v0.6.1`. Adds a leading `v` if missing.
+ */
+export function shortVersion(tag: string): string {
+  const v = tag.startsWith('v') ? tag : `v${tag}`;
+  return v.replace(/^(v\d+\.\d+)\.0$/, '$1');
 }

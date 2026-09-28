@@ -25,14 +25,19 @@ for (const { path, title } of PAGES) {
   });
 }
 
-test('homepage shows the orbit logo twice and both product cards, Audio first', async ({
+test('homepage: nav mark, the drawn Boojy logo, both app cards (Audio first) and the About card', async ({
   page,
 }) => {
   await page.goto('/');
-  await expect(page.locator('svg.boojy-mark')).toHaveCount(2); // nav + hero
+  await expect(page.locator('.site-nav svg.boojy-mark')).toHaveCount(1);
+  // The hero logo is drawn from parts: the sun and the draggable planet are real shapes.
+  await expect(page.locator('svg[data-system] .sun')).toHaveCount(1);
+  await expect(page.locator('svg[data-system] .jplanet')).toHaveCount(1);
   await expect(page.locator('.product-card')).toHaveCount(2);
   await expect(page.locator('.product-card').first()).toHaveAttribute('data-product', 'audio');
   await expect(page.locator('.product-card').last()).toHaveAttribute('data-product', 'notes');
+  await expect(page.locator('.product-card').first()).toHaveAttribute('href', '/audio/');
+  await expect(page.locator('.about h2')).toHaveText("Hi, I'm Tyr.");
 });
 
 test('homepage runs without JavaScript errors', async ({ page }) => {
@@ -45,7 +50,7 @@ test('homepage runs without JavaScript errors', async ({ page }) => {
 
 test('/audio/ download CTA hydrates and the panel lists a GitHub fallback', async ({ page }) => {
   await page.goto('/audio/');
-  await expect(page.locator('.btn-download')).toBeVisible();
+  await expect(page.locator('.audio-download')).toBeVisible();
   // client:load island — retry the toggle until hydration has attached the handler.
   // (By name, not class: the "All versions" link shares .other-platforms-link styling.)
   await expect(async () => {
@@ -143,12 +148,32 @@ test('/design/ is still reachable by direct link', async ({ page }) => {
 test('nav and footer do not link to Design, and list Audio before Notes', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('a[href="/design/"]')).toHaveCount(0);
-  await expect(page.locator('.nav-products .nav-product')).toHaveText(['Audio', 'Notes']);
-  await expect(page.locator('.footer-row-1 a')).toHaveText(['Audio', 'Notes', 'Privacy', 'Terms']);
+  await expect(page.locator('.site-nav-links a')).toHaveText(['Audio', 'Notes']);
+  await expect(page.locator('.site-foot a')).toHaveText([
+    'Audio',
+    'Notes',
+    'Privacy',
+    'Terms',
+    'GitHub',
+    'tyr@boojy.org',
+  ]);
+});
+
+test('app pages show four feature tiles and a link to the source on GitHub', async ({ page }) => {
+  for (const app of ['notes', 'audio']) {
+    await page.goto(`/${app}/`);
+    await expect(page.locator('.tile')).toHaveCount(4);
+    await expect(page.locator('.gh-line a')).toHaveAttribute(
+      'href',
+      `https://github.com/boojyorg/boojy-${app}`,
+    );
+    await expect(page.locator(`.horizon-${app} .site-foot`)).toHaveCount(1);
+  }
 });
 
 test('unknown URLs return the 404 page', async ({ page }) => {
   const response = await page.goto('/this-page-does-not-exist/');
   expect(response?.status()).toBe(404);
-  await expect(page.locator('.not-found-title')).toHaveText('Page Not Found');
+  await expect(page.locator('.lost-title')).toHaveText('This page drifted out of orbit.');
+  await expect(page.locator('.lost a[href="/"]')).toBeVisible();
 });

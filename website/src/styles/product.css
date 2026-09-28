@@ -1,0 +1,240 @@
+/* ===================================
+   BOOJY - APP PAGES (Notes, Audio)
+   Lockup hero → download → screenshot → Features, on one reading-width column,
+   ending on the app's planet horizon (the footer, from space.css).
+   =================================== */
+
+.product-hero {
+  position: relative;
+  z-index: 3; /* the download panel opens over the screenshot below */
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 108px 20px 14px;
+}
+.product-lockup {
+  width: min(715px, 94vw);
+  height: auto;
+  display: block;
+  touch-action: manipulation;
+}
+.product-tag {
+  margin: 4px 0 0;
+  font-size: clamp(19px, 2.2vw, 23px);
+  color: var(--ink);
+  text-wrap: balance;
+}
+.product-key {
+  margin: 0 0 4px;
+  max-width: 66ch;
+  color: var(--muted);
+  font-size: 15.5px;
+  text-wrap: balance;
+}
+
+/* Download: the button, then "Apple Silicon · v0.10 · Early access · Other platforms" */
+.dl {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 9px;
+  margin-top: 6px;
+}
+.dl-meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.dl-meta a {
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
+.dl-meta a:hover {
+  color: var(--ink);
+}
+.notes-desktop-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+.dl .download-icon {
+  display: inline-flex;
+}
+.dl .btn-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reading {
+  width: min(var(--reading), calc(100% - 40px));
+  margin: 0 auto;
+}
+
+/* Screenshot: dark by default, the pill at the bottom centre switches to light */
+.shotwrap {
+  position: relative;
+  margin-top: 12px;
+  margin-bottom: 49px;
+}
+.shotwrap .frame {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 34px 90px rgba(0, 0, 0, 0.55);
+  background: #181818;
+}
+.shotwrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  transition: opacity 0.35s var(--ease);
+}
+.shotwrap .shot-light {
+  opacity: 0;
+}
+.shotwrap[data-theme="light"] .shot-light {
+  opacity: 1;
+}
+.themepill {
+  position: absolute;
+  left: 50%;
+  bottom: -19px;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(30, 33, 44, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+.themepill button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 30px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: 500 13px / 1 var(--font-sans);
+  transition:
+    background 0.25s var(--ease),
+    color 0.25s var(--ease);
+}
+.themepill button[aria-pressed="true"] {
+  background: var(--ink);
+  color: #0b0d14;
+}
+.themepill svg {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Features */
+.features {
+  margin-bottom: 10px;
+}
+.features h2 {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 560px) {
+  .tiles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.tile {
+  padding: 18px 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--card-line);
+  border-radius: 16px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+}
+.tile-icon {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: var(--tile-icon);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.tile b {
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.tile span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.sky[data-page="notes"] ~ main {
+  --tile-icon: #a4c8cc;
+}
+.sky[data-page="audio"] ~ main {
+  --tile-icon: #6aa8ff;
+}
+.gh-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin: 30px 0 0;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+.gh-line svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+.gh-line a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .product-hero {
+    padding-top: 88px;
+  }
+  .product-lockup {
+    width: 86vw;
+  }
+  .product-key {
+    font-size: 14.5px;
+  }
+}
+
+.dl .download-icon svg {
+  width: 16px;
+  height: 16px;
+}

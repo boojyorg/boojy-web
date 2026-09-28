@@ -1,8 +1,10 @@
 ---
 import { AudioDownload } from '../../components/AudioDownload';
+import AppLockup from '../../components/AppLockup.astro';
+import Features from '../../components/Features.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLatestRelease } from '../../lib/github-release';
-import '../../styles/audio.css';
+import '../../styles/product.css';
 
 // Build-time fetch — the version is baked into the static HTML and re-fetched on each
 // deploy. getLatestRelease never throws (falls back on any error/timeout). Audio ships
@@ -11,29 +13,15 @@ const release = await getLatestRelease('boojyorg/boojy-audio', {
   fallbackVersion: 'v0.6.0 Early access',
 });
 
-// Feature checklist — what boojy-audio has shipped in a tagged release (check its CHANGELOG).
-// "What's next" follows the site policy: only the next scheduled release. v0.7 is a
-// reliability release with no new feature theme (boojy-audio docs/BACKLOG.md), so it says
-// that rather than listing features. Punch in/out is left out on purpose: the Unreleased
-// changelog removes it, so naming it here would go stale at v0.7.
 const features = [
-  { title: 'Multi-track timeline', detail: 'audio and MIDI side by side' },
-  { title: 'Recording', detail: 'mic or interface, MIDI keyboard, count-in, input monitoring' },
-  { title: 'Piano roll', detail: 'velocity, quantize, scale highlighting' },
-  { title: 'Drum kit', detail: 'pads with starter sounds and a step grid for beats' },
-  { title: 'Automation', detail: 'draw volume and pan changes over time' },
-  { title: 'Clip tools', detail: 'join, reverse, pitch and warp' },
-  { title: 'Mixer & effects', detail: 'sends and returns; EQ, compressor, reverb, delay, chorus' },
-  { title: 'Export', detail: 'WAV, MP3, per-track stems, MIDI in and out' },
-];
-
-const comingSoon = [
-  { title: 'v0.7', detail: 'steadier recording, saving and playback' },
-  { title: 'Simpler workflows', detail: 'smoother everyday editing and mixing' },
-];
+  { icon: 'mic', title: 'Recording', text: 'From a mic, an audio interface or a MIDI keyboard.' },
+  { icon: 'grid', title: 'Beats', text: "Build drum patterns on the drum kit's step grid." },
+  { icon: 'sliders', title: 'Mixing', text: 'Built-in effects, plus your own VST3 plugins.' },
+  { icon: 'export', title: 'Export', text: 'WAV, MP3 or separate stems for each track.' },
+] as const;
 ---
 
-<BaseLayout path="/audio/">
+<BaseLayout path="/audio/" page="audio" footer="audio">
   <script
     type="application/ld+json"
     is:inline
@@ -49,147 +37,20 @@ const comingSoon = [
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
     })}
   />
-  <section class="audio-hero">
-    <div class="audio-hero-glow" aria-hidden="true" data-glow></div>
-    <div class="container">
-      <h1 class="sr-only">Boojy Audio — a free, simple music studio for macOS and Windows</h1>
-      <div class="audio-hero-title reveal">
-        <img src="/images/boojy-logo.svg" alt="Boojy" class="audio-hero-logo" />
-        <img src="/images/audio-text-logo.png" alt="Audio" class="audio-hero-product" />
-      </div>
-      <p class="audio-tagline reveal reveal-d1">Music production without the barriers.</p>
-      <AudioDownload client:load versionText={release.versionText} />
-    </div>
+    <section class="product-hero">
+    <h1 class="sr-only">Boojy Audio — a free, simple music studio for macOS and Windows</h1>
+    <div class="rise" style="--i:0"><AppLockup app="audio" class="product-lockup" /></div>
+    <p class="product-tag rise" style="--i:1">Music production without the barriers</p>
+    <p class="product-key rise" style="--i:2">Easy enough for your first song, with room to grow</p>
+    <div class="rise" style="--i:3"><AudioDownload client:load version={release.version} /></div>
   </section>
 
-  <section class="audio-screenshot-section">
-    <div class="container">
-      <div class="audio-screenshot-wrapper reveal reveal-d3">
-        <img
-          src="/images/audio-screenshot-v0.5.2.png"
-          alt="Boojy Audio"
-          class="audio-screenshot"
-          loading="lazy"
-        />
+  <div class="reading">
+    <div class="shotwrap rise pop" style="--i:4">
+      <div class="frame">
+        <img class="shot-dark" src="/images/audio-v0.5.jpg" alt="Boojy Audio with a song open: tracks, clips, the mixer and the piano roll" width="1800" height="1132" decoding="async" />
       </div>
     </div>
-  </section>
-
-  <section class="audio-cards-section">
-    <div class="container">
-      <div class="audio-features-grid">
-        <div class="audio-feature-card reveal">
-          <svg
-            class="audio-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10"></circle>
-            <path d="m9 12 2 2 4-4"></path>
-          </svg>
-          <h3>Completely Free</h3>
-          <p>No subscriptions, no paywalls. Free forever.</p>
-        </div>
-        <div class="audio-feature-card reveal reveal-d1">
-          <svg
-            class="audio-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-          </svg>
-          <h3>Plugin Support</h3>
-          <p>Use VST3 instruments and effects.</p>
-        </div>
-        <div class="audio-feature-card reveal reveal-d2">
-          <svg
-            class="audio-feature-icon"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-          </svg>
-          <h3>Beginner Friendly</h3>
-          <p>Clean interface. No overwhelming menus.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="audio-features-section">
-    <div class="container">
-      <div class="audio-features-card reveal">
-        <h2>Features</h2>
-        <div class="audio-features-columns">
-          <div class="audio-features-col">
-            <h3>Current</h3>
-            <ul class="audio-feature-list">
-            {
-              features.map((item) => (
-                <li>
-                  <svg
-                    class="audio-feature-check"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M20 6 9 17l-5-5" />
-                  </svg>
-                  <span>
-                    <strong>{item.title}</strong> — {item.detail}
-                  </span>
-                </li>
-              ))
-            }
-            </ul>
-          </div>
-          <div class="audio-features-col audio-features-col-soon">
-            <h3>What's next</h3>
-            <ul class="audio-feature-list">
-            {
-              comingSoon.map((item) => (
-                <li>
-                  <svg
-                    class="audio-feature-check"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M5 12h14" />
-                    <path d="m12 5 7 7-7 7" />
-                  </svg>
-                  <span>
-                    <strong>{item.title}</strong> — {item.detail}
-                  </span>
-                </li>
-              ))
-            }
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    <Features items={[...features]} repo="https://github.com/boojyorg/boojy-audio" />
+  </div>
 </BaseLayout>

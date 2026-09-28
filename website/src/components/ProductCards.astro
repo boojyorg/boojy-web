@@ -1,71 +1,29 @@
 ---
-import { PRODUCT_CARDS, STAGE_LABELS } from '../content/site';
+import { PRODUCT_CARDS } from '../content/site';
+import AppWordmark from './AppWordmark.astro';
+
+// The homepage's two apps, Audio then Notes. The whole card is the link; the button inside
+// is the visual cue. On hover: a quick lift, a faint wash of the app's colour, the button glows.
+const SIZES: Record<string, [number, number]> = { audio: [1800, 1132], notes: [1800, 1125] };
 ---
 
-<section class="products-section">
-  <div class="container">
-    <div class="product-cards reveal reveal-d3">
-      {
-        PRODUCT_CARDS.map((product) => {
-          // Products with a page link out; one without an href renders as a plain card.
-          const Wrapper = product.href ? 'a' : 'div';
-          return (
-            <Wrapper
-              class:list={['product-card', { 'coming-soon-card': product.comingSoon }]}
-              data-product={product.id}
-              {...(product.href ? { href: product.href } : {})}
-            >
-              <div class="product-card-img">
-                {product.visual.kind === 'image' ? (
-                  <img src={product.visual.src} alt={product.visual.alt} loading="lazy" />
-                ) : (
-                  <div class="card-placeholder">
-                    {/* Lucide "image" — stand-in for a product with no screenshot yet. */}
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      aria-hidden="true"
-                    >
-                      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-                      <circle cx="9" cy="9" r="2" />
-                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                    </svg>
-                  </div>
-                )}
-                <span
-                  class:list={['product-card-badge', { 'coming-soon-badge': product.comingSoon }]}
-                >
-                  {product.comingSoon ? 'Coming soon' : product.stage ? STAGE_LABELS[product.stage] : ''}
-                </span>
-              </div>
-              <div class="product-card-body">
-                {product.logo ? (
-                  <img
-                    src={product.logo.src}
-                    alt={product.logo.alt}
-                    class="product-card-logo"
-                    loading="lazy"
-                  />
-                ) : (
-                  <p class="product-card-name">{product.name}</p>
-                )}
-                <p class="product-card-description">{product.description}</p>
-                {product.comingSoon ? (
-                  <span class="product-card-cta product-card-cta-disabled" aria-disabled="true">
-                    Coming soon
-                  </span>
-                ) : (
-                  <span class="product-card-cta">Learn more →</span>
-                )}
-              </div>
-            </Wrapper>
-          );
-        })
-      }
-    </div>
-  </div>
-</section>
+<div class="apps">
+  {
+    PRODUCT_CARDS.map((product) => {
+      const [w, h] = SIZES[product.id] ?? [1600, 1000];
+      const label = product.id === 'audio' ? 'Audio' : 'Notes';
+      return (
+        <a class="app product-card rise together" style="--i:4" data-product={product.id} href={product.href} aria-label={`${product.name}: ${product.line}`}>
+          <div class="shot">
+            <img src={product.screenshot.src} alt={product.screenshot.alt} width={w} height={h} decoding="async" />
+          </div>
+          <div class="name">
+            <AppWordmark app={product.id} />
+          </div>
+          <p class="line">{product.line}</p>
+          <span class={`btn-solid btn-${product.id}`}>Explore {label} →</span>
+        </a>
+      );
+    })
+  }
+</div>
