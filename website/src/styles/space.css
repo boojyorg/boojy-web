@@ -23,8 +23,13 @@
   --gutter: clamp(16px, 5vw, 64px);
 }
 
+/* The page fills at least the screen, with main taking the spare room, so on a tall
+   screen the footer (and an app page's planet) rests at the bottom instead of mid-screen */
 body {
   background: var(--ground);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---------- Sky: nebula + canvases (scripts/sky.ts), fixed behind everything ---------- */
@@ -156,6 +161,7 @@ main,
 }
 /* Soft hazes behind the hero and cards are wider than a phone screen; never let them scroll the page sideways */
 main {
+  flex: 1 0 auto;
   overflow-x: clip;
 }
 /* While a planet is being dragged, nothing on the page can be text-selected */

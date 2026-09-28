@@ -165,23 +165,26 @@
 }
 
 /* About */
+/* Photo + text sit as one block centred in the card, so the reading-width text doesn't
+   leave a dead zone on the right of the wide card */
 .about {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 26px;
+  grid-template-columns: auto minmax(0, 62ch);
+  justify-content: center;
+  gap: 34px;
   align-items: start;
-  padding: 30px;
+  padding: 40px;
   margin-bottom: 26px;
   background: var(--card);
   border: 1px solid var(--card-line);
   border-radius: 20px;
 }
 .about:not(:has(.about-photo)) {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 62ch);
 }
 .about-photo {
-  width: 112px;
-  height: 112px;
+  width: 128px;
+  height: 128px;
   border-radius: 50%;
   object-fit: cover;
 }
@@ -193,7 +196,6 @@
 .about p {
   margin: 0 0 12px;
   color: var(--muted);
-  max-width: 64ch;
   line-height: 1.65;
 }
 .about p:last-child {
@@ -205,6 +207,11 @@
   }
   .about {
     grid-template-columns: 1fr;
+    gap: 18px;
     padding: 22px;
+  }
+  .about-photo {
+    width: 96px;
+    height: 96px;
   }
 }
