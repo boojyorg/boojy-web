@@ -38,7 +38,6 @@ items. Shipped work leaves here for `CHANGELOG.md`. How the site works lives in 
 The space redesign shipped from the Sky Lab (spec: https://claude.ai/artifact/17QQiaUjrCMM8iyGBNV6y8;
 decisions in `CHANGELOG.md`). Left over:
 
-- **Tyr's photo** for the About card: set `ABOUT_PHOTO` in `content/site.ts` (square, 400px+).
 - **Real screenshots.** The Notes pair was captured from the browser build in a wide window, so it's
   mostly empty at card size; recapture at about 1100×700 with a fuller note, light and dark. Audio's
   is from v0.5.2. Use one recipe for both apps.
@@ -46,7 +45,8 @@ decisions in `CHANGELOG.md`). Left over:
   arm64-only (the release build runs on arm64 runners). Verify, then drop the row or ship a
   universal build.
 - **Phone check on real devices.** Dragging the homepage planets is mouse/pen only (touch keeps
-  scrolling the page); the j's dot and the 404 moon do drag on touch.
+  scrolling the page); the j's dot and the 404 moon do drag on touch. The flare and touch fixes
+  (2026-09-28) were checked in desktop and emulated-mobile browsers only: confirm on an iPhone.
 - **`/design/`** still uses the old black wordmark image (unlisted, deliberately untouched).
 
 ## Unscheduled

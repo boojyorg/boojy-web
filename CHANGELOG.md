@@ -6,6 +6,14 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Features
+- **The logo's planet spins as you change page.** Any link to another page on the site sends the
+  nav logo's planet round once (clockwise), and the next page picks the lap up mid-orbit, so it
+  never snaps back.
+- **Privacy and Terms, rewritten to be readable.** Each opens with one line and an "In short"
+  summary, with the detail on a solid card instead of over the stars. The Website section (empty
+  until now) covers Cloudflare Web Analytics, Notes' automatic updates are listed, and both pages
+  speak as "I". Together they're about 40% shorter.
+- **Tyr's photo in the About card.**
 - **The space redesign** (from the Sky Lab). The homepage is a solar system around the Boojy
   logo: soft spectrum orbit rings fading with distance, an asteroid belt, and eight planets you can
   drag (let go and they glide back onto the nearest point of their orbit with a small settle).
@@ -23,6 +31,16 @@ convention is in the suite root's `AGENTS.md`.
   description and search data now say macOS, Windows and Linux.
 
 ### Bug Fixes
+- **Feature tiles fade in on time, not on scroll.** Their fade was tied to scroll distance, so it
+  felt slow, and on phones the last tiles stayed half-faded because the page couldn't scroll far
+  enough.
+- **The planet horizon is round on phones.** It was a tall oval that read as a steep hill on
+  narrow screens.
+- **The logo's flares play in Safari, and the logo behaves on touch.** No grey tap box or
+  long-press menu on the sun, N, A and planets, and a dragged dot rides above your finger instead
+  of under it.
+- **The footer rests at the bottom of short pages** on tall screens, instead of floating
+  mid-screen.
 - **The Boojy logo always renders in its own font.** The logo's "Boojy" was live text in Poppins,
   which an SVG shown as an image can't load, so any visitor without Poppins installed saw it in
   Times. The letters are now outlines, identical to the design.
@@ -47,6 +65,12 @@ convention is in the suite root's `AGENTS.md`.
   Mailchimp newsletter; the site sends no emails. "Last updated" bumped to 2026-09-07.
 
 ### Improvements
+- **A calmer, fuller sky.** The stars scroll closer to the page's speed and the solar system fades
+  to half past the hero, so the rings no longer feel like glass sliding over a still sky. Planets
+  and rings are bigger on large screens, and a dragged dot or moon passes in front of everything.
+- **Nav and spacing polish.** Bigger nav links that take their app's colour (Audio blue, Notes
+  teal) when active or hovered, tighter gaps around Features, and the footer's © in the same
+  colour as the links.
 - **Planning files pruned.** `dreams.md` (a June to-do list) and `docs/ROADMAP.md` are gone; their
   unfinished items and locked decisions live in `docs/BACKLOG.md`, now the one planning file. The
   stale `session-metrics` skill from the Astro migration is removed.
