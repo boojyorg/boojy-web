@@ -37,7 +37,10 @@ paths:
   only) and **retried once**. Unauthenticated, the API allows 60 req/hr per IP, and Cloudflare's build
   IPs are shared, so that allowance is often spent before our build runs: this is why Notes v0.11.0
   went live showing the v0.10 fallback with no direct download links (2026-09-29). With the token the
-  limit is 5,000/hr. Every fallback `console.warn`s the repo, the reason (HTTP status, rate limit,
+  limit is 5,000/hr. A **401/403 that isn't a spent rate limit** means the token itself was refused
+  (bad, expired, or blocked by the org's token policy): the fetch logs GitHub's message and retries
+  **without** the token, so a broken token never does worse than none. Use a classic no-scope token
+  (see the doc). Every fallback `console.warn`s the repo, the reason (HTTP status, rate limit,
   timeout) and whether a token was present, so the Cloudflare build log says why.
 - Each app's `site-rebuild.yml` POSTs a CF Deploy Hook when a release is published, then checks
   boojy.org until the new version appears, and fails the run (GitHub emails Tyr) if it doesn't.

@@ -31,6 +31,9 @@ convention is in the suite root's `AGENTS.md`.
   description and search data now say macOS, Windows and Linux.
 
 ### Bug Fixes
+- **A refused GitHub token no longer breaks the version lookup.** The first token was refused
+  (HTTP 403), so the build fell back even with a token set. It now logs GitHub's reason and
+  tries again without the token.
 - **New app versions reach the site reliably.** The build asks GitHub for the latest release with a
   read-only token (`GITHUB_TOKEN`) and retries once. Without a token, Cloudflare's shared build
   machines often hit GitHub's hourly limit, so Notes v0.11.0 went live showing v0.10 and a generic

@@ -90,6 +90,46 @@ describe('getLatestRelease', () => {
     expect(init?.headers).not.toHaveProperty('Authorization');
   });
 
+  it('drops a rejected token and retries without it', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValueOnce({
+          ok: false,
+          status: 403,
+          headers: new Headers({ 'x-ratelimit-remaining': '4999' }),
+          json: async () => ({ message: 'forbidden by org policy' }),
+        })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => [{ tag_name: 'v0.5.4', published_at: null, assets: [] }],
+        }),
+    );
+
+    const release = await getLatestRelease(REPO, { ...OPTS, token: 'bad' });
+    expect(release.tag).toBe('v0.5.4');
+    const second = vi.mocked(fetch).mock.calls[1]?.[1];
+    expect(second?.headers).not.toHaveProperty('Authorization');
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('forbidden by org policy'));
+  });
+
+  it('keeps the token when the 403 is a spent rate limit', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 403,
+        headers: new Headers({ 'x-ratelimit-remaining': '0' }),
+        json: async () => ({ message: 'API rate limit exceeded' }),
+      }),
+    );
+
+    expect(await getLatestRelease(REPO, { ...OPTS, token: 'good' })).toEqual(FALLBACK);
+    const second = vi.mocked(fetch).mock.calls[1]?.[1];
+    expect(second?.headers).toMatchObject({ Authorization: 'Bearer good' });
+  });
+
   it('retries once after a failed request', async () => {
     vi.stubGlobal(
       'fetch',
