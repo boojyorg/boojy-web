@@ -31,8 +31,8 @@ A fallback is logged in the build log with its reason.
 ### Setting up `GITHUB_TOKEN` (one-off)
 
 1. GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token.
-   Resource owner **boojyorg**, repository access **Public repositories (read-only)**, no extra
-   permissions. Pick the longest expiry you're happy with and note the date.
+   Resource owner: your own account (it doesn't need to be boojyorg; public repos are readable by
+   anyone). Repository access **Public repositories**, no permissions added. Pick the longest expiry you're happy with and note the date.
 2. Cloudflare dashboard → Workers & Pages → the boojy.org Pages project → Settings → Variables and
    Secrets → add `GITHUB_TOKEN` as a **Secret**, for **Production and Preview**.
 3. Retry the latest production deployment (or merge anything) so the site rebuilds with it.
