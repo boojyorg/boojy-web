@@ -30,14 +30,16 @@ A fallback is logged in the build log with its reason.
 
 ### Setting up `GITHUB_TOKEN` (one-off)
 
-1. GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token.
-   Resource owner: your own account (it doesn't need to be boojyorg; public repos are readable by
-   anyone). Repository access **Public repositories**, no permissions added. Pick the longest expiry you're happy with and note the date.
+1. Make a **classic** token: github.com/settings/tokens/new, **no scopes ticked**, 1-year expiry.
+   A classic token with no scopes can only read public data. Don't use a fine-grained token:
+   the first one (2026-09-29) was refused by GitHub with HTTP 403 for boojyorg's repos, because
+   the org's rules for fine-grained tokens apply to it, and classic ones sidestep that.
 2. Cloudflare dashboard → Workers & Pages → the boojy.org Pages project → Settings → Variables and
    Secrets → add `GITHUB_TOKEN` as a **Secret**, for **Production and Preview**.
 3. Retry the latest production deployment (or merge anything) so the site rebuilds with it.
-4. When the token expires the site keeps working, it just falls back again, and the release check
-   below starts failing. Renew it then.
+4. When the token expires or is refused, the build logs `GITHUB_TOKEN rejected (…)` with
+   GitHub's reason and retries without it, so it is never worse than no token. It may then hit
+   the shared rate limit and fall back, and the release check below fails. Renew it then.
 
 ### Release checklist (boojy-notes / boojy-audio)
 

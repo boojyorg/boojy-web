@@ -82,7 +82,22 @@ export async function getLatestRelease(
       });
       if (!res.ok) {
         const remaining = res.headers?.get('x-ratelimit-remaining');
-        reason = `HTTP ${res.status}${remaining === '0' ? ' (rate limit spent)' : ''}`;
+        const body = (await res.json().catch(() => null)) as { message?: string } | null;
+        reason = `HTTP ${res.status}${remaining === '0' ? ' (rate limit spent)' : ''}${
+          body?.message ? `: ${body.message}` : ''
+        }`;
+        // A rejected token (bad, expired, or refused by the org's token policy) must never
+        // do worse than no token: log it and try again without one.
+        if (
+          (res.status === 401 || res.status === 403) &&
+          remaining !== '0' &&
+          headers.Authorization
+        ) {
+          console.warn(
+            `[github-release] ${repo}: GITHUB_TOKEN rejected (${reason}); retrying without it`,
+          );
+          delete headers.Authorization;
+        }
         continue;
       }
 
@@ -121,7 +136,7 @@ export async function getLatestRelease(
   }
 
   console.warn(
-    `[github-release] ${repo}: using fallback "${fallbackVersion}" (${reason}; ${token ? 'with' : 'no'} GITHUB_TOKEN)`,
+    `[github-release] ${repo}: using fallback "${fallbackVersion}" (${reason}; ${headers.Authorization ? 'with' : 'no'} GITHUB_TOKEN)`,
   );
   return fallback;
 }
