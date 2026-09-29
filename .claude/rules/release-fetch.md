@@ -33,6 +33,11 @@ paths:
   affordance is ever a dead link.
 - Repo owner is **`boojyorg`** for both apps (`boojyorg/boojy-audio`, `boojyorg/boojy-notes`). The old
   `tyrbujac/boojy-audio` only survives as a 301 — never reintroduce it.
-- No GitHub token needed: the unauthenticated API is 60 req/hr per IP on shared CF build IPs, and the
-  fallback string covers the occasional rate-limit. Each app's `site-rebuild.yml` POSTs a CF Deploy Hook
-  when a release is published, so a new version goes live without a manual deploy.
+- **Authenticated with `GITHUB_TOKEN`** (a Cloudflare Pages build env var, read-only, public repos
+  only) and **retried once**. Unauthenticated, the API allows 60 req/hr per IP, and Cloudflare's build
+  IPs are shared, so that allowance is often spent before our build runs: this is why Notes v0.11.0
+  went live showing the v0.10 fallback with no direct download links (2026-09-29). With the token the
+  limit is 5,000/hr. Every fallback `console.warn`s the repo, the reason (HTTP status, rate limit,
+  timeout) and whether a token was present, so the Cloudflare build log says why.
+- Each app's `site-rebuild.yml` POSTs a CF Deploy Hook when a release is published, then checks
+  boojy.org until the new version appears, and fails the run (GitHub emails Tyr) if it doesn't.

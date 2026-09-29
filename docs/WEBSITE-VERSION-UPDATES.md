@@ -23,13 +23,31 @@ in its `.astro` frontmatter at build time:
 The fetch never breaks the build (AbortController + try/catch → `fallbackVersion`), and the download
 components fall back to the releases page if an asset URL is unresolved, so no link is ever dead.
 
+The fetch authenticates with the **`GITHUB_TOKEN`** build env var and retries once. Without a token,
+GitHub allows 60 requests an hour per IP, and Cloudflare's build machines share IPs, so a build can
+find the allowance already spent and quietly bake in the fallback. That happened with Notes v0.11.0.
+A fallback is logged in the build log with its reason.
+
+### Setting up `GITHUB_TOKEN` (one-off)
+
+1. GitHub → Settings → Developer settings → Fine-grained tokens → Generate new token.
+   Resource owner: your own account (it doesn't need to be boojyorg; public repos are readable by
+   anyone). Repository access **Public repositories**, no permissions added. Pick the longest expiry you're happy with and note the date.
+2. Cloudflare dashboard → Workers & Pages → the boojy.org Pages project → Settings → Variables and
+   Secrets → add `GITHUB_TOKEN` as a **Secret**, for **Production and Preview**.
+3. Retry the latest production deployment (or merge anything) so the site rebuilds with it.
+4. When the token expires the site keeps working, it just falls back again, and the release check
+   below starts failing. Renew it then.
+
 ### Release checklist (boojy-notes / boojy-audio)
 
 1. Bump the version, update `CHANGELOG.md`, commit.
 2. Tag (`git tag v0.x.x`) and push the tag; publish the GitHub Release with the built assets.
-3. **The website rebuilds itself** when the release is published (see below). If boojy.org still
-   shows the old version a few minutes later, check that app's "Rebuild boojy.org" workflow run,
-   or use "Retry deployment" in Cloudflare Pages.
+3. **The website rebuilds itself** when the release is published (see below). The "Rebuild
+   boojy.org" workflow then waits for the new version to appear on the site and fails if it
+   doesn't, so a stale site shows up as a failed run (and an email). To fix one: check the
+   Cloudflare build log for a `[github-release]` warning, then "Retry deployment" in Cloudflare
+   Pages.
 4. Keep the `fallbackVersion` in the page frontmatter roughly current so a rate-limited build doesn't
    look stale.
 
@@ -42,6 +60,11 @@ Each app repo has `.github/workflows/site-rebuild.yml`, which POSTs the Cloudfla
 (secret `CF_PAGES_DEPLOY_HOOK_URL`) on `release: published`, so publishing a release rebuilds the
 site with no manual redeploy. It fires on *published*, not on the tag push, because the tag only
 builds a draft. Working since 2026-06; confirmed with Notes v0.10.0 on 2026-09-27.
+
+The hook only proves Cloudflare *started* a build, not that the build found the new release (Notes
+v0.11.0 rebuilt fine and still showed v0.10). So after the POST, the Notes workflow polls
+`https://boojy.org/notes/` for up to ~10 minutes, looking for the release's direct download link,
+and fails the run if it never appears.
 
 ---
 

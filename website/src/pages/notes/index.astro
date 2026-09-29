@@ -11,7 +11,7 @@ import '../../styles/product.css';
 // error/timeout). Notes' asset filenames embed the version, so the download URLs have
 // to come from the live release, not a hardcoded path.
 const release = await getLatestRelease('boojyorg/boojy-notes', {
-  fallbackVersion: 'v0.10.0 Early access',
+  fallbackVersion: 'v0.11.0 Early access',
 });
 // electron-builder names: x64 is `x86_64` for the AppImage but `amd64` for the .deb.
 const downloadUrls: NotesDownloadUrls = {

@@ -1,5 +1,9 @@
 const API_BASE = 'https://api.github.com/repos';
 
+/** Per-attempt timeout. Two attempts max, so a dead API costs the build ~11s, not a hang. */
+const ATTEMPT_TIMEOUT_MS = 5000;
+const RETRY_DELAY_MS = 1000;
+
 export interface ReleaseAsset {
   name: string;
   url: string;
@@ -23,6 +27,12 @@ interface Options {
   fallbackVersion: string;
   /** Word placed after the tag in `versionText`. Default `Early access`. */
   channel?: string;
+  /**
+   * GitHub token for the request. Defaults to the `GITHUB_TOKEN` build env var (set in
+   * Cloudflare Pages). Without one the API allows 60 requests/hr per IP, and Cloudflare's
+   * build IPs are shared, so that allowance is often already spent.
+   */
+  token?: string;
 }
 
 interface GitHubRelease {
@@ -38,12 +48,13 @@ interface GitHubRelease {
  * and asset download URLs, all baked into the static HTML and re-fetched on every deploy.
  * Used by `/notes/` and `/audio/` so the shown version and the download links can never
  * drift from each other (Notes' asset names embed the version, so the URLs MUST come from
- * here, not a hardcoded path). Swallows every error and returns the fallback — a GitHub
- * hiccup or the unauthenticated 60 req/hr/IP rate limit must never break the build.
+ * here, not a hardcoded path). Authenticates with `GITHUB_TOKEN` when set and retries
+ * once. Swallows every error and returns the fallback — a GitHub hiccup must never break
+ * the build — but logs why, so a stale version shows up in the Cloudflare build log.
  */
 export async function getLatestRelease(
   repo: string,
-  { fallbackVersion, channel = 'Early access' }: Options,
+  { fallbackVersion, channel = 'Early access', token = buildEnv('GITHUB_TOKEN') }: Options,
 ): Promise<LatestRelease> {
   const fallback: LatestRelease = {
     versionText: fallbackVersion,
@@ -53,43 +64,73 @@ export async function getLatestRelease(
     assets: [],
   };
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 5000);
-  try {
-    const res = await fetch(`${API_BASE}/${repo}/releases?per_page=1`, {
-      headers: { 'User-Agent': 'boojy.org-build', Accept: 'application/vnd.github+json' },
-      signal: controller.signal,
-    });
-    if (!res.ok) return fallback;
+  const headers: Record<string, string> = {
+    'User-Agent': 'boojy.org-build',
+    Accept: 'application/vnd.github+json',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
 
-    const releases = (await res.json()) as GitHubRelease[];
-    const release = releases[0];
-    if (!release?.tag_name) return fallback;
+  let reason = '';
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    if (attempt > 1) await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), ATTEMPT_TIMEOUT_MS);
+    try {
+      const res = await fetch(`${API_BASE}/${repo}/releases?per_page=1`, {
+        headers,
+        signal: controller.signal,
+      });
+      if (!res.ok) {
+        const remaining = res.headers?.get('x-ratelimit-remaining');
+        reason = `HTTP ${res.status}${remaining === '0' ? ' (rate limit spent)' : ''}`;
+        continue;
+      }
 
-    const dateText = release.published_at
-      ? new Date(release.published_at).toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        })
-      : '';
-    const assets: ReleaseAsset[] = (release.assets ?? []).map((asset) => ({
-      name: asset.name,
-      url: asset.browser_download_url,
-    }));
+      const releases = (await res.json()) as GitHubRelease[];
+      const release = releases[0];
+      if (!release?.tag_name) {
+        // A real answer, just not a usable one — retrying won't change it.
+        reason = 'no published release in the response';
+        break;
+      }
 
-    return {
-      versionText: `${release.tag_name} ${channel}${dateText ? ` · ${dateText}` : ''}`,
-      tag: release.tag_name,
-      version: shortVersion(release.tag_name),
-      dateText,
-      assets,
-    };
-  } catch {
-    return fallback;
-  } finally {
-    clearTimeout(timeout);
+      const dateText = release.published_at
+        ? new Date(release.published_at).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+          })
+        : '';
+      const assets: ReleaseAsset[] = (release.assets ?? []).map((asset) => ({
+        name: asset.name,
+        url: asset.browser_download_url,
+      }));
+
+      return {
+        versionText: `${release.tag_name} ${channel}${dateText ? ` · ${dateText}` : ''}`,
+        tag: release.tag_name,
+        version: shortVersion(release.tag_name),
+        dateText,
+        assets,
+      };
+    } catch (error) {
+      reason = error instanceof Error ? error.message : String(error);
+    } finally {
+      clearTimeout(timeout);
+    }
   }
+
+  console.warn(
+    `[github-release] ${repo}: using fallback "${fallbackVersion}" (${reason}; ${token ? 'with' : 'no'} GITHUB_TOKEN)`,
+  );
+  return fallback;
+}
+
+/** A build-time env var, read without depending on Node's types. */
+function buildEnv(name: string): string | undefined {
+  const env = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process
+    ?.env;
+  return env?.[name] || undefined;
 }
 
 /** URL of the first asset whose filename matches `pattern`, or `undefined`. */
