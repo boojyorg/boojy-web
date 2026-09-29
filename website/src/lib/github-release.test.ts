@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { findAssetUrl, getLatestRelease, shortVersion } from './github-release';
 
 const REPO = 'boojyorg/boojy-audio';
@@ -17,8 +17,14 @@ function stubFetchJson(body: unknown, ok = true) {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok, json: async () => body }));
 }
 
+beforeEach(() => {
+  // Every fallback logs why; keep the test output quiet.
+  vi.spyOn(console, 'warn').mockImplementation(() => {});
+});
+
 afterEach(() => {
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe('getLatestRelease', () => {
@@ -65,6 +71,41 @@ describe('getLatestRelease', () => {
     stubFetchJson({ message: 'API rate limit exceeded' }, false);
 
     expect(await getLatestRelease(REPO, OPTS)).toEqual(FALLBACK);
+    expect(console.warn).toHaveBeenCalledWith(expect.stringContaining('HTTP'));
+  });
+
+  it('sends the token as a Bearer header when one is given', async () => {
+    stubFetchJson([{ tag_name: 'v0.5.4', published_at: null, assets: [] }]);
+
+    await getLatestRelease(REPO, { ...OPTS, token: 'abc123' });
+    const init = vi.mocked(fetch).mock.calls[0]?.[1];
+    expect(init?.headers).toMatchObject({ Authorization: 'Bearer abc123' });
+  });
+
+  it('sends no Authorization header without a token', async () => {
+    stubFetchJson([{ tag_name: 'v0.5.4', published_at: null, assets: [] }]);
+
+    await getLatestRelease(REPO, { ...OPTS, token: '' });
+    const init = vi.mocked(fetch).mock.calls[0]?.[1];
+    expect(init?.headers).not.toHaveProperty('Authorization');
+  });
+
+  it('retries once after a failed request', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValueOnce({ ok: false, status: 403, json: async () => ({}) })
+        .mockResolvedValueOnce({
+          ok: true,
+          json: async () => [{ tag_name: 'v0.5.4', published_at: null, assets: [] }],
+        }),
+    );
+
+    const release = await getLatestRelease(REPO, OPTS);
+    expect(release.tag).toBe('v0.5.4');
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(console.warn).not.toHaveBeenCalled();
   });
 
   it('falls back when the network request throws', async () => {

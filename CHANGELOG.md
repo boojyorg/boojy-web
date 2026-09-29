@@ -31,6 +31,13 @@ convention is in the suite root's `AGENTS.md`.
   description and search data now say macOS, Windows and Linux.
 
 ### Bug Fixes
+- **New app versions reach the site reliably.** The build asks GitHub for the latest release with a
+  read-only token (`GITHUB_TOKEN`) and retries once. Without a token, Cloudflare's shared build
+  machines often hit GitHub's hourly limit, so Notes v0.11.0 went live showing v0.10 and a generic
+  releases link instead of the direct download. When the fallback is used, the build log now says
+  why. The Notes fallback version is v0.11.0.
+- **The Design page's "Let me know" link works.** It pointed at the removed homepage feedback
+  section; it now opens an email to tyr@boojy.org.
 - **Feature tiles fade in on time, not on scroll.** Their fade was tied to scroll distance, so it
   felt slow, and on phones the last tiles stayed half-faded because the page couldn't scroll far
   enough.

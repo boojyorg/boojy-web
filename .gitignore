@@ -14,3 +14,6 @@ docs/BUSINESS_PLAN.md
 
 # Transient hook artifact (astro check log)
 .astro_errors.log
+
+# Local Playwright screenshots
+.playwright-screenshots/
