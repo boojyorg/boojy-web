@@ -28,11 +28,7 @@ const meta = (
   ogImage,
 });
 
-/**
- * Canonical meta per route — ported from former static HTML `<head>` tags.
- * `/design/` keeps its entry: the page is still live and indexable, it's just
- * no longer linked from the homepage, nav or footer (unlisted 2026-09).
- */
+/** Canonical meta per route — ported from former static HTML `<head>` tags. */
 export const PAGE_META: Record<string, PageMeta> = {
   '/': meta(
     'Boojy – Creative Tools',
@@ -57,14 +53,6 @@ export const PAGE_META: Record<string, PageMeta> = {
     `${SITE}/images/notes-v0.10-dark.jpg`,
     'Boojy Notes - A Calm Space for Your Thoughts',
     'Write in markdown, organize with folders. Free for macOS, Windows and Linux.',
-  ),
-  '/design/': meta(
-    'Boojy Design – Image Editor in Your Browser',
-    'Boojy Design - A free image editor that runs in your browser. Paint, shapes, layers, live text, and export. No install, no account.',
-    '/design/',
-    `${SITE}/images/design-screenshot-v0.4.png`,
-    'Boojy Design - Image Editor in Your Browser',
-    'Paint, shapes, layers, live text, and export — free, right in your browser.',
   ),
   '/privacy/': meta(
     'Privacy Policy – Boojy',

@@ -18,7 +18,6 @@
   /* Product Colors */
   --color-audio: #4a9ef5;
   --color-notes: #a4cace;
-  --color-design: #ffa500; /* unlisted product; still used by the live /design/ page */
 
   /* UI Colors (matched to Boojy Notes palette) */
   --color-bg: #13151c;
@@ -190,26 +189,6 @@ body {
 }
 .hero-meta a:hover {
   color: #9b9eb0;
-}
-
-/* Quiet line under a product CTA — a plain line, not a banner. Only /design/ uses it
-   now, for its paused-development caveat; /audio/ and /notes/ dropped their notes
-   2026-09 and end at the version line. */
-.hero-note {
-  max-width: 34rem;
-  margin: 0.85rem auto 0;
-  color: #8a8ea6;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  text-align: center;
-}
-.hero-note a {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.hero-note a:hover {
-  color: #c2c5d6;
 }
 
 /* Other platforms panel */

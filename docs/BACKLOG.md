@@ -14,19 +14,17 @@ items. Shipped work leaves here for `CHANGELOG.md`. How the site works lives in 
   (its one post went stale and wrong), the old newsletter confirmation page, the homepage
   feedback form (2026-09) and the Feedback section that replaced it (2026-09-11). The footer
   email is the site's only contact route; `/#feedback` is a dead anchor.
-- **Boojy Design is unlisted (2026-09).** Off the homepage grid, the nav and the footer, and out of
-  the marketing copy (homepage meta + JSON-LD) and the Terms "What Boojy Is" list. `/design/` itself
-  stays live, linkable and indexable — it's just no longer promoted. The `preview` badge flag went
-  with it. Re-listing is a revert: add the card back to `PRODUCT_CARDS` and a link to
-  `Nav.astro` / `Footer.astro`.
+- **Boojy Design is on hold (2026-10)** until Audio and Notes are both in Beta. It was unlisted
+  in 2026-09; now its page is gone and `/design/` 302s to `/`. Bringing it back: restore
+  `src/pages/design/`, `styles/design.css` and its two images from git, remove the two `_redirects`
+  lines, and give it a fresh look (it still used the old wordmark image).
 - **Logos are drawn, not images (2026-09-28).** The Boojy logo and the Notes/Audio wordmarks are
   built from Poppins outlines (`website/src/content/glyphs.json`), so they're light on the dark
   ground and never depend on a font loading. If an app's glyph (the teal N, the blue A) changes,
   update `lib/wordmark.ts`.
 - **App pages end at Features (2026-09-28).** Hero, screenshot, four Features tiles, a GitHub
   line, then the footer on the app's planet horizon. No Current/Coming-soon lists (they kept going
-  stale) and no feedback invite until the apps reach Beta. `/design/` keeps its own paused-
-  development note and is the only user of `.hero-note`.
+  stale) and no feedback invite until the apps reach Beta.
 - **Notes is desktop-only on the site (2026-09-27).** No "Open in Web" button: the browser build
   at notes.boojy.org is a development target whose notes live in browser storage (boojy-notes
   README). Bring a web option back when Notes on the web saves notes properly. Phones and tablets
@@ -47,7 +45,6 @@ decisions in `CHANGELOG.md`). Left over:
 - **Phone check on real devices.** Dragging the homepage planets is mouse/pen only (touch keeps
   scrolling the page); the j's dot and the 404 moon do drag on touch. The flare and touch fixes
   (2026-09-28) were checked in desktop and emulated-mobile browsers only: confirm on an iPhone.
-- **`/design/`** still uses the old black wordmark image (unlisted, deliberately untouched).
 
 ## Unscheduled
 
@@ -56,7 +53,7 @@ decisions in `CHANGELOG.md`). Left over:
 - **Privacy and terms freshness check.** Carried from June. The one known inaccuracy (a newsletter
   "Unsubscribe" line) was fixed 2026-09-07; a full read-through against what the apps actually do
   is still owed.
-- **CSS consolidation:** Notes and Audio now share `product.css`; `design.css` and `legal.css` remain.
+- **CSS consolidation:** Notes and Audio now share `product.css`; `legal.css` remains.
 - **Google Search Console (reassess).** A domain property was being verified in June; check whether
   it completed and whether `https://boojy.org/sitemap-index.xml` was submitted. The June list of
   URLs to index included `/cloud/`, which no longer exists.

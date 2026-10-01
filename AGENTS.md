@@ -12,9 +12,7 @@ This is the **boojy.org marketing website** repo (`boojy-web`). Solo project by 
 static site** (SSG + React islands), live in production. It replaced a Vite + React SPA whose empty
 `<div id="root">` was invisible to crawlers and social scrapers; Astro ships fully-formed static
 HTML per page (real `<title>`/description/OG), with the interactive pieces layered back in as React
-islands. Scope of that migration was **framework only** — the plain CSS, Supabase/Stripe logic, and
-copy were untouched; a Tailwind/shadcn restyle is a separate future task. Historical spec:
-`docs/archive/ASTRO_MIGRATION_PLAN.md`.
+islands.
 
 Two architectural anchors for any change:
 
@@ -30,8 +28,8 @@ Two architectural anchors for any change:
 |------|------|---------|
 | `boojy-web` (this) | `boojy-web/` | Marketing website — boojy.org |
 | `boojy-notes` | `../boojy-notes/` | Notes desktop app (macOS, Windows, Linux) |
-| `boojy-cloud` | `../boojy-cloud/` | Supabase Edge Functions + migrations |
-| `boojy-design` | `../boojy-design/` | Web image editor (the `.claude` system here came from it) |
+| `boojy-cloud` | `../boojy-cloud/` | Dormant Supabase backend (private; the site doesn't use it) |
+| `boojy-design` | `../boojy-design/` | Web image editor (private, on hold; `/design/` redirects home) |
 | `Boojy Audio` | `../boojy-audio/` | DAW |
 
 ## Commands
@@ -46,7 +44,7 @@ pnpm preview             # serve the static build locally
 pnpm exec astro check    # type + diagnostic gate
 pnpm lint                # biome check (lint + format diagnostics)
 pnpm lint:fix            # biome check --write (apply formatting + safe fixes)
-pnpm test:unit           # vitest (src/**/*.test.ts — currently github-release.ts)
+pnpm test:unit           # vitest (src/**/*.test.ts)
 pnpm test:e2e            # Playwright smoke suite — needs a fresh `pnpm build` first
 ```
 
@@ -79,11 +77,12 @@ General branch discipline → suite root `AGENTS.md`. Web specifics:
 
 ## Architecture
 
-* **`website/src/pages/`** — file-based routes: `index`, `notes/`, `audio/`, `design/`,
+* **`website/src/pages/`** — file-based routes: `index`, `notes/`, `audio/`,
   `privacy/`, `terms/`, `404`. Legal pages use **clean URLs** + 301s from the old `.html`
   (see `.claude/rules/caching-and-deploy.md`). Retired routes 301 to `/` in `public/_redirects`:
   `/cloud/` and `/account/` (Boojy Cloud drop, 2026-08), `/news/*` and `/subscribed/` (removed
-  2026-09 — the site has no news page, no newsletter, and no account functionality).
+  2026-09 — the site has no news page, no newsletter, and no account functionality). `/design/`
+  302s to `/` while Boojy Design is on hold (2026-10).
 * **`website/src/layouts/`** — `BaseLayout.astro` owns the full static `<head>` (title, description,
   canonical, OG, theme-color, favicons, analytics slot) from `content/page-meta.ts`. `LegalLayout.astro` for
   privacy/terms. (View-transition + glow rules: `.claude/rules/view-transitions-and-glow.md`.)
@@ -113,7 +112,7 @@ General branch discipline → suite root `AGENTS.md`. Web specifics:
   across existing `lib/` code, not just new files. Handle it; use `import type` for type-only imports.
 * **CSS lives in `src/styles/`** (not `public/css/`) so Astro bundles + content-hashes it.
   `shared.css` + `space.css` (tokens, sky, nav, footer, buttons, motion) are global in
-  `BaseLayout`; per-page CSS (`home.css`, `product.css` for Notes + Audio, `lost.css`, `design.css`,
+  `BaseLayout`; per-page CSS (`home.css`, `product.css` for Notes + Audio, `lost.css`,
   `legal.css`) is imported in each page's frontmatter.
   Inter loads via `src/styles/inter.css` (a hand-rolled latin + latin-ext `@font-face`, **not** the
   full `@fontsource-variable/inter` import — the other 5 subsets are latin-only dead weight in `dist`).
@@ -125,11 +124,11 @@ General memory model + context-hygiene → suite root `AGENTS.md`. Web specifics
 * **`docs/BACKLOG.md`** — the one planning file: decisions, what's next, unscheduled items. There is
   no `dreams.md` and no roadmap file; shipped work goes to `CHANGELOG.md`.
 * **`.claude/rules/`** — one topic per file (per-area gotchas + durable facts: caching/deploy,
-  view-transitions/glow, release-fetch). Read the matching file when touching matching areas.
+  view-transitions/glow, release-fetch, sky-and-motion). Read the matching file when touching matching areas.
 
 ## Claude Code–specific
 
 Only applies when the agent is Claude Code; other agents can skip this section.
 
 * Claude Code loads `.claude/rules/` files conditionally when touching matching paths.
-* `CLAUDE.md` in this repo is a symlink to this file.
+* `CLAUDE.md` in this repo is a one-line pointer to this file.
