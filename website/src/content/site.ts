@@ -9,8 +9,8 @@ export type ProductId = 'notes' | 'audio';
 /**
  * Homepage app cards, in the canonical order (Audio, Notes — keep the nav and footer the
  * same). Each card is a link to the app's page: screenshot, name, one line, and a button.
- * (Boojy Cloud left the lineup 2026-08; Boojy Design was unlisted 2026-09 — its /design/
- * page is still live, just not promoted. See the suite VISION.md.)
+ * (Boojy Cloud left the lineup 2026-08; Boojy Design is on hold from 2026-10 and its
+ * /design/ page redirects home. See the suite VISION.md.)
  */
 export interface ProductCardData {
   id: ProductId;

@@ -19,7 +19,11 @@
 /subscribed       /    301
 /subscribed/      /    301
 
+# Boojy Design is on hold (2026-10) until Audio and Notes reach Beta. 302, not 301, so
+# browsers don't cache it: restoring the page means deleting these two lines.
+/design           /    302
+/design/          /    302
+
 # Non-trailing-slash → trailing slash (site uses trailingSlash: 'always')
 /audio    /audio/      301
 /notes    /notes/      301
-/design   /design/     301

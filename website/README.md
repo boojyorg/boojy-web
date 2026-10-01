@@ -13,12 +13,11 @@ File-based, under `src/pages/`. All routes are directory routes (`trailingSlash:
 | `/` | Hub — product grid (Audio · Notes), Why Boojy, feedback line |
 | `/audio/` | OS-aware download CTA + platforms panel (island) |
 | `/notes/` | Web CTA + downloads; version baked at build time from the GitHub API |
-| `/design/` | **Unlisted** (2026-09) — live and indexable, but nothing on the site links to it. Web image editor: link to design.boojy.org, value props, feature checklist (version hardcoded; no GH Releases) |
 | `/privacy/`, `/terms/` | Legal content via `LegalLayout` (clean URLs; old `.html` 301 → here) |
 | `*` (404) | `404.astro` → `dist/404.html`, served by Cloudflare for unmatched paths |
 
-Retired routes (`/cloud/`, `/account/`, `/news/`, `/pricing`, `/subscribed`) 301 to `/`; see
-`public/_redirects`.
+Retired routes (`/cloud/`, `/account/`, `/news/`, `/pricing`, `/subscribed`) 301 to `/`, and
+`/design/` 302s to `/` while Boojy Design is on hold; see `public/_redirects`.
 Nav: **Audio · Notes** plus GitHub.
 
 ## Local development
@@ -46,8 +45,8 @@ pnpm dev          # http://localhost:4321
 
 ```
 website/
-├── astro.config.mjs    # static output, trailingSlash, sitemap (filters /account/ + /subscribed/)
-├── biome.json          # lint/format (.ts/.tsx/.js/.json/.css — .astro excluded; see CLAUDE.md)
+├── astro.config.mjs    # static output, trailingSlash, sitemap
+├── biome.json          # lint/format (.ts/.tsx/.js/.json/.css — .astro excluded; see AGENTS.md)
 ├── vitest.config.ts    # unit tests (src/**/*.test.ts)
 ├── playwright.config.ts # smoke suite vs the built dist/ (astro preview :4173)
 ├── tests/              # Playwright smoke specs
@@ -63,7 +62,7 @@ website/
 │   └── styles/         # inter.css, shared.css + space.css (global), per-page CSS, hashed by Astro
 └── public/
     ├── _headers        # security headers + immutable caching for /_astro/*
-    ├── _redirects      # legacy .html → clean-URL 301s, /pricing → /cloud/, /github
+    ├── _redirects      # legacy .html → clean-URL 301s, retired routes → /, /github
     ├── robots.txt      # → sitemap-index.xml
     └── images/
 ```
@@ -98,4 +97,4 @@ Pushes to `master` deploy production; other branches get preview deploys. The re
 ## Links
 
 - **Live site:** [boojy.org](https://boojy.org)
-- **Project context:** [CLAUDE.md](../CLAUDE.md)
+- **Project context:** [AGENTS.md](../AGENTS.md)

@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 
 /**
@@ -11,7 +12,6 @@ const PAGES = [
   { path: '/', title: 'Boojy – Creative Tools' },
   { path: '/audio/', title: 'Boojy Audio – Free DAW for Beginners' },
   { path: '/notes/', title: 'Boojy Notes – A Calm Space for Your Thoughts' },
-  { path: '/design/', title: 'Boojy Design – Image Editor in Your Browser' },
   { path: '/privacy/', title: 'Privacy Policy – Boojy' },
   { path: '/terms/', title: 'Terms of Service – Boojy' },
 ];
@@ -115,7 +115,7 @@ test.describe('on a phone', () => {
 
 test('desktop pages do not scroll sideways', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  for (const path of ['/', '/notes/', '/audio/', '/design/']) {
+  for (const path of ['/', '/notes/', '/audio/']) {
     await page.goto(path);
     const overflow = await page.evaluate(
       () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -138,11 +138,12 @@ test('the footer carries the contact email', async ({ page }) => {
   await expect(page.locator('.footer-email')).toHaveAttribute('href', 'mailto:tyr@boojy.org');
 });
 
-// Design was unlisted 2026-09: the page stays live and linkable, but nothing on the
-// site points at it. These two guard both halves of that.
-test('/design/ is still reachable by direct link', async ({ page }) => {
-  const response = await page.goto('/design/');
-  expect(response?.status()).toBe(200);
+// Design is on hold (2026-10): its page isn't built and Cloudflare sends /design/ home.
+// `astro preview` neither applies nor serves _redirects, so check the built file itself.
+test('/design/ is not built and redirects home', async ({ page }) => {
+  expect((await page.goto('/design/'))?.status()).toBe(404);
+  const redirects = readFileSync('dist/_redirects', 'utf8');
+  expect(redirects).toMatch(/^\/design\/\s+\/\s+302$/m);
 });
 
 test('nav and footer do not link to Design, and list Audio before Notes', async ({ page }) => {

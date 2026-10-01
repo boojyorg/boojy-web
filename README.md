@@ -5,9 +5,7 @@ open-source creative tools: Audio and Notes.
 
 > **Looking for a product?** Boojy *Audio* (the DAW) lives at
 > [boojyorg/boojy-audio](https://github.com/boojyorg/boojy-audio) and *Notes* at
-> [boojyorg/boojy-notes](https://github.com/boojyorg/boojy-notes). *Design* (the browser image
-> editor, at [boojyorg/boojy-design](https://github.com/boojyorg/boojy-design)) is no longer
-> promoted on the site — `/design/` stays live, just unlisted. **This repo is just the website.**
+> [boojyorg/boojy-notes](https://github.com/boojyorg/boojy-notes). **This repo is just the website.**
 
 ## Stack
 
@@ -26,13 +24,7 @@ pnpm install
 pnpm dev            # http://localhost:4321
 ```
 
-| Command | What it does |
-|---|---|
-| `pnpm dev` | Astro dev server |
-| `pnpm build` | Static build → `website/dist/` |
-| `pnpm preview` | Serve the production build locally |
-| `pnpm run check` | `astro check` — type/diagnostic gate |
-| `pnpm lint` | Biome lint + format check |
+The full command list and the gates are in [website/README.md](website/README.md).
 
 ## Deploy
 
@@ -43,7 +35,7 @@ deploy. Build settings: root `website`, command `pnpm build`, output `dist`.
 ## More
 
 - **[website/README.md](website/README.md)** — routes, project structure, deploy verification
-- **[CLAUDE.md](CLAUDE.md)** — full architecture, conventions, and gotchas
+- **[AGENTS.md](AGENTS.md)** — full architecture, conventions, and gotchas
 
 ## Contributing
 

@@ -5,6 +5,10 @@ convention is in the suite root's `AGENTS.md`.
 
 ## Unreleased
 
+### Improvements
+- **Boojy Design is on hold.** Its page is gone and `/design/` now sends you to the homepage,
+  until Audio and Notes are both in Beta.
+
 ### Features
 - **The logo's planet spins as you change page.** Any link to another page on the site sends the
   nav logo's planet round once (clockwise), and the next page picks the lap up mid-orbit, so it
