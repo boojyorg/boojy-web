@@ -159,11 +159,16 @@ export function NotesDownload({ version, urls }: Props) {
       )}
       <p className="dl-meta">
         {selected ? `${selected.meta} · ` : ''}
-        {version} · Early access ·{' '}
+        {version} · Beta ·{' '}
         <a href="#" className="other-platforms-link" ref={toggleRef} onClick={toggle}>
           Other platforms
         </a>
       </p>
+      {selected?.id === 'windows-x64' && (
+        <p className="dl-meta dl-windows-note">
+          Windows may warn about an unknown publisher: choose More info, then Run anyway.
+        </p>
+      )}
       <div className={panelClassName} ref={panelRef}>
         {platforms.map((platform) => (
           <a

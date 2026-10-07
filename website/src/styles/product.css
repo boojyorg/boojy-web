@@ -33,7 +33,7 @@
   text-wrap: balance;
 }
 
-/* Download: the button, then "Apple Silicon · v0.10 · Early access · Other platforms" */
+/* Download: the button, then "Apple Silicon · v0.10 · Beta · Other platforms" */
 .dl {
   position: relative;
   display: grid;
@@ -53,6 +53,12 @@
 }
 .dl-meta a:hover {
   color: var(--ink);
+}
+/* With Windows chosen: what to do when SmartScreen warns (the installer is unsigned). */
+.dl-windows-note {
+  max-width: 44ch;
+  text-align: center;
+  text-wrap: balance;
 }
 .notes-desktop-note {
   margin: 0;

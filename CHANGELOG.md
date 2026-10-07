@@ -6,6 +6,10 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Improvements
+- **Boojy Notes is labelled Beta, with a word for Windows.** The line under the download button
+  says Beta instead of Early access, and with Windows chosen a second line says what to do when
+  Windows warns about an unknown publisher (More info, then Run anyway). Terms' "Early access"
+  heading is now "Still early", as Audio still is.
 - **The privacy policy says what Notes talks to.** Its Notes section now names GitHub (update
   checks), Google (spelling word lists on Windows and Linux) and websites a note's pictures load
   from, says what the app keeps outside your notes folder, and covers the test version at
