@@ -51,8 +51,9 @@ decisions in `CHANGELOG.md`). Left over:
 - **Core Web Vitals not measured.** Run a Lighthouse pass for real LCP / CLS / INP and add the
   Cloudflare Web Analytics beacon (free CWV data).
 - **Privacy and terms freshness check.** Carried from June. The one known inaccuracy (a newsletter
-  "Unsubscribe" line) was fixed 2026-09-07; a full read-through against what the apps actually do
-  is still owed.
+  "Unsubscribe" line) was fixed 2026-09-07. Notes' section was checked against its code on
+  2026-10-07 (GitHub, Google's spelling lists, web pictures, the web test version); Audio's
+  read-through, and the terms, are still owed.
 - **CSS consolidation:** Notes and Audio now share `product.css`; `legal.css` remains.
 - **Google Search Console (reassess).** A domain property was being verified in June; check whether
   it completed and whether `https://boojy.org/sitemap-index.xml` was submitted. The June list of

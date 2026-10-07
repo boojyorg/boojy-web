@@ -6,6 +6,10 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Improvements
+- **The privacy policy says what Notes talks to.** Its Notes section now names GitHub (update
+  checks), Google (spelling word lists on Windows and Linux) and websites a note's pictures load
+  from, says what the app keeps outside your notes folder, and covers the test version at
+  notes.boojy.org.
 - **Boojy Design is on hold.** Its page is gone and `/design/` now sends you to the homepage,
   until Audio and Notes are both in Beta.
 
