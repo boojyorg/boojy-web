@@ -13,6 +13,8 @@
  * - Reduced motion: no orbits, twinkle, shooting stars or springs.
  */
 
+import { tune } from './tune';
+
 type Page = 'home' | 'notes' | 'audio' | 'lost' | 'other';
 
 const root = document.querySelector<HTMLElement>('.sky');
@@ -317,13 +319,10 @@ function start(
   const SQUASH = 0.4;
   const TILT = -0.14;
   const RING_TINT = '#f3e7c9';
-  const RING_ALPHA = 0.26;
-  const RING_WIDTH = 1.5;
   const PLANET_SIZE = 1.1;
   /** Planets grow with the logo up to this much on big screens. */
   const PLANET_MAX = 1.4;
   const SYSTEM_FADE = 0.5;
-  const GLOW = 1.8;
 
   interface Body {
     ox: number;
@@ -405,16 +404,36 @@ function start(
     maxScroll: number;
   }
   let sun: SunInfo | null = null;
-  // The solar system stays hidden until the logo has finished arriving, then fades in. Drawn
-  // from the first frame, it was sized and placed off the still-moving logo and jumped when
-  // re-measured.
-  const INTRO_MS = 700;
-  let introStart = reduceMotion ? 0 : -1;
-  function settle() {
-    if (introStart >= 0) return;
+  // When the system starts showing (null: not yet). How it arrives is `tune.ringArrival`:
+  // in place from the first frame, fading in alongside the logo, or fading in once it lands.
+  let introStart: number | null = null;
+  let arrival = 0;
+  function arrive() {
+    const run = ++arrival;
+    introStart = null;
     measureSun();
-    introStart = performance.now();
+    if (reduceMotion || tune.ringArrival === 'in-place') {
+      introStart = Number.NEGATIVE_INFINITY;
+      return;
+    }
+    if (tune.ringArrival === 'with-logo') {
+      introStart = performance.now();
+      return;
+    }
+    const settle = () => {
+      if (run !== arrival || introStart !== null) return;
+      measureSun();
+      introStart = performance.now();
+    };
+    const rise = document.querySelector('svg[data-system]')?.closest('.rise');
+    if (!rise || getComputedStyle(rise).animationName === 'none') return settle();
+    rise.addEventListener('animationend', (e) => {
+      if (e.target === rise) settle();
+    });
+    window.setTimeout(settle, tune.riseMs + 500);
   }
+  // Measures where the sun will rest, not where it is: the hero's arrival animation slides the
+  // logo for its first moments, and rings sized off the moving logo jumped when re-measured.
   function measureSun() {
     const core = document.querySelector<SVGCircleElement>('svg[data-system] .core');
     const logo = core?.ownerSVGElement;
@@ -422,11 +441,14 @@ function start(
       sun = null;
       return;
     }
+    const rise = logo.closest('.rise');
+    const moved = rise ? getComputedStyle(rise).transform : 'none';
+    const m = new DOMMatrixReadOnly(moved === 'none' ? undefined : moved);
     const cr = core.getBoundingClientRect();
     sun = {
-      x: cr.left + cr.width / 2,
-      y0: cr.top + cr.height / 2 + window.scrollY,
-      logoW: logo.getBoundingClientRect().width,
+      x: cr.left + cr.width / 2 - m.m41,
+      y0: cr.top + cr.height / 2 - m.m42 + window.scrollY,
+      logoW: logo.getBoundingClientRect().width / (m.a || 1),
       maxScroll: Math.max(0, document.documentElement.scrollHeight - window.innerHeight) + 120,
     };
   }
@@ -461,9 +483,9 @@ function start(
       gx.translate(s.x, yS);
       gx.scale(1.9, 1);
       const ng = gx.createRadialGradient(0, 0, 0, 0, 0, glowR);
-      ng.addColorStop(0, `rgba(255,186,80,${Math.min(0.55, 0.13 * GLOW)})`);
-      ng.addColorStop(0.2, `rgba(250,150,90,${Math.min(0.32, 0.07 * GLOW)})`);
-      ng.addColorStop(0.55, `rgba(110,110,220,${0.06 * Math.min(GLOW, 1.5)})`);
+      ng.addColorStop(0, `rgba(255,186,80,${Math.min(0.55, 0.13 * tune.glow)})`);
+      ng.addColorStop(0.2, `rgba(250,150,90,${Math.min(0.32, 0.07 * tune.glow)})`);
+      ng.addColorStop(0.55, `rgba(110,110,220,${0.06 * Math.min(tune.glow, 1.5)})`);
       ng.addColorStop(1, 'rgba(60,70,160,0)');
       gx.fillStyle = ng;
       gx.fillRect(-glowR, -glowR, glowR * 2, glowR * 2);
@@ -477,8 +499,8 @@ function start(
       PLANETS.forEach((p, i) => {
         const r = inner * p.f;
         rx.strokeStyle = RING_COLOURS[i] ?? '#ffffff';
-        rx.globalAlpha = RING_ALPHA * (1 - 0.55 * (i / (PLANETS.length - 1)));
-        rx.lineWidth = RING_WIDTH;
+        rx.globalAlpha = tune.ringAlpha * (1 - 0.55 * (i / (PLANETS.length - 1)));
+        rx.lineWidth = tune.ringWidth;
         rx.beginPath();
         rx.ellipse(0, 0, r, r * SQUASH, 0, 0, Math.PI * 2);
         rx.stroke();
@@ -593,11 +615,11 @@ function start(
     rctx.clearRect(0, 0, W, H);
     yctx.clearRect(0, 0, W, H);
     lctx.clearRect(0, 0, W, H);
-    if (page !== 'home' || !sun || introStart < 0) return;
+    if (page !== 'home' || !sun || introStart === null) return;
     const s = sun;
     const cy = s.y0 - scroll;
-    const t = Math.min(1, (performance.now() - introStart) / INTRO_MS);
-    const intro = reduceMotion ? 1 : t * (2 - t);
+    const t = Math.min(1, (performance.now() - introStart) / tune.ringFadeMs);
+    const intro = t * (2 - t);
     // The rings, belt and planets fade back to half as you scroll past the hero.
     const past = Math.min(1, Math.max(0, (scroll - H * 0.15) / (H * 0.7)));
     const op = String(Math.round((1 - SYSTEM_FADE * past) * intro * 100) / 100);
@@ -615,6 +637,9 @@ function start(
       dpr,
       Math.round(s.maxScroll / 16),
       Math.round(s.y0 / 8),
+      tune.ringAlpha,
+      tune.ringWidth,
+      tune.glow,
     ].join('|');
     if (!cache || cache.key !== key) buildCache(s, inner, key);
     if (!cache) return;
@@ -622,7 +647,7 @@ function start(
     sctx.globalAlpha = intro;
     sctx.drawImage(cache.glow, 0, cy - cache.yS, W, cache.h);
     const core = sctx.createRadialGradient(s.x, cy, 0, s.x, cy, s.logoW * 0.55);
-    core.addColorStop(0, `rgba(255,200,105,${Math.min(0.55, 0.15 * GLOW)})`);
+    core.addColorStop(0, `rgba(255,200,105,${Math.min(0.55, 0.15 * tune.glow)})`);
     core.addColorStop(1, 'rgba(255,180,80,0)');
     sctx.fillStyle = core;
     sctx.fillRect(s.x - s.logoW * 0.55, cy - s.logoW * 0.55, s.logoW * 1.1, s.logoW * 1.1);
@@ -849,15 +874,12 @@ function start(
   resize();
   lastW = W;
   lastH = H;
-  // The hero's arrival animation moves the logo; show the system once it has landed (the
-  // timer covers a missed or skipped animation).
-  if (reduceMotion) measureSun();
-  else {
-    const rise = document.querySelector('svg[data-system]')?.closest('.rise');
-    rise?.addEventListener('animationend', (e) => {
-      if (e.target === rise) settle();
-    });
-    window.setTimeout(settle, 1200);
+  if (page === 'home') {
+    arrive();
+    if (import.meta.env.DEV) {
+      window.addEventListener('boojy:replay', arrive);
+      void import('./tweaks');
+    }
   }
   window.addEventListener('load', () => window.setTimeout(measureSun, 300));
   scheduleShoot();
@@ -868,7 +890,7 @@ function start(
     if (now - last < 15.5) return;
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    if (!reduceMotion) simTime += dt * 1000;
+    if (!reduceMotion) simTime += dt * 1000 * tune.orbitSpeed;
     const scroll = window.scrollY;
     if (sctx) drawStars(sctx, now, scroll);
     drawSystem(dt, scroll);
