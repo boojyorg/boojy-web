@@ -85,7 +85,7 @@ const GROUPS: [string, Control[]][] = [
     ],
   ],
   [
-    'Motion',
+    'Planets',
     [
       {
         key: 'orbitSpeed',
@@ -113,6 +113,14 @@ const GROUPS: [string, Control[]][] = [
           ['random', 'Random'],
           ['fixed', 'Same every time'],
         ],
+      },
+      {
+        key: 'planetGlow',
+        label: 'Hover glow',
+        kind: 'range',
+        min: 0,
+        max: 2,
+        step: 0.05,
       },
     ],
   ],

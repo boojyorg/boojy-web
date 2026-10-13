@@ -32,6 +32,8 @@ export const DEFAULTS = {
   planetDrop: 'pickup' as PlanetDrop,
   /** Where the planets start on each visit: somewhere new, or the same every time. */
   planetStart: 'random' as PlanetStart,
+  /** How much a planet lights up while hovered or dragged. */
+  planetGlow: 1,
 };
 
 export type Tune = typeof DEFAULTS;

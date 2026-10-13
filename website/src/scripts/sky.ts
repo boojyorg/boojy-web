@@ -339,6 +339,8 @@ function start(
     relT: number;
     /** Its place on the orbit while held (null: orbiting), so it waits there for its return. */
     hold: number | null;
+    /** How lit up it is (0–1): eases up while hovered or held, like the j's dot. */
+    lit: number;
   }
   const bodies: Body[] = PLANETS.map(() => ({
     ox: 0,
@@ -355,6 +357,7 @@ function start(
     phase: tune.planetStart === 'random' ? Math.random() * Math.PI * 2 : 0,
     relT: 0,
     hold: null,
+    lit: 0,
   }));
   interface Rock {
     a: number;
@@ -527,12 +530,14 @@ function start(
     p: Planet,
     t: number,
     open: number,
+    lit: number,
   ) {
     if (!scx) return;
     const gassy = p.kind === 'gas' || p.kind === 'ice';
     const col = tone(p.c);
-    const hr = r * (gassy ? 2.6 : 2.0);
-    const ha = gassy ? 0.17 : 0.09;
+    // Hovered or held, the glow swells and the disc brightens a touch (as the j's dot does).
+    const hr = r * (gassy ? 2.6 : 2.0) * (1 + 0.35 * lit);
+    const ha = Math.min(0.5, (gassy ? 0.17 : 0.09) * (1 + 2 * lit));
     const h = ctx.createRadialGradient(x, y, r * 1.02, x, y, hr);
     h.addColorStop(0, rgba(col, ha));
     h.addColorStop(1, rgba(col, 0));
@@ -590,6 +595,11 @@ function start(
       scx.fill();
     }
     scx.restore();
+    if (lit > 0) {
+      scx.globalAlpha = Math.min(0.25, 0.08 * lit);
+      scx.fillStyle = '#ffffff';
+      scx.fillRect(-r - 2, -r - 2, r * 2 + 4, r * 2 + 4);
+    }
     scx.globalAlpha = 1;
     scx.globalCompositeOperation = 'source-over';
     ctx.drawImage(scratch, 0, 0, S, S, x - half / scale, y - half / scale, S / scale, S / scale);
@@ -697,6 +707,8 @@ function start(
     // dragged or gliding planet rides above the page.
     const now = performance.now();
     const scaleR = Math.min(PLANET_MAX, inner / 300);
+    const hover = pointer && !drag ? hitPlanet(pointer.x, pointer.y) : -1;
+    const ease = reduceMotion ? 1 : 1 - Math.exp(-dt / 0.1);
     PLANETS.forEach((p, i) => {
       const b = bodies[i];
       if (!b) return;
@@ -725,8 +737,11 @@ function start(
       b.sx = o.x + b.ox;
       b.sy = o.y + b.oy;
       if (b.sy < -60 || b.sy > H + 60) return;
+      b.lit += ((b.drag || i === hover ? 1 : 0) - b.lit) * ease;
+      if (b.lit < 0.005) b.lit = 0;
       const lifted = b.drag || Math.hypot(b.ox, b.oy) > 0.5;
-      drawPlanet(lifted ? lctx : yctx, b.sx, b.sy, b.r, p, simTime, Math.abs(Math.sin(a)));
+      const glow = b.lit * tune.planetGlow;
+      drawPlanet(lifted ? lctx : yctx, b.sx, b.sy, b.r, p, simTime, Math.abs(Math.sin(a)), glow);
     });
   }
 
@@ -740,6 +755,9 @@ function start(
     }
     return -1;
   };
+  // Where the mouse is over open sky (null: off the page or over the page's content), so a
+  // planet orbiting under a still mouse lights up too.
+  let pointer: { x: number; y: number } | null = null;
   let drag: {
     i: number;
     last: { x: number; y: number };
@@ -776,7 +794,9 @@ function start(
       if (!drag) {
         if (e.pointerType !== 'touch') {
           const target = e.target as Element | null;
-          const over = !target?.closest(INTERACTIVE) && hitPlanet(e.clientX, e.clientY) >= 0;
+          const free = !target?.closest(INTERACTIVE);
+          pointer = free ? { x: e.clientX, y: e.clientY } : null;
+          const over = free && hitPlanet(e.clientX, e.clientY) >= 0;
           document.documentElement.style.cursor = over ? 'grab' : '';
         }
         return;
@@ -816,6 +836,9 @@ function start(
       b.vx = b.vy = 0;
       b.relT = performance.now();
     };
+    document.documentElement.addEventListener('pointerleave', () => {
+      pointer = null;
+    });
     window.addEventListener('pointerup', end);
     window.addEventListener('pointercancel', end);
     window.addEventListener('selectstart', (e) => {

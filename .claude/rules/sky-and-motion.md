@@ -29,7 +29,9 @@ A picked-up homepage planet holds its place on the orbit and, let go, springs ba
 it was picked up, then carries on (like the j's dot springing home). Tyr's pick over gliding to the
 nearest point on its ring to the drop, which is still a tweak (`planetDrop`). Planets start at a
 random place on their orbits each visit (`planetStart`; set it to `fixed` in the tweaks panel for
-like-for-like screenshots).
+like-for-like screenshots). Hovered or held, a planet's glow swells and its disc brightens over
+~0.3s, like the j's dot (`planetGlow`); hover is re-checked each frame, so a planet orbiting under
+a still mouse lights up too.
 A dragged body always passes in front of everything: homepage planets move to the `sky-lift`
 canvas; the j's dot / 404 moon raise their logo's ancestors (`logo.ts` `raise()`) until they settle.
 
