@@ -451,7 +451,7 @@ html.dragging * {
 .jplanet:hover .pbody,
 .jplanet.dragging .pbody,
 .jplanet:focus-visible .pbody {
-  filter: drop-shadow(0 0 5px rgba(230, 234, 245, 0.9)) brightness(1.08);
+  filter: drop-shadow(0 0 4px rgba(230, 234, 245, 0.76)) brightness(1.05);
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -538,9 +538,16 @@ function start(
     // Hovered or held, the glow swells and the disc brightens a touch (as the j's dot does).
     const hr = r * (gassy ? 2.6 : 2.0) * (1 + 0.35 * lit);
     const ha = Math.min(0.5, (gassy ? 0.17 : 0.09) * (1 + 2 * lit));
+    // Falls away fast from the edge, then trails off: a straight fade read as a ring when lit.
     const h = ctx.createRadialGradient(x, y, r * 1.02, x, y, hr);
-    h.addColorStop(0, rgba(col, ha));
-    h.addColorStop(1, rgba(col, 0));
+    for (const [o, k] of [
+      [0, 1],
+      [0.25, 0.62],
+      [0.5, 0.3],
+      [0.75, 0.1],
+      [1, 0],
+    ] as const)
+      h.addColorStop(o, rgba(col, ha * k));
     ctx.fillStyle = h;
     ctx.beginPath();
     ctx.arc(x, y, hr, 0, Math.PI * 2);
