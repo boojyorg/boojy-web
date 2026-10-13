@@ -41,8 +41,9 @@ the j's dot.
 
 **Arrival (2026-10-13):** `measureSun` measures where the sun will *rest*, taking off the
 hero's `.rise` slide, so the system is drawn in its final place from the first frame (sized off
-the moving logo, it used to jump when re-measured). Tyr tried a fade-in after the logo landed and
-didn't like the wait. Planets sit on their ring line (no gap cut). Rings are 26% opacity, 1.5px
+the moving logo, it used to jump when re-measured). It fades in alongside the logo (700ms):
+Tyr's pick over appearing outright or fading in after the logo lands (he didn't like the wait).
+The sun's wide glow is 1.0, down from the lab's 1.8. Planets sit on their ring line (no gap cut). Rings are 26% opacity, 1.5px
 (Tyr found the lab's 36% / 1.8px too strong).
 
 **Tweaks panel (dev only):** `scripts/tune.ts` holds the system's adjustable values (arrival, ring

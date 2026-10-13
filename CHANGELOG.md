@@ -6,8 +6,9 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Improvements
-- **A calmer homepage solar system.** The rings, belt and planets are drawn in their final place
-  from the first frame, instead of jumping into place a second after the page opens. The planets sit on their
+- **A calmer homepage solar system.** The rings, belt and planets fade in alongside the logo,
+  already in their final place, instead of jumping into place a second after the page opens. The
+  sun's wide glow is softer. The planets sit on their
   orbit lines with no gap cut around them, and the rings are softer and a little thinner. The A
   and N on the homepage cards no longer glow on hover.
 - **A rewritten About card.** Shorter, and closer to how Tyr writes.

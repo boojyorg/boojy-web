@@ -8,7 +8,7 @@ export type RingArrival = 'in-place' | 'with-logo' | 'after-logo';
 
 export const DEFAULTS = {
   /** How the rings, belt and planets appear on load. */
-  ringArrival: 'in-place' as RingArrival,
+  ringArrival: 'with-logo' as RingArrival,
   /** Fade length for the two fade arrivals (ms). */
   ringFadeMs: 700,
   /** The hero's slide-up on load (logo, headline, subtitle). */
@@ -18,7 +18,7 @@ export const DEFAULTS = {
   ringAlpha: 0.26,
   ringWidth: 1.5,
   /** The wide warm glow behind the logo, drawn by the sky. */
-  glow: 1.8,
+  glow: 1,
   /** The logo's own halo just around the sun disc (share of its normal strength). */
   halo: 1,
   /** The sun disc's brightness on the homepage. */
