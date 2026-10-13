@@ -25,6 +25,9 @@ Spec: the Sky Lab (https://claude.ai/artifact/17QQiaUjrCMM8iyGBNV6y8). Tyr signe
 **Interaction rule:** things that glow react with light (the sun, the N, the A: click for a
 flare); things that orbit can be dragged (the planets, the j's dot, the 404 moon). Homepage planets
 drag with mouse/pen only, so touch keeps scrolling the page.
+A picked-up homepage planet holds its place on the orbit and, let go, springs back to exactly where
+it was picked up, then carries on (like the j's dot springing home). Tyr's pick over gliding to the
+nearest point on its ring to the drop, which is still a tweak (`planetDrop`).
 A dragged body always passes in front of everything: homepage planets move to the `sky-lift`
 canvas; the j's dot / 404 moon raise their logo's ancestors (`logo.ts` `raise()`) until they settle.
 

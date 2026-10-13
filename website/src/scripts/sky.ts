@@ -337,6 +337,8 @@ function start(
     r: number;
     phase: number;
     relT: number;
+    /** Its place on the orbit while held (null: orbiting), so it waits there for its return. */
+    hold: number | null;
   }
   const bodies: Body[] = PLANETS.map(() => ({
     ox: 0,
@@ -351,6 +353,7 @@ function start(
     r: 0,
     phase: 0,
     relT: 0,
+    hold: null,
   }));
   interface Rock {
     a: number;
@@ -598,6 +601,7 @@ function start(
     const p = PLANETS[i];
     const b = bodies[i];
     if (!p || !b) return 0;
+    if (b.hold !== null) return b.hold;
     return i * 1.9 + 0.8 + b.phase + (simTime / (50000 * p.f ** 0.65)) * Math.PI * 2;
   };
   const orbitPoint = (i: number, a: number) => {
@@ -752,6 +756,7 @@ function start(
       const b = bodies[i];
       if (!b) return;
       b.drag = true;
+      b.hold = orbitAngle(i);
       b.px = e.clientX;
       b.py = e.clientY;
       drag = {
@@ -792,12 +797,18 @@ function start(
       const g = geom;
       if (!b || !g) return;
       b.drag = false;
-      // Let go: glide to the nearest point on its own ring and carry on orbiting from there.
-      const dx = b.sx - g.cx;
-      const dy = b.sy - g.cy;
-      const lx = dx * g.cosT + dy * g.sinT;
-      const ly = -dx * g.sinT + dy * g.cosT;
-      b.phase += Math.atan2(ly / SQUASH, lx) - orbitAngle(i);
+      // Let go: glide back to where it was picked up (or, as a tweak, to the nearest point on
+      // its ring) and carry on orbiting from there.
+      const held = b.hold;
+      b.hold = null;
+      if (tune.planetDrop === 'pickup' && held !== null) b.phase += held - orbitAngle(i);
+      else {
+        const dx = b.sx - g.cx;
+        const dy = b.sy - g.cy;
+        const lx = dx * g.cosT + dy * g.sinT;
+        const ly = -dx * g.sinT + dy * g.cosT;
+        b.phase += Math.atan2(ly / SQUASH, lx) - orbitAngle(i);
+      }
       const o = orbitPoint(i, orbitAngle(i));
       b.ox = b.sx - o.x;
       b.oy = b.sy - o.y;

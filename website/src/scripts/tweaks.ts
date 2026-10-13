@@ -96,6 +96,15 @@ const GROUPS: [string, Control[]][] = [
         step: 0.1,
         unit: '×',
       },
+      {
+        key: 'planetDrop',
+        label: 'Dropped planet goes',
+        kind: 'choice',
+        options: [
+          ['pickup', 'Back where it was'],
+          ['nearest', 'Nearest on its ring'],
+        ],
+      },
     ],
   ],
 ];
