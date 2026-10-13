@@ -91,7 +91,8 @@ General branch discipline → suite root `AGENTS.md`. Web specifics:
   the logo's sun (rings, belt, draggable planets). `BoojyWordmark` / `AppLockup` / `AppWordmark`
   draw the logos from Poppins outlines (`lib/wordmark.ts` + `content/glyphs.json`), so no web font
   is involved; `scripts/logo.ts` handles the sun/N/A flares and dragging the j's dot and the 404
-  moon. Speed + interaction rules: `.claude/rules/sky-and-motion.md`.
+  moon. `scripts/tune.ts` holds the solar system's adjustable values; `pnpm dev` adds a tweaks
+  panel on the homepage to try them live (dev only). Speed + interaction rules: `.claude/rules/sky-and-motion.md`.
 * **Islands (React):** only `AudioDownload` / `NotesDownload` (`client:load`; OS detect runs in
   `useEffect` so they SSR a universal default). The homepage ships no React. The footer email is
   the site's contact route.

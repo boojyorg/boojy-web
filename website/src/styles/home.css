@@ -123,11 +123,9 @@
 }
 .app[data-product="audio"] {
   --tint: rgba(74, 144, 255, 0.1);
-  --gl: rgba(74, 144, 255, 0.8);
 }
 .app[data-product="notes"] {
   --tint: rgba(143, 193, 198, 0.1);
-  --gl: rgba(143, 193, 198, 0.8);
 }
 .app .shot {
   width: 100%;
@@ -151,12 +149,6 @@
   width: auto;
   display: block;
   overflow: visible;
-}
-.app .bj-wordmark .glyph {
-  transition: filter 0.3s var(--ease);
-}
-.app:hover .bj-wordmark .glyph {
-  filter: drop-shadow(0 0 6px var(--gl)) brightness(1.08);
 }
 .app .line {
   margin: 0;

@@ -25,6 +25,14 @@ Spec: the Sky Lab (https://claude.ai/artifact/17QQiaUjrCMM8iyGBNV6y8). Tyr signe
 **Interaction rule:** things that glow react with light (the sun, the N, the A: click for a
 flare); things that orbit can be dragged (the planets, the j's dot, the 404 moon). Homepage planets
 drag with mouse/pen only, so touch keeps scrolling the page.
+A picked-up homepage planet holds its place on the orbit and, let go, springs back to exactly where
+it was picked up, then carries on (like the j's dot springing home). Tyr's pick over gliding to the
+nearest point on its ring to the drop, which is still a tweak (`planetDrop`). Planets start at a
+random place on their orbits each visit (`planetStart`; set it to `fixed` in the tweaks panel for
+like-for-like screenshots). Hovered or held, a planet's glow swells and its disc brightens over
+~0.3s, like the j's dot (`planetGlow` 0.6, Tyr's pick; the glow falls away along a curve, since a
+straight fade read as a ring when lit; the j's dot's hover glow is softened to match); hover is re-checked each frame, so a planet orbiting under
+a still mouse lights up too.
 A dragged body always passes in front of everything: homepage planets move to the `sky-lift`
 canvas; the j's dot / 404 moon raise their logo's ancestors (`logo.ts` `raise()`) until they settle.
 
@@ -38,5 +46,20 @@ don't feel like glass sliding over a still sky. Planets grow up to 1.4× on big 
 **Logo:** letters are Poppins Medium outlines in `content/glyphs.json`, never live text (a font
 that fails to load turned the old logo into Times). The sun is the second "o"; the grey planet is
 the j's dot.
+
+**Arrival (2026-10-13):** `measureSun` measures where the sun will *rest*, taking off the
+hero's `.rise` slide, so the system is drawn in its final place from the first frame (sized off
+the moving logo, it used to jump when re-measured). It fades in alongside the logo (700ms):
+Tyr's pick over appearing outright or fading in after the logo lands (he didn't like the wait).
+The sun's wide glow is 1.0, down from the lab's 1.8. Planets sit on their ring line (no gap cut). Rings are 26% opacity, 1.5px
+(Tyr found the lab's 36% / 1.8px too strong).
+
+**Tweaks panel (dev only):** `scripts/tune.ts` holds the system's adjustable values (arrival, ring
+strength, sun glow/halo/disc, orbit speed); its defaults are what ships. In `pnpm dev` the homepage
+shows a panel (`scripts/tweaks.ts`, dynamically imported behind `import.meta.env.DEV`, so it never
+reaches `dist/`) that changes them live, saves to localStorage, and copies changed values as JSON.
+To adopt a value, change its default in `tune.ts`.
+The homepage cards' A and N don't glow on hover: on the site a glowing A/N means "click for a
+flare", and a card click opens the app's page instead.
 
 **Reduced motion:** no orbits, twinkle, shooting stars, springs or arrival animations.

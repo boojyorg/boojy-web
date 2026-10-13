@@ -13,6 +13,8 @@
  * - Reduced motion: no orbits, twinkle, shooting stars or springs.
  */
 
+import { tune } from './tune';
+
 type Page = 'home' | 'notes' | 'audio' | 'lost' | 'other';
 
 const root = document.querySelector<HTMLElement>('.sky');
@@ -317,13 +319,10 @@ function start(
   const SQUASH = 0.4;
   const TILT = -0.14;
   const RING_TINT = '#f3e7c9';
-  const RING_ALPHA = 0.36;
-  const RING_WIDTH = 1.8;
   const PLANET_SIZE = 1.1;
   /** Planets grow with the logo up to this much on big screens. */
   const PLANET_MAX = 1.4;
   const SYSTEM_FADE = 0.5;
-  const GLOW = 1.8;
 
   interface Body {
     ox: number;
@@ -338,6 +337,10 @@ function start(
     r: number;
     phase: number;
     relT: number;
+    /** Its place on the orbit while held (null: orbiting), so it waits there for its return. */
+    hold: number | null;
+    /** How lit up it is (0–1): eases up while hovered or held, like the j's dot. */
+    lit: number;
   }
   const bodies: Body[] = PLANETS.map(() => ({
     ox: 0,
@@ -350,8 +353,11 @@ function start(
     sx: -999,
     sy: -999,
     r: 0,
-    phase: 0,
+    // Each visit starts the planets somewhere new on their orbits (or, as a tweak, the same).
+    phase: tune.planetStart === 'random' ? Math.random() * Math.PI * 2 : 0,
     relT: 0,
+    hold: null,
+    lit: 0,
   }));
   interface Rock {
     a: number;
@@ -405,6 +411,36 @@ function start(
     maxScroll: number;
   }
   let sun: SunInfo | null = null;
+  // When the system starts showing (null: not yet). How it arrives is `tune.ringArrival`:
+  // in place from the first frame, fading in alongside the logo, or fading in once it lands.
+  let introStart: number | null = null;
+  let arrival = 0;
+  function arrive() {
+    const run = ++arrival;
+    introStart = null;
+    measureSun();
+    if (reduceMotion || tune.ringArrival === 'in-place') {
+      introStart = Number.NEGATIVE_INFINITY;
+      return;
+    }
+    if (tune.ringArrival === 'with-logo') {
+      introStart = performance.now();
+      return;
+    }
+    const settle = () => {
+      if (run !== arrival || introStart !== null) return;
+      measureSun();
+      introStart = performance.now();
+    };
+    const rise = document.querySelector('svg[data-system]')?.closest('.rise');
+    if (!rise || getComputedStyle(rise).animationName === 'none') return settle();
+    rise.addEventListener('animationend', (e) => {
+      if (e.target === rise) settle();
+    });
+    window.setTimeout(settle, tune.riseMs + 500);
+  }
+  // Measures where the sun will rest, not where it is: the hero's arrival animation slides the
+  // logo for its first moments, and rings sized off the moving logo jumped when re-measured.
   function measureSun() {
     const core = document.querySelector<SVGCircleElement>('svg[data-system] .core');
     const logo = core?.ownerSVGElement;
@@ -412,11 +448,14 @@ function start(
       sun = null;
       return;
     }
+    const rise = logo.closest('.rise');
+    const moved = rise ? getComputedStyle(rise).transform : 'none';
+    const m = new DOMMatrixReadOnly(moved === 'none' ? undefined : moved);
     const cr = core.getBoundingClientRect();
     sun = {
-      x: cr.left + cr.width / 2,
-      y0: cr.top + cr.height / 2 + window.scrollY,
-      logoW: logo.getBoundingClientRect().width,
+      x: cr.left + cr.width / 2 - m.m41,
+      y0: cr.top + cr.height / 2 - m.m42 + window.scrollY,
+      logoW: logo.getBoundingClientRect().width / (m.a || 1),
       maxScroll: Math.max(0, document.documentElement.scrollHeight - window.innerHeight) + 120,
     };
   }
@@ -451,9 +490,9 @@ function start(
       gx.translate(s.x, yS);
       gx.scale(1.9, 1);
       const ng = gx.createRadialGradient(0, 0, 0, 0, 0, glowR);
-      ng.addColorStop(0, `rgba(255,186,80,${Math.min(0.55, 0.13 * GLOW)})`);
-      ng.addColorStop(0.2, `rgba(250,150,90,${Math.min(0.32, 0.07 * GLOW)})`);
-      ng.addColorStop(0.55, `rgba(110,110,220,${0.06 * Math.min(GLOW, 1.5)})`);
+      ng.addColorStop(0, `rgba(255,186,80,${Math.min(0.55, 0.13 * tune.glow)})`);
+      ng.addColorStop(0.2, `rgba(250,150,90,${Math.min(0.32, 0.07 * tune.glow)})`);
+      ng.addColorStop(0.55, `rgba(110,110,220,${0.06 * Math.min(tune.glow, 1.5)})`);
       ng.addColorStop(1, 'rgba(60,70,160,0)');
       gx.fillStyle = ng;
       gx.fillRect(-glowR, -glowR, glowR * 2, glowR * 2);
@@ -467,8 +506,8 @@ function start(
       PLANETS.forEach((p, i) => {
         const r = inner * p.f;
         rx.strokeStyle = RING_COLOURS[i] ?? '#ffffff';
-        rx.globalAlpha = RING_ALPHA * (1 - 0.55 * (i / (PLANETS.length - 1)));
-        rx.lineWidth = RING_WIDTH;
+        rx.globalAlpha = tune.ringAlpha * (1 - 0.55 * (i / (PLANETS.length - 1)));
+        rx.lineWidth = tune.ringWidth;
         rx.beginPath();
         rx.ellipse(0, 0, r, r * SQUASH, 0, 0, Math.PI * 2);
         rx.stroke();
@@ -491,15 +530,24 @@ function start(
     p: Planet,
     t: number,
     open: number,
+    lit: number,
   ) {
     if (!scx) return;
     const gassy = p.kind === 'gas' || p.kind === 'ice';
     const col = tone(p.c);
-    const hr = r * (gassy ? 2.6 : 2.0);
-    const ha = gassy ? 0.17 : 0.09;
+    // Hovered or held, the glow swells and the disc brightens a touch (as the j's dot does).
+    const hr = r * (gassy ? 2.6 : 2.0) * (1 + 0.35 * lit);
+    const ha = Math.min(0.5, (gassy ? 0.17 : 0.09) * (1 + 2 * lit));
+    // Falls away fast from the edge, then trails off: a straight fade read as a ring when lit.
     const h = ctx.createRadialGradient(x, y, r * 1.02, x, y, hr);
-    h.addColorStop(0, rgba(col, ha));
-    h.addColorStop(1, rgba(col, 0));
+    for (const [o, k] of [
+      [0, 1],
+      [0.25, 0.62],
+      [0.5, 0.3],
+      [0.75, 0.1],
+      [1, 0],
+    ] as const)
+      h.addColorStop(o, rgba(col, ha * k));
     ctx.fillStyle = h;
     ctx.beginPath();
     ctx.arc(x, y, hr, 0, Math.PI * 2);
@@ -554,6 +602,11 @@ function start(
       scx.fill();
     }
     scx.restore();
+    if (lit > 0) {
+      scx.globalAlpha = Math.min(0.25, 0.08 * lit);
+      scx.fillStyle = '#ffffff';
+      scx.fillRect(-r - 2, -r - 2, r * 2 + 4, r * 2 + 4);
+    }
     scx.globalAlpha = 1;
     scx.globalCompositeOperation = 'source-over';
     ctx.drawImage(scratch, 0, 0, S, S, x - half / scale, y - half / scale, S / scale, S / scale);
@@ -566,6 +619,7 @@ function start(
     const p = PLANETS[i];
     const b = bodies[i];
     if (!p || !b) return 0;
+    if (b.hold !== null) return b.hold;
     return i * 1.9 + 0.8 + b.phase + (simTime / (50000 * p.f ** 0.65)) * Math.PI * 2;
   };
   const orbitPoint = (i: number, a: number) => {
@@ -583,12 +637,14 @@ function start(
     rctx.clearRect(0, 0, W, H);
     yctx.clearRect(0, 0, W, H);
     lctx.clearRect(0, 0, W, H);
-    if (page !== 'home' || !sun) return;
+    if (page !== 'home' || !sun || introStart === null) return;
     const s = sun;
     const cy = s.y0 - scroll;
+    const t = Math.min(1, (performance.now() - introStart) / tune.ringFadeMs);
+    const intro = t * (2 - t);
     // The rings, belt and planets fade back to half as you scroll past the hero.
     const past = Math.min(1, Math.max(0, (scroll - H * 0.15) / (H * 0.7)));
-    const op = String(Math.round((1 - SYSTEM_FADE * past) * 100) / 100);
+    const op = String(Math.round((1 - SYSTEM_FADE * past) * intro * 100) / 100);
     if (ringsEl.style.opacity !== op) {
       ringsEl.style.opacity = op;
       systemEl.style.opacity = op;
@@ -603,16 +659,21 @@ function start(
       dpr,
       Math.round(s.maxScroll / 16),
       Math.round(s.y0 / 8),
+      tune.ringAlpha,
+      tune.ringWidth,
+      tune.glow,
     ].join('|');
     if (!cache || cache.key !== key) buildCache(s, inner, key);
     if (!cache) return;
     // Glow on the stars layer (behind the rings), rings on their own layer.
+    sctx.globalAlpha = intro;
     sctx.drawImage(cache.glow, 0, cy - cache.yS, W, cache.h);
     const core = sctx.createRadialGradient(s.x, cy, 0, s.x, cy, s.logoW * 0.55);
-    core.addColorStop(0, `rgba(255,200,105,${Math.min(0.55, 0.15 * GLOW)})`);
+    core.addColorStop(0, `rgba(255,200,105,${Math.min(0.55, 0.15 * tune.glow)})`);
     core.addColorStop(1, 'rgba(255,180,80,0)');
     sctx.fillStyle = core;
     sctx.fillRect(s.x - s.logoW * 0.55, cy - s.logoW * 0.55, s.logoW * 1.1, s.logoW * 1.1);
+    sctx.globalAlpha = 1;
     rctx.drawImage(cache.rings, 0, cy - cache.yS, W, cache.h);
     // The asteroid belt turns, so it stays live: one transform per rock, off-screen rocks skipped.
     const g = geom;
@@ -649,10 +710,12 @@ function start(
     }
     yctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     yctx.globalAlpha = 1;
-    // Planets: in front of their rings (a small gap is cut in the ring line), pulled back by
-    // gentle gravity with a small settle; a dragged or gliding planet rides above the page.
+    // Planets: sitting on their rings, pulled back by gentle gravity with a small settle; a
+    // dragged or gliding planet rides above the page.
     const now = performance.now();
     const scaleR = Math.min(PLANET_MAX, inner / 300);
+    const hover = pointer && !drag ? hitPlanet(pointer.x, pointer.y) : -1;
+    const ease = reduceMotion ? 1 : 1 - Math.exp(-dt / 0.1);
     PLANETS.forEach((p, i) => {
       const b = bodies[i];
       if (!b) return;
@@ -681,16 +744,11 @@ function start(
       b.sx = o.x + b.ox;
       b.sy = o.y + b.oy;
       if (b.sy < -60 || b.sy > H + 60) return;
+      b.lit += ((b.drag || i === hover ? 1 : 0) - b.lit) * ease;
+      if (b.lit < 0.005) b.lit = 0;
       const lifted = b.drag || Math.hypot(b.ox, b.oy) > 0.5;
-      if (!lifted) {
-        rctx.save();
-        rctx.globalCompositeOperation = 'destination-out';
-        rctx.beginPath();
-        rctx.arc(b.sx, b.sy, b.r + 2, 0, Math.PI * 2);
-        rctx.fill();
-        rctx.restore();
-      }
-      drawPlanet(lifted ? lctx : yctx, b.sx, b.sy, b.r, p, simTime, Math.abs(Math.sin(a)));
+      const glow = b.lit * tune.planetGlow;
+      drawPlanet(lifted ? lctx : yctx, b.sx, b.sy, b.r, p, simTime, Math.abs(Math.sin(a)), glow);
     });
   }
 
@@ -704,6 +762,9 @@ function start(
     }
     return -1;
   };
+  // Where the mouse is over open sky (null: off the page or over the page's content), so a
+  // planet orbiting under a still mouse lights up too.
+  let pointer: { x: number; y: number } | null = null;
   let drag: {
     i: number;
     last: { x: number; y: number };
@@ -721,6 +782,7 @@ function start(
       const b = bodies[i];
       if (!b) return;
       b.drag = true;
+      b.hold = orbitAngle(i);
       b.px = e.clientX;
       b.py = e.clientY;
       drag = {
@@ -739,7 +801,9 @@ function start(
       if (!drag) {
         if (e.pointerType !== 'touch') {
           const target = e.target as Element | null;
-          const over = !target?.closest(INTERACTIVE) && hitPlanet(e.clientX, e.clientY) >= 0;
+          const free = !target?.closest(INTERACTIVE);
+          pointer = free ? { x: e.clientX, y: e.clientY } : null;
+          const over = free && hitPlanet(e.clientX, e.clientY) >= 0;
           document.documentElement.style.cursor = over ? 'grab' : '';
         }
         return;
@@ -761,18 +825,27 @@ function start(
       const g = geom;
       if (!b || !g) return;
       b.drag = false;
-      // Let go: glide to the nearest point on its own ring and carry on orbiting from there.
-      const dx = b.sx - g.cx;
-      const dy = b.sy - g.cy;
-      const lx = dx * g.cosT + dy * g.sinT;
-      const ly = -dx * g.sinT + dy * g.cosT;
-      b.phase += Math.atan2(ly / SQUASH, lx) - orbitAngle(i);
+      // Let go: glide back to where it was picked up (or, as a tweak, to the nearest point on
+      // its ring) and carry on orbiting from there.
+      const held = b.hold;
+      b.hold = null;
+      if (tune.planetDrop === 'pickup' && held !== null) b.phase += held - orbitAngle(i);
+      else {
+        const dx = b.sx - g.cx;
+        const dy = b.sy - g.cy;
+        const lx = dx * g.cosT + dy * g.sinT;
+        const ly = -dx * g.sinT + dy * g.cosT;
+        b.phase += Math.atan2(ly / SQUASH, lx) - orbitAngle(i);
+      }
       const o = orbitPoint(i, orbitAngle(i));
       b.ox = b.sx - o.x;
       b.oy = b.sy - o.y;
       b.vx = b.vy = 0;
       b.relT = performance.now();
     };
+    document.documentElement.addEventListener('pointerleave', () => {
+      pointer = null;
+    });
     window.addEventListener('pointerup', end);
     window.addEventListener('pointercancel', end);
     window.addEventListener('selectstart', (e) => {
@@ -843,8 +916,13 @@ function start(
   resize();
   lastW = W;
   lastH = H;
-  // The hero's arrival animation moves the logo for ~1s; measure again once it has settled.
-  window.setTimeout(measureSun, 1200);
+  if (page === 'home') {
+    arrive();
+    if (import.meta.env.DEV) {
+      window.addEventListener('boojy:replay', arrive);
+      void import('./tweaks');
+    }
+  }
   window.addEventListener('load', () => window.setTimeout(measureSun, 300));
   scheduleShoot();
 
@@ -854,7 +932,7 @@ function start(
     if (now - last < 15.5) return;
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    if (!reduceMotion) simTime += dt * 1000;
+    if (!reduceMotion) simTime += dt * 1000 * tune.orbitSpeed;
     const scroll = window.scrollY;
     if (sctx) drawStars(sctx, now, scroll);
     drawSystem(dt, scroll);

@@ -47,8 +47,8 @@ export const PRODUCT_CARDS: ProductCardData[] = [
 
 /** The homepage "Hi, I'm Tyr." card: two paragraphs in Tyr's voice (it can grow later). */
 export const ABOUT_PARAGRAPHS = [
-  "I'm a computer science student, and I started making music as a teenager. A lot of the apps and tools I wanted sat behind paywalls, so eventually I started building my own. Boojy is the calm, free creative suite I wish I'd had back then.",
-  "It's all early. Notes is nearly steady and Audio still has plenty of bugs, so for now I'm mostly fixing, then polishing, then adding features and platforms. Boojy is free and open source, and isn't accepting advertisements.",
+  "I'm studying computer science, but I've always loved being creative and making music. A lot of the tools I wanted sat behind paywalls, and I think that's a big barrier for many people. Boojy is my set of free creative apps that I hope people enjoy using.",
+  "Boojy Notes is fairly stable but only on desktop for now. Boojy Audio still has plenty of bugs, and I'm working on fixing those. Everything is free and open source, with no ads.",
 ];
 
 /** Tyr's photo for the About card (square, face centred; shown as a circle). */
