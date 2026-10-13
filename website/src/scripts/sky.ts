@@ -317,8 +317,8 @@ function start(
   const SQUASH = 0.4;
   const TILT = -0.14;
   const RING_TINT = '#f3e7c9';
-  const RING_ALPHA = 0.36;
-  const RING_WIDTH = 1.8;
+  const RING_ALPHA = 0.26;
+  const RING_WIDTH = 1.5;
   const PLANET_SIZE = 1.1;
   /** Planets grow with the logo up to this much on big screens. */
   const PLANET_MAX = 1.4;
@@ -405,6 +405,16 @@ function start(
     maxScroll: number;
   }
   let sun: SunInfo | null = null;
+  // The solar system stays hidden until the logo has finished arriving, then fades in. Drawn
+  // from the first frame, it was sized and placed off the still-moving logo and jumped when
+  // re-measured.
+  const INTRO_MS = 700;
+  let introStart = reduceMotion ? 0 : -1;
+  function settle() {
+    if (introStart >= 0) return;
+    measureSun();
+    introStart = performance.now();
+  }
   function measureSun() {
     const core = document.querySelector<SVGCircleElement>('svg[data-system] .core');
     const logo = core?.ownerSVGElement;
@@ -583,12 +593,14 @@ function start(
     rctx.clearRect(0, 0, W, H);
     yctx.clearRect(0, 0, W, H);
     lctx.clearRect(0, 0, W, H);
-    if (page !== 'home' || !sun) return;
+    if (page !== 'home' || !sun || introStart < 0) return;
     const s = sun;
     const cy = s.y0 - scroll;
+    const t = Math.min(1, (performance.now() - introStart) / INTRO_MS);
+    const intro = reduceMotion ? 1 : t * (2 - t);
     // The rings, belt and planets fade back to half as you scroll past the hero.
     const past = Math.min(1, Math.max(0, (scroll - H * 0.15) / (H * 0.7)));
-    const op = String(Math.round((1 - SYSTEM_FADE * past) * 100) / 100);
+    const op = String(Math.round((1 - SYSTEM_FADE * past) * intro * 100) / 100);
     if (ringsEl.style.opacity !== op) {
       ringsEl.style.opacity = op;
       systemEl.style.opacity = op;
@@ -607,12 +619,14 @@ function start(
     if (!cache || cache.key !== key) buildCache(s, inner, key);
     if (!cache) return;
     // Glow on the stars layer (behind the rings), rings on their own layer.
+    sctx.globalAlpha = intro;
     sctx.drawImage(cache.glow, 0, cy - cache.yS, W, cache.h);
     const core = sctx.createRadialGradient(s.x, cy, 0, s.x, cy, s.logoW * 0.55);
     core.addColorStop(0, `rgba(255,200,105,${Math.min(0.55, 0.15 * GLOW)})`);
     core.addColorStop(1, 'rgba(255,180,80,0)');
     sctx.fillStyle = core;
     sctx.fillRect(s.x - s.logoW * 0.55, cy - s.logoW * 0.55, s.logoW * 1.1, s.logoW * 1.1);
+    sctx.globalAlpha = 1;
     rctx.drawImage(cache.rings, 0, cy - cache.yS, W, cache.h);
     // The asteroid belt turns, so it stays live: one transform per rock, off-screen rocks skipped.
     const g = geom;
@@ -649,8 +663,8 @@ function start(
     }
     yctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     yctx.globalAlpha = 1;
-    // Planets: in front of their rings (a small gap is cut in the ring line), pulled back by
-    // gentle gravity with a small settle; a dragged or gliding planet rides above the page.
+    // Planets: sitting on their rings, pulled back by gentle gravity with a small settle; a
+    // dragged or gliding planet rides above the page.
     const now = performance.now();
     const scaleR = Math.min(PLANET_MAX, inner / 300);
     PLANETS.forEach((p, i) => {
@@ -682,14 +696,6 @@ function start(
       b.sy = o.y + b.oy;
       if (b.sy < -60 || b.sy > H + 60) return;
       const lifted = b.drag || Math.hypot(b.ox, b.oy) > 0.5;
-      if (!lifted) {
-        rctx.save();
-        rctx.globalCompositeOperation = 'destination-out';
-        rctx.beginPath();
-        rctx.arc(b.sx, b.sy, b.r + 2, 0, Math.PI * 2);
-        rctx.fill();
-        rctx.restore();
-      }
       drawPlanet(lifted ? lctx : yctx, b.sx, b.sy, b.r, p, simTime, Math.abs(Math.sin(a)));
     });
   }
@@ -843,8 +849,16 @@ function start(
   resize();
   lastW = W;
   lastH = H;
-  // The hero's arrival animation moves the logo for ~1s; measure again once it has settled.
-  window.setTimeout(measureSun, 1200);
+  // The hero's arrival animation moves the logo; show the system once it has landed (the
+  // timer covers a missed or skipped animation).
+  if (reduceMotion) measureSun();
+  else {
+    const rise = document.querySelector('svg[data-system]')?.closest('.rise');
+    rise?.addEventListener('animationend', (e) => {
+      if (e.target === rise) settle();
+    });
+    window.setTimeout(settle, 1200);
+  }
   window.addEventListener('load', () => window.setTimeout(measureSun, 300));
   scheduleShoot();
 

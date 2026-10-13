@@ -39,4 +39,11 @@ don't feel like glass sliding over a still sky. Planets grow up to 1.4× on big 
 that fails to load turned the old logo into Times). The sun is the second "o"; the grey planet is
 the j's dot.
 
+**Arrival (2026-10-13):** the solar system (glow, rings, belt, planets) stays hidden until the
+logo's `.rise` arrival ends, then is measured and fades in over 700ms. Drawn from the first frame,
+it was placed off the still-moving logo and jumped when re-measured. Planets sit on their ring
+line (no gap cut). Rings are 26% opacity, 1.5px (Tyr found the lab's 36% / 1.8px too strong).
+The homepage cards' A and N don't glow on hover: on the site a glowing A/N means "click for a
+flare", and a card click opens the app's page instead.
+
 **Reduced motion:** no orbits, twinkle, shooting stars, springs or arrival animations.
