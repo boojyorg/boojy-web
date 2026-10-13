@@ -9,7 +9,7 @@ convention is in the suite root's `AGENTS.md`.
 - **A calmer homepage solar system.** The rings, belt and planets fade in alongside the logo,
   already in their final place, instead of jumping into place a second after the page opens. The
   sun's wide glow is softer. A planet you drag and let go springs back to exactly where you picked
-  it up, then carries on orbiting. The planets sit on their
+  it up, then carries on orbiting. The planets start somewhere new on their orbits each visit. The planets sit on their
   orbit lines with no gap cut around them, and the rings are softer and a little thinner. The A
   and N on the homepage cards no longer glow on hover.
 - **A rewritten About card.** Shorter, and closer to how Tyr writes.

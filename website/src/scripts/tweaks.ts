@@ -105,6 +105,15 @@ const GROUPS: [string, Control[]][] = [
           ['nearest', 'Nearest on its ring'],
         ],
       },
+      {
+        key: 'planetStart',
+        label: 'Start (on reload)',
+        kind: 'choice',
+        options: [
+          ['random', 'Random'],
+          ['fixed', 'Same every time'],
+        ],
+      },
     ],
   ],
 ];

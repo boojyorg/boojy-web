@@ -27,7 +27,9 @@ flare); things that orbit can be dragged (the planets, the j's dot, the 404 moon
 drag with mouse/pen only, so touch keeps scrolling the page.
 A picked-up homepage planet holds its place on the orbit and, let go, springs back to exactly where
 it was picked up, then carries on (like the j's dot springing home). Tyr's pick over gliding to the
-nearest point on its ring to the drop, which is still a tweak (`planetDrop`).
+nearest point on its ring to the drop, which is still a tweak (`planetDrop`). Planets start at a
+random place on their orbits each visit (`planetStart`; set it to `fixed` in the tweaks panel for
+like-for-like screenshots).
 A dragged body always passes in front of everything: homepage planets move to the `sky-lift`
 canvas; the j's dot / 404 moon raise their logo's ancestors (`logo.ts` `raise()`) until they settle.
 

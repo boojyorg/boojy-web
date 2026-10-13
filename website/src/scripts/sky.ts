@@ -351,7 +351,8 @@ function start(
     sx: -999,
     sy: -999,
     r: 0,
-    phase: 0,
+    // Each visit starts the planets somewhere new on their orbits (or, as a tweak, the same).
+    phase: tune.planetStart === 'random' ? Math.random() * Math.PI * 2 : 0,
     relT: 0,
     hold: null,
   }));

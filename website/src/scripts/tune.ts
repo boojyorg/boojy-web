@@ -6,6 +6,7 @@
 
 export type RingArrival = 'in-place' | 'with-logo' | 'after-logo';
 export type PlanetDrop = 'pickup' | 'nearest';
+export type PlanetStart = 'random' | 'fixed';
 
 export const DEFAULTS = {
   /** How the rings, belt and planets appear on load. */
@@ -29,6 +30,8 @@ export const DEFAULTS = {
   /** Where a dragged planet goes when let go: back to where it was picked up, or the nearest
    * point on its ring to where it was dropped. */
   planetDrop: 'pickup' as PlanetDrop,
+  /** Where the planets start on each visit: somewhere new, or the same every time. */
+  planetStart: 'random' as PlanetStart,
 };
 
 export type Tune = typeof DEFAULTS;
