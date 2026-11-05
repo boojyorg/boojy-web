@@ -169,6 +169,9 @@ test('app pages show four feature tiles and a link to the source on GitHub', asy
       `https://github.com/boojyorg/boojy-${app}`,
     );
     await expect(page.locator(`.horizon-${app} .site-foot`)).toHaveCount(1);
+    // The horizon overlaps the GitHub line; a trial click fails if anything covers the link.
+    await page.locator('.gh-line a').click({ trial: true, timeout: 3000 });
+    await page.locator('.horizon .site-foot a').first().click({ trial: true, timeout: 3000 });
   }
 });
 
