@@ -38,7 +38,7 @@ export const PRODUCT_CARDS: ProductCardData[] = [
     href: '/notes/',
     name: 'Boojy Notes',
     screenshot: {
-      src: '/images/notes-v0.10-dark.jpg',
+      src: '/images/notes-v0.20-dark.png',
       alt: 'Boojy Notes in dark mode with a trip-planning note open',
     },
     line: 'A calm place for the notes you own',

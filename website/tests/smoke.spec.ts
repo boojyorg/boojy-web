@@ -11,7 +11,7 @@ import { expect, test } from '@playwright/test';
 const PAGES = [
   { path: '/', title: 'Boojy – Creative Tools' },
   { path: '/audio/', title: 'Boojy Audio – Free DAW for Beginners' },
-  { path: '/notes/', title: 'Boojy Notes – A Calm Space for Your Thoughts' },
+  { path: '/notes/', title: 'Boojy Notes – A Calm Place for the Notes You Own' },
   { path: '/privacy/', title: 'Privacy Policy – Boojy' },
   { path: '/terms/', title: 'Terms of Service – Boojy' },
 ];

@@ -6,6 +6,11 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Improvements
+- **Notes shows the app as it is now.** New Dark and Light screenshots of v0.20 (a Lisbon trip
+  note, with larger text) replace the v0.10 ones, on the Notes page, the homepage card
+  and link previews. The four feature tiles are now Your files, Writing, Finding and Safe with
+  your files, the same four points as the README, and the page's title and description say "A
+  calm place for the notes you own" like its headline.
 - **A calmer homepage solar system.** The rings, belt and planets fade in alongside the logo,
   already in their final place, instead of jumping into place a second after the page opens. The
   rings are softer and a little thinner, the planets sit on their orbit lines with no gap cut

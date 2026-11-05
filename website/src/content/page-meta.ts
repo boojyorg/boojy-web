@@ -47,12 +47,12 @@ export const PAGE_META: Record<string, PageMeta> = {
     'A free, simple music studio for macOS and Windows. Perfect for making your first beat.',
   ),
   '/notes/': meta(
-    'Boojy Notes – A Calm Space for Your Thoughts',
-    'Boojy Notes - A calm space for your thoughts. Write in markdown, organize with folders. Free for macOS, Windows and Linux.',
+    'Boojy Notes – A Calm Place for the Notes You Own',
+    'Boojy Notes - A calm place for the notes you own. Plain Markdown files on your computer, no account. Free for macOS, Windows and Linux.',
     '/notes/',
-    `${SITE}/images/notes-v0.10-dark.jpg`,
-    'Boojy Notes - A Calm Space for Your Thoughts',
-    'Write in markdown, organize with folders. Free for macOS, Windows and Linux.',
+    `${SITE}/images/notes-v0.20-dark.png`,
+    'Boojy Notes - A Calm Place for the Notes You Own',
+    'Plain Markdown files on your computer, no account. Free for macOS, Windows and Linux.',
   ),
   '/privacy/': meta(
     'Privacy Policy – Boojy',
