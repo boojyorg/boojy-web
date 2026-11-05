@@ -253,6 +253,9 @@ html.dragging * {
   height: 330px;
   margin-top: -130px;
   overflow: hidden;
+  /* It reaches 130px up over the page's last lines (the GitHub link), and comes later
+     in the page, so it would take their clicks; only its footer links take the pointer. */
+  pointer-events: none;
 }
 .horizon::before {
   content: "";
@@ -269,6 +272,7 @@ html.dragging * {
     0 0 130px 40px var(--hz-glow2);
 }
 .horizon .site-foot {
+  pointer-events: auto;
   position: absolute;
   left: 0;
   right: 0;

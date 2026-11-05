@@ -6,6 +6,11 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Improvements
+- **Notes shows the app as it is now.** New Dark and Light screenshots of v0.20 (a Lisbon trip
+  note, with larger text) replace the v0.10 ones, on the Notes page, the homepage card
+  and link previews. The four feature tiles are now Your files, Writing, Finding and Safe, the
+  same four points as the README, and the page's title and description say "A
+  calm place for the notes you own" like its headline.
 - **A calmer homepage solar system.** The rings, belt and planets fade in alongside the logo,
   already in their final place, instead of jumping into place a second after the page opens. The
   rings are softer and a little thinner, the planets sit on their orbit lines with no gap cut
@@ -51,6 +56,8 @@ convention is in the suite root's `AGENTS.md`.
   description and search data now say macOS, Windows and Linux.
 
 ### Bug Fixes
+- **"View the code on GitHub" works again on the Notes and Audio pages.** The planet horizon at
+  the foot of the page reached up over the link and took its clicks.
 - **A refused GitHub token no longer breaks the version lookup.** The first token was refused
   (HTTP 403), so the build fell back even with a token set. It now logs GitHub's reason and
   tries again without the token.
