@@ -6,6 +6,9 @@ convention is in the suite root's `AGENTS.md`.
 ## Unreleased
 
 ### Improvements
+- **The new Boojy mark.** The mark in the top-left corner, the browser tab icon, the phone
+  home-screen icon and the image shown when a link is shared are all the new sun, ring and planet.
+  The tab icon is now sharp at any size.
 - **Notes shows the app as it is now.** New Dark and Light screenshots of v0.20 (a Lisbon trip
   note, with larger text) replace the v0.10 ones, on the Notes page, the homepage card
   and link previews. The four feature tiles are now Your files, Writing, Finding and Safe, the
