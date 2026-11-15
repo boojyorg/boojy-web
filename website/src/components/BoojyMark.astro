@@ -1,26 +1,29 @@
 ---
 /**
- * The Boojy mark as an inline SVG — sun, orbit ring, and the grey planet actually
- * orbiting (CSS offset-path). Traced from `public/images/Boojy_Image_Logo.png`, which
- * stays canonical for OG images, JSON-LD `logo`, and favicons (scrapers want raster).
+ * The Boojy mark as an inline SVG — sun, ring, and the grey planet actually orbiting
+ * (CSS offset-path). Redrawn from the suite master, `brand/boojy-mark.svg` in the
+ * boojy-suite repo (rules in its `docs/BRAND.md`); the favicons, share image and
+ * JSON-LD `logo` in `public/images/` are exports of the same masters.
  *
- * Geometry (PNG-measured): sun disc c(304,222) r165 with a soft top-left highlight;
- * orbit ellipse c(300,215) rx295 ry108 rotated −23°; planet r50 resting at the
- * ellipse's upper-right major-axis extreme (571.5, 99.7).
+ * Geometry (the master's): sun c(100,106) r54; ring ellipse rx91.1 ry29.4, stroke 8.5,
+ * tilted 30°; planet r16 resting on the ring by its upper tip. Everything that follows
+ * the ring sits in one group rotated −30° about the sun's centre, so the ring, the
+ * orbit path and the clip halves are all written as a plain, unrotated ellipse. The
+ * viewBox is the master's cropped to the drawing, so the mark sizes by height.
  *
  * The z-order trick: the planet must pass BEHIND the sun on the far (upper) side of
- * the orbit and IN FRONT on the near (lower) side — the static PNG already draws the
- * ring over the sun at the bottom. So the ring is split into two half-arcs with the
- * sun sandwiched between, and the planet is rendered TWICE running the identical
- * animation, each copy clipped to one half-plane along the orbit's major axis. The
- * handoff happens exactly at the path's 0%/50% points (the major-axis extremes),
- * where both copies straddle the clip line and tile seamlessly — it cannot flicker.
+ * the orbit and IN FRONT on the near (lower) side. So the ring's near half is redrawn
+ * over the sun, and the planet is rendered TWICE running the identical animation, each
+ * copy clipped to one half-plane along the ring's long axis (y=106 inside the group).
+ * The handoff happens at the ring's two tips, far from the sun, where both copies
+ * straddle the clip line. The halves overlap a little there (see the "near" clip), so
+ * no seam shows and it cannot flicker.
  *
  * The orbit path STARTS at the planet's resting position, so reduced-motion users,
- * non-`offset-path` browsers, and the paused lap variant all see today's exact
- * static logo for free.
+ * non-`offset-path` browsers, and the paused lap variant all see the master's exact
+ * static mark for free.
  *
- * variant="always"  — planet orbits continuously (homepage hero).
+ * variant="always"  — planet orbits continuously.
  * variant="lap"     — still at rest; plays one quick lap (slow start, quick middle, slow finish)
  *                     when Nav adds `.spin` on a page-change click. A lap never restarts mid-way.
  * variant="static"  — no animation shipped at all.
@@ -30,70 +33,79 @@ interface Props {
   variant?: 'always' | 'lap' | 'static';
 }
 const { class: className, variant = 'always' } = Astro.props;
-// Unique ids per instance — the homepage renders two marks (nav + hero) and
-// clip-path/gradient ids must not collide.
+// Unique ids per instance, so two marks on one page can't share clip-path/gradient ids.
 const uid = Math.random().toString(36).slice(2, 8);
 ---
 
 <svg
-  viewBox="0 0 595 419"
+  viewBox="14.5 39.5 176.5 124"
   class:list={['boojy-mark', `boojy-mark-${variant}`, className]}
   aria-hidden="true"
 >
   <defs>
-    <radialGradient id={`sun-${uid}`} cx="40%" cy="32%" r="78%">
-      <stop offset="0%" stop-color="#FFC23A"></stop>
-      <stop offset="55%" stop-color="#FFB71D"></stop>
-      <stop offset="100%" stop-color="#F2A60F"></stop>
-    </radialGradient>
-    <!-- Half-planes split along the orbit's major axis (the line through (300,215)
-         at −23°): "far" is above it, "near" below. -->
+    <!-- Both lit from the upper left, as the Notes N is. -->
+    <linearGradient id={`sun-${uid}`} x1="0.12" y1="0.05" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#FFD98A"></stop>
+      <stop offset="0.55" stop-color="#FDB52A"></stop>
+      <stop offset="1" stop-color="#F0940F"></stop>
+    </linearGradient>
+    <linearGradient id={`planet-${uid}`} x1="0.12" y1="0.05" x2="0.8" y2="1">
+      <stop offset="0" stop-color="#B6BAC2"></stop>
+      <stop offset="0.55" stop-color="#9498A1"></stop>
+      <stop offset="1" stop-color="#797D87"></stop>
+    </linearGradient>
+    <!-- Half-planes either side of the ring's long axis: "far" above it, "near" below. -->
     <clipPath id={`far-${uid}`}>
-      <rect x="-1200" y="-1285" width="3000" height="1500" transform="rotate(-23 300 215)"></rect>
+      <rect x="-200" y="-194" width="600" height="300"></rect>
     </clipPath>
+    <!-- "near" starts 4 units above the axis, so the two planet copies overlap there. Two
+         clip edges that only touch each get a soft edge, and the ring shows through as a
+         hairline across the planet. -->
     <clipPath id={`near-${uid}`}>
-      <rect x="-1200" y="215" width="3000" height="1500" transform="rotate(-23 300 215)"></rect>
+      <rect x="-200" y="102" width="600" height="304"></rect>
     </clipPath>
   </defs>
 
-  <!-- Paint order, bottom → top: full ring ellipse → far planet copy → sun → near
-       (lower) ring arc redrawn on top → near planet copy. The base ring is a full
-       seamless ellipse and the overlay arc is butt-capped, so no linecap ever pokes
-       over the far planet copy at the handoff extremes. -->
-  <path
-    class="ring"
-    d="M571.5 99.7 A295 108 -23 0 0 28.5 330.3 A295 108 -23 0 0 571.5 99.7"></path>
-  <g clip-path={`url(#far-${uid})`}>
-    <circle class="planet" r="50" fill="#666666"></circle>
+  <!-- Paint order, bottom → top: whole ring → far planet copy → sun → the ring's near
+       half where it crosses the sun → near planet copy. The planet is always over the
+       ring; only the sun ever hides it. -->
+  <g transform="rotate(-30 100 106)">
+    <ellipse class="ring" cx="100" cy="106" rx="91.1" ry="29.4"></ellipse>
+    <g clip-path={`url(#far-${uid})`}>
+      <circle class="planet" r="16" fill={`url(#planet-${uid})`}></circle>
+    </g>
   </g>
-  <circle class="sun-disc" cx="304" cy="222" r="165" fill={`url(#sun-${uid})`}></circle>
-  <path class="ring" d="M571.5 99.7 A295 108 -23 0 1 28.5 330.3"></path>
-  <g clip-path={`url(#near-${uid})`}>
-    <circle class="planet" r="50" fill="#666666"></circle>
+  <circle class="sun-disc" cx="100" cy="106" r="54" fill={`url(#sun-${uid})`}></circle>
+  <g transform="rotate(-30 100 106)">
+    <!-- The whole near half, tip to tip, not just the part over the sun: an arc cut off
+         at the sun's edge leaves a hairline there. -->
+    <path class="ring" d="M191.1 106 A91.1 29.4 0 0 1 8.9 106"></path>
+    <g clip-path={`url(#near-${uid})`}>
+      <circle class="planet" r="16" fill={`url(#planet-${uid})`}></circle>
+    </g>
   </g>
 </svg>
 
 <style is:global>
   .boojy-mark {
-    /* Sized by the caller's class (height + width:auto, like the PNG it replaces);
-       the ratio keeps width:auto honest. Overflow stays visible because the planet's
-       disc pokes a few px past the canvas at the orbit's left/right extremes (the
-       ellipse extremes sit at x=28.5/571.5 and the planet has r=50). */
-    aspect-ratio: 595 / 419;
+    /* Sized by the caller's class (height + width:auto); the ratio keeps width:auto
+       honest. Overflow stays visible because the viewBox is cropped to the resting
+       mark, and the orbiting planet swings a little past it at the ring's lower-left tip. */
+    aspect-ratio: 176.5 / 124;
     overflow: visible;
   }
 
   .boojy-mark .ring {
     fill: none;
-    stroke: #dedede;
-    stroke-width: 24;
+    stroke: #d9dce1;
+    stroke-width: 8.5;
     stroke-linecap: butt;
   }
 
-  /* Resting position = the orbit path's start point — all fallbacks land here.
-     (528.3, 68.5) is the ellipse point nearest the PNG's planet, fully on-canvas. */
+  /* Resting position = the orbit path's start point — all fallbacks land here. It is
+     the master's planet centre, a touch above the ring's tip (inside the rotated group). */
   .boojy-mark .planet {
-    transform: translate(528.3px, 68.5px);
+    transform: translate(189.1px, 99.87px);
   }
 
   .boojy-mark .sun-disc {
@@ -109,7 +121,7 @@ const uid = Math.random().toString(36).slice(2, 8);
       transform: none;
       offset-distance: 0%;
       offset-path: path(
-        "M528.3 68.5 A295 108 -23 0 0 71.7 361.5 A295 108 -23 0 0 528.3 68.5"
+        "M189.1 99.87 A91.1 29.4 0 0 0 10.9 112.13 A91.1 29.4 0 0 0 189.1 99.87"
       );
       offset-rotate: 0deg;
       animation: boojy-orbit 9s linear infinite;

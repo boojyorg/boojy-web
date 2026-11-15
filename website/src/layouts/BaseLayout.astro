@@ -60,8 +60,11 @@ const ogImage = ogImageProp ?? base.ogImage ?? DEFAULT_OG_IMAGE;
     <meta name="twitter:description" content={meta.ogDescription} />
     <meta name="twitter:image" content={ogImage} />
 
-    <link rel="icon" type="image/png" href="/images/favicon.png" />
-    <link rel="apple-touch-icon" href="/images/favicon.png" />
+    <!-- The tab icon is the full mark, ring included. Browsers that take SVG icons use the
+         first; the PNG is the fallback. -->
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
 
     <!-- Pre-paint glow origin: set the morph's start color on :root from the previous
          page (stored in sessionStorage) BEFORE the glow element is parsed, so the glow
