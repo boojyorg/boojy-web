@@ -16,7 +16,8 @@
  * over the sun, and the planet is rendered TWICE running the identical animation, each
  * copy clipped to one half-plane along the ring's long axis (y=106 inside the group).
  * The handoff happens at the ring's two tips, far from the sun, where both copies
- * straddle the clip line and tile seamlessly — it cannot flicker.
+ * straddle the clip line. The halves overlap a little there (see the "near" clip), so
+ * no seam shows and it cannot flicker.
  *
  * The orbit path STARTS at the planet's resting position, so reduced-motion users,
  * non-`offset-path` browsers, and the paused lap variant all see the master's exact
@@ -57,11 +58,11 @@ const uid = Math.random().toString(36).slice(2, 8);
     <clipPath id={`far-${uid}`}>
       <rect x="-200" y="-194" width="600" height="300"></rect>
     </clipPath>
+    <!-- "near" starts 4 units above the axis, so the two planet copies overlap there. Two
+         clip edges that only touch each get a soft edge, and the ring shows through as a
+         hairline across the planet. -->
     <clipPath id={`near-${uid}`}>
-      <rect x="-200" y="106" width="600" height="300"></rect>
-    </clipPath>
-    <clipPath id={`disc-${uid}`}>
-      <circle cx="100" cy="106" r="54"></circle>
+      <rect x="-200" y="102" width="600" height="304"></rect>
     </clipPath>
   </defs>
 
@@ -76,10 +77,9 @@ const uid = Math.random().toString(36).slice(2, 8);
   </g>
   <circle class="sun-disc" cx="100" cy="106" r="54" fill={`url(#sun-${uid})`}></circle>
   <g transform="rotate(-30 100 106)">
-    <g clip-path={`url(#disc-${uid})`}>
-      <ellipse class="ring" cx="100" cy="106" rx="91.1" ry="29.4" clip-path={`url(#near-${uid})`}
-      ></ellipse>
-    </g>
+    <!-- The whole near half, tip to tip, not just the part over the sun: an arc cut off
+         at the sun's edge leaves a hairline there. -->
+    <path class="ring" d="M191.1 106 A91.1 29.4 0 0 1 8.9 106"></path>
     <g clip-path={`url(#near-${uid})`}>
       <circle class="planet" r="16" fill={`url(#planet-${uid})`}></circle>
     </g>
@@ -99,6 +99,7 @@ const uid = Math.random().toString(36).slice(2, 8);
     fill: none;
     stroke: #d9dce1;
     stroke-width: 8.5;
+    stroke-linecap: butt;
   }
 
   /* Resting position = the orbit path's start point — all fallbacks land here. It is

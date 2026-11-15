@@ -1,11 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="25 18 160 160" role="img" aria-labelledby="t">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="10.8 9.3 184 184" role="img" aria-labelledby="t">
   <title id="t">Boojy</title>
-  <!-- The small form, for sizes under 32 pixels: the sun and its planet, without the ring.
-       The planet is drawn larger here than in the full mark so it survives at 16 pixels. -->
+  <!-- The sun, its ring tilted 30 degrees, and one planet at the ring's upper tip.
+       Drawing order: the whole ring, the planet, the sun, then the ring's near half where it crosses the sun. -->
   <defs>
     <linearGradient id="sun" x1="0.12" y1="0.05" x2="0.8" y2="1"><stop offset="0" stop-color="#FFD98A"/><stop offset=".55" stop-color="#FDB52A"/><stop offset="1" stop-color="#F0940F"/></linearGradient>
     <linearGradient id="planet" x1="0.12" y1="0.05" x2="0.8" y2="1"><stop offset="0" stop-color="#B6BAC2"/><stop offset=".55" stop-color="#9498A1"/><stop offset="1" stop-color="#797D87"/></linearGradient>
+    <clipPath id="near"><rect x="-20" y="106" width="240" height="140"/></clipPath>
+    <clipPath id="disc"><circle cx="100" cy="106" r="54"/></clipPath>
   </defs>
-  <circle cx="94" cy="110" r="66" fill="url(#sun)"/>
-  <circle cx="160" cy="42" r="22" fill="url(#planet)"/>
+  <g transform="rotate(-30 100 106)">
+    <ellipse cx="100" cy="106" rx="91.1" ry="29.4" fill="none" stroke="#D9DCE1" stroke-width="8.5"/>
+    <circle cx="189.1" cy="99.9" r="16" fill="url(#planet)"/>
+  </g>
+  <circle cx="100" cy="106" r="54" fill="url(#sun)"/>
+  <g transform="rotate(-30 100 106)" clip-path="url(#disc)">
+    <ellipse cx="100" cy="106" rx="91.1" ry="29.4" fill="none" stroke="#D9DCE1" stroke-width="8.5" clip-path="url(#near)"/>
+  </g>
 </svg>
