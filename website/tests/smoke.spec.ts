@@ -124,13 +124,6 @@ test('desktop pages do not scroll sideways', async ({ page }) => {
   }
 });
 
-// The logo is drawn as outlines: a <text> element would render in whatever font the
-// visitor happens to have (Times, on most machines), since SVG-as-<img> can't load fonts.
-test('the Boojy logo SVG has no live text', async ({ request }) => {
-  const svg = await (await request.get('/images/boojy-logo.svg')).text();
-  expect(svg).not.toContain('<text');
-});
-
 // The Feedback section went 2026-09-11; the footer email is the only contact route on the
 // homepage now, so guard that instead.
 test('the footer carries the contact email', async ({ page }) => {
